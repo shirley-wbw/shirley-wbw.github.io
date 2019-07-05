@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Gridea</title>
-    <updated>2019-07-05T08:06:47.898Z</updated>
+    <updated>2019-07-05T08:10:26.673Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -60,16 +60,20 @@
 <li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
 </ul>
 <blockquote>
-<p>long=<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>s</mi><mi>e</mi><mi>d</mi><mo>−</mo><msup><mi>n</mi><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">(sed -n &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.751892em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>=' filename1)
-short=<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mi>s</mi><mi>e</mi><mi>d</mi><mo>−</mo><msup><mi>n</mi><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">(sed -n &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.751892em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>=' filename2)
-sed <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mo>(</mo></mrow><annotation encoding="application/x-tex">((</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mopen">(</span></span></span></span>short+1)),${long}d filename1 &gt; filename3</p>
+<p>long=$(sed -n ' $=' filename1)</p>
+</blockquote>
+<blockquote>
+<p>short=$(sed -n ' $=' filename2)</p>
+</blockquote>
+<blockquote>
+<p>sed <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><mo>(</mo></mrow><annotation encoding="application/x-tex">((</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mopen">(</span></span></span></span>short+1)),${long}d filename1 &gt; filename3</p>
 </blockquote>
 <ul>
 <li>删除文件的后3行</li>
 </ul>
 <blockquote>
 <p>tac filename | sed 1,3d | tac &gt; newfile
-sed '<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>d</mi><mo mathvariant="normal">′</mo></msup><mi>f</mi><mi>i</mi><mi>l</mi><mi>e</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mi>e</mi><msup><mi>d</mi><mo mathvariant="normal">′</mo></msup></mrow><annotation encoding="application/x-tex">d&#x27; filename | sed &#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord mathdefault">a</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord">∣</span><span class="mord mathdefault">s</span><span class="mord mathdefault">e</span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>d' |sed '$d' &gt; newfile</p>
+sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile</p>
 </blockquote>
 <ul>
 <li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
