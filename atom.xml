@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Gridea</title>
-    <updated>2019-07-05T08:06:03.301Z</updated>
+    <updated>2019-07-05T08:06:47.898Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -16,9 +16,9 @@
         <link href="https://shirley-wbw.github.io/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin">
         </link>
         <updated>2019-07-05T07:16:02.000Z</updated>
-        <summary type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即使的统计计数，查看文件。总结一些语句，方便在自己遗忘时查看。</p>
+        <summary type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数，查看文件。总结一些语句，方便在自己遗忘时查看。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即使的统计计数，查看文件。总结一些语句，方便在自己遗忘时查看。</p>
+        <content type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数，查看文件。总结一些语句，方便在自己遗忘时查看。</p>
 <!--more-->
 <ul>
 <li>统计文件行数</li>
