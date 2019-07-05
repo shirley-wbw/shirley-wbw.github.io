@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>工作中常用的Shell语句集锦 | Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562314184590">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562315187432">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562314184590" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562315187432" alt="">
   </a>
   <h1 class="site-title">
     Gridea
@@ -88,7 +88,7 @@
             </div>
             
             <div class="post-content">
-              <p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数，查看文件。总结一些语句，方便在自己遗忘时查看。</p>
+              <p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
 <!--more-->
 <ul>
 <li>统计文件行数</li>
@@ -109,22 +109,34 @@
 <p>sed -n 1845p filename</p>
 </blockquote>
 <ul>
-<li>计算文件最后一列的和并输出</li>
-</ul>
-<blockquote>
-<p>awk '{sum +=$NF}; END {print sum}' filename</p>
-</blockquote>
-<ul>
 <li>查看文件的3000行到4000行</li>
 </ul>
 <blockquote>
 <p>cat filename | head -n 3000 | tail -n +1000</p>
 </blockquote>
 <ul>
-<li>提取文件中某列符合要求的行到新文件</li>
+<li>提取文件中某一列符合要求的行</li>
+</ul>
+<blockquote>
+<p>cat filename | awk '$4 == &quot;n37&quot; {print}'</p>
+</blockquote>
+<ul>
+<li>提取文件中某几列符合要求的行到新文件</li>
 </ul>
 <blockquote>
 <p>cat filename | awk '{if($2==99)print}{if($2==163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile</p>
+</blockquote>
+<ul>
+<li>计算文件最后一列的和并输出</li>
+</ul>
+<blockquote>
+<p>awk '{sum +=$NF}; END {print sum}' filename</p>
+</blockquote>
+<ul>
+<li>计算文件每行的和并输出为一个列向量</li>
+</ul>
+<blockquote>
+<p>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile</p>
 </blockquote>
 <ul>
 <li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
@@ -149,8 +161,10 @@ sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile</p>
 <li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
 </ul>
 <blockquote>
-<p>cat filename | awk '{print $1}' | sort | uniq -c
-sort -k1,1 -k2,2n filename | uniq &gt; newfile</p>
+<p>cat filename | awk '{print $1}' | sort | uniq -c</p>
+</blockquote>
+<blockquote>
+<p>sort -k1,1 -k2,2n filename | uniq &gt; newfile</p>
 </blockquote>
 <ul>
 <li>输出文件第一列的最大值/最小值</li>
@@ -170,15 +184,6 @@ cat filename | awk 'NR==1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'</p>
           </article>
         </div>
 
-        
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://shirley-wbw.github.io/post/hello-gridea">
-              <h3 class="post-title">
-                Hello Gridea
-              </h3>
-            </a>
-          </div>
         
 
         
