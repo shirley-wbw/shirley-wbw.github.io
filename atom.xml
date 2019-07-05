@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Gridea</title>
-    <updated>2019-07-05T09:21:10.709Z</updated>
+    <updated>2019-07-05T09:28:46.488Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -10,6 +10,30 @@
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[常用的R语言及R绘图语句集锦]]></title>
+        <id>https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin</id>
+        <link href="https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin">
+        </link>
+        <updated>2019-07-05T09:16:37.000Z</updated>
+        <summary type="html"><![CDATA[<p>工作中总结的一些R语言的语句，以备不时之需，避免重复检索。待补充整理收集。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>工作中总结的一些R语言的语句，以备不时之需，避免重复检索。待补充整理收集。</p>
+<!--more-->
+<ul>
+<li>R中ggplot绘图使添加的标题居中</li>
+</ul>
+<pre><code>ggplot(stage_data,aes(x=stage,y=num)) + 
+    labs(title=&quot;Stage Distribution&quot;) +
+    theme(plot.title = element_text(hjust = 0.5))
+</code></pre>
+<ul>
+<li>R中ggplot绘密度曲线</li>
+</ul>
+<pre><code>ggplot(origin_input, aes(x = value)) + geom_histogram(position = &quot;identity&quot;,alpha = 0.2,aes(y = ..density..))
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[工作中常用的Shell语句集锦]]></title>
         <id>https://shirley-wbw.github.io/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin</id>
