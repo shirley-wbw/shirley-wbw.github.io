@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>libsvm二分类实践总结 | My Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562747430765">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562748185435">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562747430765" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562748185435" alt="">
   </a>
   <h1 class="site-title">
     My Gridea
@@ -93,7 +93,7 @@
 <ul>
 <li>软件安装</li>
 </ul>
-<p>libsvm实际上是一个linux工具，但其开发者也做了python包，本文主要讲述在linux上的python里配置并使用libsvm。<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">libsvm官方网站</a>，下载tar.gz压缩包文件并解压<code>tar -zxvf *.tar.gz</code>，进入解压后目录<code>make</code>，进入解压后目录的python子目录中<code>make</code>，此时将解压目录下生成了libsvm.so.2，将其拷贝至自己python环境下的/lib/python3.6目录下，python子目录下的各*.py文件拷贝至自己python环境下的lib/python3.6/site-packages目录下。此时进入jupyter notebook运行以下代码，无报错说明安装成功。liblinear安装方法同libsvm安装方法基本一致。</p>
+<p>libsvm实际上是一个linux工具，但其开发者也做了python包，本文主要讲述在linux上python里配置并使用libsvm。<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">libsvm官方网站</a>，下载tar.gz压缩包文件并解压<code>tar -zxvf *.tar.gz</code>，进入解压后目录<code>make</code>，进入解压后目录的python子目录中<code>make</code>，此时解压目录下生成了libsvm.so.2文件，将其拷贝至自己python环境下的/lib/python3.6目录下，python子目录下的各*.py文件拷贝至自己python环境下的lib/python3.6/site-packages目录下。进入jupyter notebook运行以下代码，无报错说明安装成功。liblinear安装方法同libsvm安装方法基本一致。</p>
 <pre><code>import svmutil
 from svmutil import *
 </code></pre>
