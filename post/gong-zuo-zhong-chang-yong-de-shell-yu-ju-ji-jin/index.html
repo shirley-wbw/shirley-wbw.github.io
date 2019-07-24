@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>工作中常用的Shell语句集锦 | My Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562823004122">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1563961473501">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562823004122" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1563961473501" alt="">
   </a>
   <h1 class="site-title">
     My Gridea
@@ -124,7 +124,7 @@
 <li>提取文件中某几列符合要求的行到新文件</li>
 </ul>
 <blockquote>
-<p>cat filename | awk '{if($2==99)print}{if($2==163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile</p>
+<p>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile</p>
 </blockquote>
 <ul>
 <li>计算文件最后一列的和并输出</li>
@@ -154,7 +154,7 @@
 <li>删除文件的后3行</li>
 </ul>
 <blockquote>
-<p>tac filename | sed 1,3d | tac &gt; newfile
+<p>tac filename | sed 1,3d | tac &gt; newfile<br>
 sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile</p>
 </blockquote>
 <ul>
@@ -170,8 +170,8 @@ sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile</p>
 <li>输出文件第一列的最大值/最小值</li>
 </ul>
 <blockquote>
-<p>cat filename | awk 'NR==1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'
-cat filename | awk 'NR==1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'</p>
+<p>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'<br>
+cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'</p>
 </blockquote>
 <ul>
 <li>批量清除任务</li>

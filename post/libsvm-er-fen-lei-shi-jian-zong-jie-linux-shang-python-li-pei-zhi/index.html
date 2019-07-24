@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>libsvm二分类实践总结 | My Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1562823004122">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1563961473501">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1562823004122" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1563961473501" alt="">
   </a>
   <h1 class="site-title">
     My Gridea
@@ -106,7 +106,7 @@ from svmutil import *
 <li>首先libsvm需要输入什么数据：输入数据矩阵，每行代表一个样本，第一列为label，本文做二分类，此时第一列值可以为0和1或者为-1和+1，之后的每列数据为一个特征，每个特征需要有一个index。数据格式如下：</li>
 </ol>
 <p>[label] [index1]:[value1] [index2]:[value2] ...</p>
-<p>以下python代码可以把txt输入格式文件
+<p>以下python代码可以把txt输入格式文件<br>
 [label] [value1] [value2]转换为[label] [index1]:[value1] [index2]:[value2]格式</p>
 <pre><code>readin = open('home/user/input_feature.txt', 'r')
 #write data file
@@ -145,7 +145,7 @@ p_label, p_acc, p_val = svm_predict(test_y,test_x, m)
 </code></pre>
 <ol start="3">
 <li>
-<p>libsvm建模优化
+<p>libsvm建模优化<br>
 用以上方法做出的模型分类效果不佳，这时可以考虑建模优化问题。libsvm有以下几个可以考虑的地方。</p>
 <ol>
 <li>svm-scale：功能是将所有特征默认normalization到[-1,1]范围，有参数可指定上下限。-s参数可将其缩放规则存在文件中。-r参数可指定按某种缩放规则缩放本次输入文件，实际应用中可将训练集的缩放规则用于测试集缩放。经normalization后的数据再用来建模。</li>
@@ -158,16 +158,16 @@ p_label, p_acc, p_val = svm_predict(test_y,test_x, m)
 </li>
 </ol>
 <ul>
-<li>libsvm一些参数解释
-libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter notebook。
+<li>libsvm一些参数解释<br>
+libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter notebook。<br>
 <code>svmtrain [options] input [model]</code></li>
 </ul>
-<p>-s svm类型：SVM设置类型(默认0)
-0 -- C-SVC：C-支持向量分类机；参数C为惩罚系数，C越大表示对错误分类的惩罚越大，适当的参数C对分类Accuracy很关键。
-1 --v-SVC：v-支持向量分类机；由于C的选取比较困难，用另一个参数v代替C。C是“无意义”的，v是有意义的。（与C_SVC其实采用的模型相同，但是它们的参数C的范围不同,C_SVC采用的是0到正无穷，该类型是[0,1]。）
-2 – 一类SVM：单类别-支持向量机，不需要类标号,用于支持向量的密度估计和聚类。
-3 -- e -SVR：ε-支持向量回归机，不敏感损失函数，对样本点来说，存在着一个不为目标函数提供任何损失值的区域。
-4 -- v-SVR：n-支持向量回归机，由于EPSILON_SVR需要事先确定参数，然而在某些情况下选择合适的参数却不是一件容易的事情。而NU_SVR能够自动计算参数。
+<p>-s svm类型：SVM设置类型(默认0)<br>
+0 -- C-SVC：C-支持向量分类机；参数C为惩罚系数，C越大表示对错误分类的惩罚越大，适当的参数C对分类Accuracy很关键。<br>
+1 --v-SVC：v-支持向量分类机；由于C的选取比较困难，用另一个参数v代替C。C是“无意义”的，v是有意义的。（与C_SVC其实采用的模型相同，但是它们的参数C的范围不同,C_SVC采用的是0到正无穷，该类型是[0,1]。）<br>
+2 – 一类SVM：单类别-支持向量机，不需要类标号,用于支持向量的密度估计和聚类。<br>
+3 -- e -SVR：ε-支持向量回归机，不敏感损失函数，对样本点来说，存在着一个不为目标函数提供任何损失值的区域。<br>
+4 -- v-SVR：n-支持向量回归机，由于EPSILON_SVR需要事先确定参数，然而在某些情况下选择合适的参数却不是一件容易的事情。而NU_SVR能够自动计算参数。<br>
 显然，后两者是针对回归问题的，分类问题与回归问题最大的不同就是label，分类的label是类别，比如+1，-1，回归的label是目标值，可能为任意值。</p>
 <ul>
 <li>总结</li>
@@ -188,7 +188,7 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
 <ul>
 <li>问题</li>
 </ul>
-<p>经过一系列检索总结实践，我的数据集属于特征数远远大于样本数的数据集，但是在svm做分类时不知是否应该先进行特征工程来减少特征。另外就是截至目前，svm的方法在我的数据集上表现仍然很差，不知是因为svm不适用于解决该问题还是我的优化仍不到位。
+<p>经过一系列检索总结实践，我的数据集属于特征数远远大于样本数的数据集，但是在svm做分类时不知是否应该先进行特征工程来减少特征。另外就是截至目前，svm的方法在我的数据集上表现仍然很差，不知是因为svm不适用于解决该问题还是我的优化仍不到位。<br>
 探索是一个艰难的过程。永远没有能百分百分正确的模型。</p>
 
             </div>
