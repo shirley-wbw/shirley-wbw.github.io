@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>My Gridea</title>
-    <updated>2019-07-24T09:44:37.022Z</updated>
+    <updated>2019-07-25T06:43:56.869Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -20,7 +20,8 @@
 ]]></summary>
         <content type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。</p>
 <!-- more -->
-<p>基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。</p>
+<p>基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。其中数据预处理部分是一样的，后两部分又分为寻找种系突变和体细胞突变。本文侧重寻找体细胞突变。<br>
+建议在代码化的时候设置好各项变量，比如参考文件路径，软件路径，输出文件路径等等，这样在批量出结果的时候就可以脉络清晰，方便查看及引用。</p>
 <h2 id="数据预处理">数据预处理</h2>
 <h3 id="下机数据处理获得dupbam文件">下机数据处理获得dup.bam文件</h3>
 <p>由于我拿到的数据是dup.bam（即经过比对、排序、去重、索引后），所以数据预处理这部分基本不需要做什么了，但是有以下几点注意事项。</p>
@@ -29,7 +30,7 @@
 </ol>
 <pre><code>$JAVA/java -Xmx2g -jar $PICARD/picard.jar AddOrReplaceReadGroups \
 I=$sample.dup.bam O=$sample.ah.bam \
-ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
+ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
 </code></pre>
 <ol start="2">
 <li>看到很多bwa比对的，但我这里用的是bowtie2，如果要在bowtie2步骤把@RG加上，比对获得sam文件，排序去重建索引后，获得的dup.bam文件直接就可以进行下游分析了。</li>
@@ -44,7 +45,7 @@ ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
 -1 ${sample}_1.clean.fastq.gz -2 ${sample}_2.clean.fastq.gz -S ${sample}.sam
 </code></pre>
 <ol start="3">
-<li>做变异检测应该都是文件头必须包含@RG，我测试deepvariant时它也需要带@RG的bam文件。</li>
+<li>做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。</li>
 </ol>
 <h3 id="碱基质量矫正bqsr">碱基质量矫正（BQSR）</h3>
 <p>GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
@@ -54,9 +55,11 @@ ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
 <pre><code>$JAVA/java -Xmx2g -jar $PICARD/picard.jar CreateSequenceDictionary R=hg19.fa O=hg19.dict
 </code></pre>
 <ol start="2">
-<li>碱基质量校正分两步。<br>
-第一步，注意--known-sites参数需要的文件从GATK官网Resource Bundle下载。</li>
+<li>碱基质量校正分两步。</li>
 </ol>
+<ul>
+<li>第一步，注意--known-sites参数需要的文件从GATK官网Resource Bundle下载。</li>
+</ul>
 <pre><code>$GATK BaseRecalibrator \
 -R hg19.fa \
 -I ${sample}.ah.bam -O ${sample}.recal.table \
@@ -64,7 +67,9 @@ ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
 --known-sites 1000G_phase1.indels.hg19.sites.vcf \
 --known-sites Mills_and_1000G_gold_standard.indels.hg19.sites.vcf
 </code></pre>
-<p>第二步，获得校正后的文件，我这里的后缀为ah.recal.bam。记得samtools建立索引。</p>
+<ul>
+<li>第二步，获得校正后的文件，我这里的后缀为ah.recal.bam。记得samtools建立索引。</li>
+</ul>
 <pre><code>$GATK ApplyBQSR \
 -bqsr ${sample}.recal.table \
 -R hg19.fa \
@@ -77,7 +82,7 @@ ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
 <h2 id="变异检测">变异检测</h2>
 <p>变异检测分为种系突变和体细胞突变，过程复杂到令人崩溃。</p>
 <h3 id="种系突变haplotypecaller">种系突变（HaplotypeCaller）</h3>
-<p>相对来说寻找种系突变还算简单点。以下方式是计算较慢，需要速度提升的话可以拆成对每个染色体做snp calling，最后合并。这里我考虑到chr*<em>random和chrUn</em>*可能有其意义，所以也没有拆成每个染色体寻找突变。加--dbsnp可以在结果vcf文件中注释一些研究过的snp。</p>
+<p>相对来说寻找种系突变还算简单点。以下方式是计算较慢，需要速度提升的话可以拆成对每个染色体做snp calling，最后合并。这里我考虑到chr*_random和chrUn_*可能有其意义，所以也没有拆成每个染色体寻找突变。加--dbsnp可以在结果vcf文件中注释一些研究过的snp。</p>
 <pre><code>$GATK HaplotypeCaller \
 -R hg19.fa \
 --dbsnp dbsnp_138.hg19.vcf \
@@ -137,7 +142,8 @@ SD=human.dict
 -V gendb://pon_db \
 -O pon_db.vcf.gz
 </code></pre>
-<p>这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu--germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）</p>
+<p>这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu--germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）<br>
+备注：我下载了这个资源，用官方的b37也生成了一个自己的，两个文件大小不一致，但是在CreateSomaticPanelOfNormals这步获得的pon_db.vcf.gz结果一样，diff了一下，差别仅在文件头里里记录的执行语句及任务开始时间不同。</p>
 <pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar LiftoverVcf \
 I=af-only-gnomad.raw.sites.b37.vcf.gz \
 O=af-only-gnomad.raw.sites.hg19.vcf.gz \
@@ -146,13 +152,13 @@ REJECT=rejected_variants.vcf \
 R=hg19.fa
 </code></pre>
 <ol start="2">
-<li>对每对正常-肿瘤样本寻找体细胞突变。正常-肿瘤来自同一个体，我这里用的是TI、TU样本。据说这里每对样本的@RG文件头里的SM参数要一样，我还没做到这一步，等做到了再验证。</li>
+<li>对每对正常-肿瘤样本寻找体细胞突变。正常-肿瘤需要是来自同一个体的，我这里用的是TI、TU样本。这里-normal参数即正常样本bam文件头@RG里SM的值。</li>
 </ol>
 <pre><code>$GATK Mutect2 \
 -R hg19.fa \
 -I ${sample_tu}.ah.recal.bam \
 -I ${sample_ti}.ah.recal.bam \
--normal ${sample_ti}.ah.recal \
+-normal ${sample_ti} \
 --germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
 --panel-of-normals pon_db.vcf.gz \
 -O ${sample_tu}_${sample_ti}.vcf
@@ -161,8 +167,11 @@ R=hg19.fa
 <h3 id="种系突变结果过滤vqsrhard-filtering">种系突变结果过滤（VQSR/hard-filtering）</h3>
 <p>过滤这里是种系突变过滤比较复杂。这里只讲snp的，indel的同理。</p>
 <ol>
-<li>做VQSR过滤是建立了GMM模型进行过滤。分两步。</li>
+<li>做VQSR过滤是建立了GMM模型进行过滤。要求样本量大，且有足够多的已知变异参考信息（比如人类）。分两步。</li>
 </ol>
+<ul>
+<li>第一步。</li>
+</ul>
 <pre><code>$GATK VariantRecalibrator \
 -R hg19.fa \
 -V ${sample}.hc.vcf \
@@ -176,7 +185,9 @@ R=hg19.fa
 --tranches-file ${sample}.hc.snp.tranches \
 -O ${sample}.hc.snp.recal
 </code></pre>
-<p>第二步。</p>
+<ul>
+<li>第二步。</li>
+</ul>
 <pre><code>$GATK ApplyVQSR \
 -R hg19.fa \
 -V ${sample}.hc.vcf \
