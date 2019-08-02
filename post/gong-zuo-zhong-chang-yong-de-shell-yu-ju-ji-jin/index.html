@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>工作中常用的Shell语句集锦 | My Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1564037033927">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1564709318992">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1564037033927" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1564709318992" alt="">
   </a>
   <h1 class="site-title">
     My Gridea
@@ -93,92 +93,74 @@
 <ul>
 <li>统计文件行数</li>
 </ul>
-<blockquote>
-<p>wc -l filename</p>
-</blockquote>
+<pre><code>wc -l filename
+</code></pre>
 <ul>
 <li>删除文件的1-7行，在原文件上修改</li>
 </ul>
-<blockquote>
-<p>sed -i '1,7d' filename</p>
-</blockquote>
+<pre><code>sed -i '1,7d' filename
+</code></pre>
 <ul>
 <li>查看文件的某一行，如查看第1845行</li>
 </ul>
-<blockquote>
-<p>sed -n 1845p filename</p>
-</blockquote>
+<pre><code>sed -n 1845p filename
+cat filename | awk 'NR==1845'
+</code></pre>
 <ul>
 <li>查看文件的3000行到4000行</li>
 </ul>
-<blockquote>
-<p>cat filename | head -n 3000 | tail -n +1000</p>
-</blockquote>
+<pre><code>cat filename | head -n 3000 | tail -n +1000
+</code></pre>
 <ul>
 <li>提取文件中某一列符合要求的行</li>
 </ul>
-<blockquote>
-<p>cat filename | awk '$4 == &quot;n37&quot; {print}'</p>
-</blockquote>
+<pre><code> cat filename | awk '$4 == &quot;n37&quot; {print}'
+</code></pre>
 <ul>
 <li>提取文件中某几列符合要求的行到新文件</li>
 </ul>
-<blockquote>
-<p>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile</p>
-</blockquote>
+<pre><code>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile
+</code></pre>
 <ul>
 <li>计算文件最后一列的和并输出</li>
 </ul>
-<blockquote>
-<p>awk '{sum +=$NF}; END {print sum}' filename</p>
-</blockquote>
+<pre><code>awk '{sum +=$NF}; END {print sum}' filename
+</code></pre>
 <ul>
 <li>计算文件每行的和并输出为一个列向量</li>
 </ul>
-<blockquote>
-<p>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile</p>
-</blockquote>
+<pre><code>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile
+</code></pre>
 <ul>
 <li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
 </ul>
-<blockquote>
-<p>long=$(sed -n ' $=' filename1)</p>
-</blockquote>
-<blockquote>
-<p>short=$(sed -n ' $=' filename2)</p>
-</blockquote>
-<blockquote>
-<p>sed $ (( $short+1)), ${long}d filename1 &gt; filename3</p>
-</blockquote>
+<pre><code>long=$(sed -n ' $=' filename1)
+short=$(sed -n ' $=' filename2)
+sed $ (( $short+1)), ${long}d filename1 &gt; filename3
+</code></pre>
 <ul>
 <li>删除文件的后3行</li>
 </ul>
-<blockquote>
-<p>tac filename | sed 1,3d | tac &gt; newfile<br>
-sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile</p>
-</blockquote>
+<pre><code>tac filename | sed 1,3d | tac &gt; newfile
+sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile
+</code></pre>
 <ul>
 <li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
 </ul>
-<blockquote>
-<p>cat filename | awk '{print $1}' | sort | uniq -c</p>
-</blockquote>
-<blockquote>
-<p>sort -k1,1 -k2,2n filename | uniq &gt; newfile</p>
-</blockquote>
+<pre><code>cat filename | awk '{print $1}' | sort | uniq -c
+sort -k1,1 -k2,2n filename | uniq &gt; newfile
+</code></pre>
 <ul>
 <li>输出文件第一列的最大值/最小值</li>
 </ul>
-<blockquote>
-<p>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'<br>
-cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'</p>
-</blockquote>
+<pre><code>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'
+cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'
+</code></pre>
 <ul>
 <li>批量清除任务</li>
 </ul>
-<blockquote>
-<p>ps -ef | grep taskscriptname | cut -c9-15 | xargs kill -9</p>
-</blockquote>
+<pre><code>ps -ef | grep taskscriptname | cut -c9-15 | xargs kill -9
+</code></pre>
 
             </div>
           </article>
