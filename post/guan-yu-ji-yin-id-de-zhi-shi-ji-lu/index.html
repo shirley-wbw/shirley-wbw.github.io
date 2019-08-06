@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>工作中常用的Shell语句集锦 | My Gridea</title>
+<title>关于基因ID的知识记录 | My Gridea</title>
 <link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1565082031301">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -74,98 +74,51 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              工作中常用的Shell语句集锦
+              关于基因ID的知识记录
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-07-05 ·
+                · 2019-08-06 ·
               </time>
               
-                <a href="https://shirley-wbw.github.io/tag/tvStup-GI" class="post-tag">
-                  # Shell
+                <a href="https://shirley-wbw.github.io/tag/MdyzJQ4FV" class="post-tag">
+                  # Bioinfo
                 </a>
               
             </div>
             
             <div class="post-content">
-              <p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
-<!--more-->
-<ul>
-<li>统计文件行数</li>
-</ul>
-<pre><code>wc -l filename
-</code></pre>
-<ul>
-<li>删除文件的1-7行，在原文件上修改</li>
-</ul>
-<pre><code>sed -i '1,7d' filename
-</code></pre>
-<ul>
-<li>查看文件的某一行，如查看第1845行</li>
-</ul>
-<pre><code>sed -n 1845p filename
-cat filename | awk 'NR==1845'
-</code></pre>
-<ul>
-<li>查看文件的3000行到4000行</li>
-</ul>
-<pre><code>cat filename | head -n 3000 | tail -n +1000
-</code></pre>
-<ul>
-<li>提取文件中某一列符合要求的行</li>
-</ul>
-<pre><code>cat filename | awk '$4 == &quot;n37&quot; {print}'
-</code></pre>
-<ul>
-<li>提取文件中某几列符合要求的行到新文件</li>
-</ul>
-<pre><code>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile
-</code></pre>
-<ul>
-<li>计算文件最后一列的和并输出</li>
-</ul>
-<pre><code>awk '{sum +=$NF}; END {print sum}' filename
-</code></pre>
-<ul>
-<li>计算文件每行的和并输出为一个列向量</li>
-</ul>
-<pre><code>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile
-</code></pre>
-<ul>
-<li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
-</ul>
-<pre><code>long=$(sed -n ' $=' filename1)
-short=$(sed -n ' $=' filename2)
-sed $ (( $short+1)), ${long}d filename1 &gt; filename3
-</code></pre>
-<ul>
-<li>删除文件的后3行</li>
-</ul>
-<pre><code>tac filename | sed 1,3d | tac &gt; newfile
-sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile
-</code></pre>
-<ul>
-<li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
-</ul>
-<pre><code>cat filename | awk '{print $1}' | sort | uniq -c
-sort -k1,1 -k2,2n filename | uniq &gt; newfile
-</code></pre>
-<ul>
-<li>输出文件第一列的最大值/最小值</li>
-</ul>
-<pre><code>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'
-cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'
-</code></pre>
-<ul>
-<li>批量清除任务</li>
-</ul>
-<pre><code>ps -ef | grep taskscriptname | cut -c9-15 | xargs kill -9
+              <p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+<!-- more -->
+<h3 id="基因id的问题">基因ID的问题</h3>
+<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
+entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
+<h3 id="基因id的转换">基因ID的转换</h3>
+<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
+<pre><code>library(AnnotationDbi)
+library(org.Hs.eg.db)
+#查看org.Hs.eg.db里可用的key.
+keytypes(org.Hs.eg.db)
+#读取特定key中的值,读取前五个.
+keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
+#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
+list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
+                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
 </code></pre>
 
             </div>
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi">
+              <h3 class="post-title">
+                myVCF对突变文件进行可视化分析
+              </h3>
+            </a>
+          </div>
         
 
         

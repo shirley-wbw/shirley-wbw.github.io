@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>My Gridea</title>
-    <updated>2019-08-06T08:50:49.848Z</updated>
+    <updated>2019-08-06T09:00:35.608Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -10,6 +10,33 @@
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, My Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[关于基因ID的知识记录]]></title>
+        <id>https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu</id>
+        <link href="https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu">
+        </link>
+        <updated>2019-08-06T08:57:31.000Z</updated>
+        <summary type="html"><![CDATA[<p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+<!-- more -->
+<h3 id="基因id的问题">基因ID的问题</h3>
+<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
+entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
+<h3 id="基因id的转换">基因ID的转换</h3>
+<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
+<pre><code>library(AnnotationDbi)
+library(org.Hs.eg.db)
+#查看org.Hs.eg.db里可用的key.
+keytypes(org.Hs.eg.db)
+#读取特定key中的值,读取前五个.
+keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
+#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
+list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
+                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[myVCF对突变文件进行可视化分析]]></title>
         <id>https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi</id>
