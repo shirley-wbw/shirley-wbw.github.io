@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>My Gridea</title>
-    <updated>2019-08-02T08:34:20.028Z</updated>
+    <updated>2019-08-06T08:50:49.848Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -10,6 +10,54 @@
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, My Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[myVCF对突变文件进行可视化分析]]></title>
+        <id>https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi</id>
+        <link href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi">
+        </link>
+        <updated>2019-08-06T08:09:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。</p>
+<!-- more -->
+<h3 id="安装">安装</h3>
+<p>myVCF的功能，简单一句话，就是可视化vcf文件。我用到的就是这块。<a href="https://github.com/apietrelli/myVCF">myVCF下载路径</a>，在GitHub上。<br>
+推荐安装到Linux系统上，因为我在Windows上安装折腾了很久也没成功。</p>
+<ol>
+<li>克隆GitHub上myVCF的源码。例如我安装到以下目录。</li>
+</ol>
+<pre><code>cd  /home/username/software
+git clone https://github.com/apietrelli/myVCF.git
+</code></pre>
+<ol start="2">
+<li>在Linux系统下自己的home目录下创建python2环境，并安装依赖包。</li>
+</ol>
+<pre><code>cd /home/username/envis
+virtualenv -p /usr/bin/python2 python27
+pip install -r /home/username/software/myVCF-master/requirements.txt
+</code></pre>
+<h3 id="使用">使用</h3>
+<ol>
+<li>用终端调用时，我这里使用Xmanager Enterprise 5，因为这个里面的Xshell可以转发到X11桌面，不然的话无法显示，会报错：no display name and no $DISPLAY environment variable。</li>
+</ol>
+<pre><code>/home/username/envis/python27/bin/python2.7 -u /home/username/software/myVCF-master/myVCF_GUI.py 
+</code></pre>
+<p><img src="https://shirley-wbw.github.io/post-images/1565080122040.png" alt=""><br>
+调用成功会显示如图界面，点击“Run myVCF”即可弹出火狐浏览器，进入软件界面。<br>
+2. 进入界面后如下图所示。<img src="https://shirley-wbw.github.io/post-images/1565080355859.png" alt="">点击“Upload new project”即可创建自己的项目。软件自带几个例子，可以自己运行一下。要运行自己的数据需要将自己的vcf文件放入软件目录下：/home/username/software/myVCF-master/data/VCFs。<br>
+3. 运行了一个例子，结果展示如下，一系列可视化图片，简约美观，还能打印输出，能缩放，是交互式的，感觉很有趣。<br>
+<img src="https://shirley-wbw.github.io/post-images/1565080904697.png" alt=""><br>
+<img src="https://shirley-wbw.github.io/post-images/1565080929812.png" alt=""><br>
+<img src="https://shirley-wbw.github.io/post-images/1565080946383.png" alt=""><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081012810.png" alt=""><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081022519.png" alt=""><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081033448.png" alt=""></p>
+<h3 id="总结">总结</h3>
+<p>测试了一些例子，我发现这个工具对注释后的vcf文件比较友好，没有注释的在可视化的步骤会受到影响。<br>
+挺有趣的小工具，但是也没有维护了。还有我运行的例子gene名称用的是ensembl ID，可能跟注释有关吧，看着不太方便。我工作中常用的是HGNC symbol。<br>
+跑了一个自己的未注释的vcf文件，结果只能出Mutations distribution: by Chromosome这张图，别的都没有。vcf注释工具我还没有研究，只能先这样了。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[GATK4实现寻找SNP记录]]></title>
         <id>https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu</id>
