@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-08-12T05:05:27.120Z</updated>
+    <updated>2019-08-14T08:25:12.915Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -10,6 +10,44 @@
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Shirley&apos;s Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[jupyter notebook配置问题记录]]></title>
+        <id>https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu</id>
+        <link href="https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu">
+        </link>
+        <updated>2019-08-14T07:53:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+<!-- more -->
+<h3 id="背景">背景</h3>
+<p>在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。</p>
+<h3 id="问题及解决办法1">问题及解决办法1</h3>
+<p>激活py2环境后启动jupyter notebook报错如下：</p>
+<pre><code>UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 4: ordinal not in range(128)
+</code></pre>
+<p>解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：</p>
+<pre><code>LANG=zn jupyter lab
+jupyter lab
+</code></pre>
+<h3 id="问题及解决办法2">问题及解决办法2</h3>
+<p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
+<pre><code>PyInit__pywrap_tensorflow_internal
+</code></pre>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还说py3。</p>
+<pre><code>import platform
+print(platform.python_version())
+</code></pre>
+<p>这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：</p>
+<pre><code>pip install ipykernel
+python -m ipykernel install --name your_env_name
+# 以上语句没有权限执行，则运行以下语句
+python -m ipykernel install --user --name your_env_name
+</code></pre>
+<h3 id="总结">总结</h3>
+<p>这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于基因ID的知识记录]]></title>
         <id>https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu</id>

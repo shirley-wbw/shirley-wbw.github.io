@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于基因ID的知识记录 | Shirley&#39;s Gridea</title>
+<title>jupyter notebook配置问题记录 | Shirley&#39;s Gridea</title>
 <link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1565771108005">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -74,37 +74,44 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于基因ID的知识记录
+              jupyter notebook配置问题记录
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-08-06 ·
+                · 2019-08-14 ·
               </time>
-              
-                <a href="https://shirley-wbw.github.io/tag/MdyzJQ4FV" class="post-tag">
-                  # Bioinfo
-                </a>
               
             </div>
             
             <div class="post-content">
-              <p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+              <p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
 <!-- more -->
-<h3 id="基因id的问题">基因ID的问题</h3>
-<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
-entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
-<h3 id="基因id的转换">基因ID的转换</h3>
-<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
-<pre><code>library(AnnotationDbi)
-library(org.Hs.eg.db)
-#查看org.Hs.eg.db里可用的key.
-keytypes(org.Hs.eg.db)
-#读取特定key中的值,读取前五个.
-keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
-#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
-list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
-                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+<h3 id="背景">背景</h3>
+<p>在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。</p>
+<h3 id="问题及解决办法1">问题及解决办法1</h3>
+<p>激活py2环境后启动jupyter notebook报错如下：</p>
+<pre><code>UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 4: ordinal not in range(128)
 </code></pre>
+<p>解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：</p>
+<pre><code>LANG=zn jupyter lab
+jupyter lab
+</code></pre>
+<h3 id="问题及解决办法2">问题及解决办法2</h3>
+<p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
+<pre><code>PyInit__pywrap_tensorflow_internal
+</code></pre>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还说py3。</p>
+<pre><code>import platform
+print(platform.python_version())
+</code></pre>
+<p>这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：</p>
+<pre><code>pip install ipykernel
+python -m ipykernel install --name your_env_name
+# 以上语句没有权限执行，则运行以下语句
+python -m ipykernel install --user --name your_env_name
+</code></pre>
+<h3 id="总结">总结</h3>
+<p>这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。</p>
 
             </div>
           </article>
@@ -113,9 +120,9 @@ list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list,
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi">
+            <a href="https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu">
               <h3 class="post-title">
-                myVCF对突变文件进行可视化分析
+                关于基因ID的知识记录
               </h3>
             </a>
           </div>
