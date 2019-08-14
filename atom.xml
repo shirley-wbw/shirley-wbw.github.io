@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-08-14T08:25:12.915Z</updated>
+    <updated>2019-08-14T08:54:42.913Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -34,7 +34,7 @@ jupyter lab
 <p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
 <pre><code>PyInit__pywrap_tensorflow_internal
 </code></pre>
-<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还说py3。</p>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。</p>
 <pre><code>import platform
 print(platform.python_version())
 </code></pre>

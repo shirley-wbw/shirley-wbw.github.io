@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>jupyter notebook配置问题记录 | Shirley&#39;s Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1565771108005">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1565772346704">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1565771108005" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1565772346704" alt="">
   </a>
   <h1 class="site-title">
     Shirley&#39;s Gridea
@@ -57,6 +57,10 @@
   </div>
   <div class="social-container">
     
+      
+        <a href="https://github.com/shirley-wbw" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
       
     
       
@@ -100,7 +104,7 @@ jupyter lab
 <p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
 <pre><code>PyInit__pywrap_tensorflow_internal
 </code></pre>
-<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还说py3。</p>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。</p>
 <pre><code>import platform
 print(platform.python_version())
 </code></pre>
