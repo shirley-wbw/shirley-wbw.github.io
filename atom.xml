@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-09-10T09:26:46.294Z</updated>
+    <updated>2019-09-29T02:30:24.795Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -215,7 +215,8 @@ ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
 <h4 id="正常-肿瘤样本对照寻找snp">正常-肿瘤样本对照寻找snp</h4>
 <p>非常复杂，需要构建PoN（Panel Of Normals），下载germline-resource。另外还有去除污染和链方向偏差矫正，这两块我没有做。</p>
 <ol>
-<li>PoN构建，推荐40个样本以上，注意要用健康年轻的样本构建，来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。构建PoN的目的一是排除种系突变，二是排除测序技术误差。构建分三步。</li>
+<li>PoN构建，推荐40个样本以上，注意要用健康年轻的样本构建，来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。构建PoN的目的一是排除种系突变，二是排除测序技术误差。构建分三步。<br>
+PS：但是这里有一个问题，根据PoN的作用，我觉得构建PoN的健康样本的测序时间及测序条件应该与要寻找突变的肿瘤样本相近，这点不利于长期实践和标准流程构建，如果在生产过程中，要加入寻找突变的检测，长期下来，可能需设定PoN更新周期来更新PoN。</li>
 </ol>
 <ul>
 <li>第一步，对每个样本寻找体细胞突变。此处由于后续工具有beta版的，导致这里必须加--max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）<br>
