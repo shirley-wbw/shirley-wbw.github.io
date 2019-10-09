@@ -4,7 +4,7 @@
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GATK4实现寻找SNP记录 | Shirley&#39;s Gridea</title>
-<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1569724221774">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1570603615238">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://shirley-wbw.github.io">
-  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1569724221774" alt="">
+  <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1570603615238" alt="">
   </a>
   <h1 class="site-title">
     Shirley&#39;s Gridea
@@ -122,7 +122,8 @@ ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
 <li>做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。</li>
 </ol>
 <h3 id="碱基质量矫正bqsr">碱基质量矫正（BQSR）</h3>
-<p>GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
+<p>BQSR:Base Quality Score Recalibration.<br>
+GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
 <ol>
 <li>所需文件准备，可以从GATK官网Resource Bundle下载需要的参考文件。或者根据自己的文件生成，以hg19为例，需要hg19.fa，hg19.fa.fai，hg19.dict。没有.dict可以用picard的CreateSequenceDictionary生成。</li>
 </ol>

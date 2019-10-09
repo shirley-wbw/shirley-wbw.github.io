@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-09-29T02:30:24.795Z</updated>
+    <updated>2019-10-09T06:46:59.159Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -161,7 +161,8 @@ ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
 <li>做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。</li>
 </ol>
 <h3 id="碱基质量矫正bqsr">碱基质量矫正（BQSR）</h3>
-<p>GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
+<p>BQSR:Base Quality Score Recalibration.<br>
+GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
 <ol>
 <li>所需文件准备，可以从GATK官网Resource Bundle下载需要的参考文件。或者根据自己的文件生成，以hg19为例，需要hg19.fa，hg19.fa.fai，hg19.dict。没有.dict可以用picard的CreateSequenceDictionary生成。</li>
 </ol>
