@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="description" content="" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于基因ID的知识记录 | Shirley&#39;s Gridea</title>
+<title>python简单功能实现语句集锦 | Shirley&#39;s Gridea</title>
 <link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1570695765153">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
@@ -78,36 +78,54 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于基因ID的知识记录
+              python简单功能实现语句集锦
             </h2>
             <div class="post-info">
               <time class="post-time">
-                · 2019-08-06 ·
+                · 2019-07-11 ·
               </time>
               
-                <a href="https://shirley-wbw.github.io/tag/MdyzJQ4FV" class="post-tag">
-                  # Bioinfo
+                <a href="https://shirley-wbw.github.io/tag/eAr4aG930" class="post-tag">
+                  # Python
                 </a>
               
             </div>
             
             <div class="post-content">
-              <p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+              <p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
 <!-- more -->
-<h3 id="基因id的问题">基因ID的问题</h3>
-<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
-entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
-<h3 id="基因id的转换">基因ID的转换</h3>
-<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
-<pre><code>library(AnnotationDbi)
-library(org.Hs.eg.db)
-#查看org.Hs.eg.db里可用的key.
-keytypes(org.Hs.eg.db)
-#读取特定key中的值,读取前五个.
-keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
-#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
-list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
-                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+<ul>
+<li>pandas dataframe取列名，可用于判断某列名是否在列名列表里。</li>
+</ul>
+<pre><code>DataFrame.columns.values.tolist()
+</code></pre>
+<ul>
+<li>pandas按某列指定字符顺序给行排序。</li>
+</ul>
+<pre><code>word_order=['b','d','a','c']
+df['word'] = df['word'].astype('category')
+# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
+df['word'].cat.set_categories(word_order, inplace=True)
+df.sort_values(by=[&quot;word&quot;,&quot;num&quot;],inplace=True)
+</code></pre>
+<ul>
+<li>pandas按某指定列名顺序给列重排序。</li>
+</ul>
+<pre><code>column_order=['cd','ac','bd','da']
+df = df[column_order]
+</code></pre>
+<ul>
+<li>numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。</li>
+</ul>
+<pre><code>df = pd.read_csv(&quot;xxx.csv&quot;)
+need_column=['S1','S5','S6','S9']
+data_arr=data.loc[:need_column].T.values
+</code></pre>
+<ul>
+<li>接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。</li>
+</ul>
+<pre><code>data_split = np.hsplit(data_arr, 3)
+data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
 </code></pre>
 
             </div>
@@ -117,9 +135,9 @@ list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list,
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi">
+            <a href="https://shirley-wbw.github.io/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi">
               <h3 class="post-title">
-                myVCF对突变文件进行可视化分析
+                libsvm二分类实践总结
               </h3>
             </a>
           </div>

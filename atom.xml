@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-09T07:09:32.021Z</updated>
+    <updated>2019-10-10T08:22:49.855Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -342,6 +342,51 @@ $GATK VariantFiltration \
 （2）<a href="http://www.bioinfo-scrounger.com/archives/699">Mutect2-肿瘤不同转移时期的免疫微环境异质性研究</a><br>
 （3）<a href="http://www.bioinfo-scrounger.com/archives/666">初试GATK4-mutect2来call somatic mutation</a><br>
 （4）<a href="https://software.broadinstitute.org/gatk/">GATK官方网站</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[python简单功能实现语句集锦]]></title>
+        <id>https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin</id>
+        <link href="https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin">
+        </link>
+        <updated>2019-07-11T05:01:20.000Z</updated>
+        <summary type="html"><![CDATA[<p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
+<!-- more -->
+<ul>
+<li>pandas dataframe取列名，可用于判断某列名是否在列名列表里。</li>
+</ul>
+<pre><code>DataFrame.columns.values.tolist()
+</code></pre>
+<ul>
+<li>pandas按某列指定字符顺序给行排序。</li>
+</ul>
+<pre><code>word_order=['b','d','a','c']
+df['word'] = df['word'].astype('category')
+# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
+df['word'].cat.set_categories(word_order, inplace=True)
+df.sort_values(by=[&quot;word&quot;,&quot;num&quot;],inplace=True)
+</code></pre>
+<ul>
+<li>pandas按某指定列名顺序给列重排序。</li>
+</ul>
+<pre><code>column_order=['cd','ac','bd','da']
+df = df[column_order]
+</code></pre>
+<ul>
+<li>numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。</li>
+</ul>
+<pre><code>df = pd.read_csv(&quot;xxx.csv&quot;)
+need_column=['S1','S5','S6','S9']
+data_arr=data.loc[:need_column].T.values
+</code></pre>
+<ul>
+<li>接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。</li>
+</ul>
+<pre><code>data_split = np.hsplit(data_arr, 3)
+data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
+</code></pre>
 ]]></content>
     </entry>
     <entry>
