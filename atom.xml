@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-10T08:26:18.804Z</updated>
+    <updated>2019-10-11T01:56:28.998Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -541,6 +541,12 @@ geom_histogram(position = &quot;identity&quot;,alpha = 0.2,aes(y = ..density..))
 ]]></summary>
         <content type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
 <!--more-->
+<ul>
+<li>查看文件占用空间大小</li>
+</ul>
+<pre><code>du -sh * | sort -rh #按从大到小的顺序排
+du -sh * | sort -h #按从小到大的顺序排
+</code></pre>
 <ul>
 <li>统计文件行数</li>
 </ul>
