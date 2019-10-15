@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-14T05:57:14.113Z</updated>
+    <updated>2019-10-15T05:23:52.920Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -129,9 +129,11 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
         <link href="https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu">
         </link>
         <updated>2019-07-24T03:07:34.000Z</updated>
-        <summary type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。</p>
+        <summary type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br>
+<strong>2019.10.15：发现GATK4更新且有其他变化，本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong></p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。</p>
+        <content type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br>
+<strong>2019.10.15：发现GATK4更新且有其他变化，本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong></p>
 <!-- more -->
 <p>基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。其中数据预处理部分是一样的，后两部分又分为寻找种系突变和体细胞突变。本文侧重寻找体细胞突变。<br>
 建议在代码化的时候设置好各项变量，比如参考文件路径，软件路径，输出文件路径等等，这样在批量出结果的时候就可以脉络清晰，方便查看及引用。</p>
@@ -139,11 +141,11 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
 <h3 id="下机数据处理获得dupbam文件">下机数据处理获得dup.bam文件</h3>
 <p>由于我拿到的数据是dup.bam（即经过比对、排序、去重、索引后），所以数据预处理这部分基本不需要做什么了，但是有以下几点注意事项。</p>
 <ol>
-<li>dup.bam文件必须有文件头，此处指的是要包含@RG信息，没有这个信息的话，可以用picard的AddOrReplaceReadGroups手动加。</li>
+<li>dup.bam文件必须有文件头，此处指的是要包含@RG信息，没有这个信息的话无法使用，可以用picard的<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_AddOrReplaceReadGroups.php">AddOrReplaceReadGroups</a>手动加。</li>
 </ol>
 <pre><code>$JAVA/java -Xmx2g -jar $PICARD/picard.jar AddOrReplaceReadGroups \
 I=$sample.dup.bam O=$sample.ah.bam \
-ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
+ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
 </code></pre>
 <ol start="2">
 <li>看到很多bwa比对的，但我这里用的是bowtie2，如果要在bowtie2步骤把@RG加上，比对获得sam文件，排序去重建索引后，获得的dup.bam文件直接就可以进行下游分析了。</li>
@@ -151,7 +153,7 @@ ID=$sample LB=$sample PL=ILLUMINA PU=$sample SM=$sample
 <pre><code>$BOWTIE/bowtie2 -q --phred33 --sensitive --end-to-end \
 -x $ref/hg19/Bowtie2Index/human_hg19 \
 --rg-id $sample \
---rg &quot;PL:ILLUMINA&quot; \
+--rg &quot;PL:illumina&quot; \
 --rg &quot;LB:$sample&quot; \
 --rg &quot;PU:$sample&quot; \
 --rg &quot;SM:$sample&quot; \
@@ -172,7 +174,8 @@ GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
 <li>碱基质量校正分两步。</li>
 </ol>
 <ul>
-<li>第一步，注意--known-sites参数需要的文件从GATK官网Resource Bundle下载。</li>
+<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php">BaseRecalibrator</a>的--known-sites参数需要的文件可以从GATK官网Resource Bundle下载，几个文件的解释有相关介绍：<a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=1259">官网解释</a>，<br>
+<a href="http://www.huangshujia.me/2018/07/29/2018-07-29-Which-training-sets-arguments-should-I-use-for-running-vqsr.html">国内解释文章</a>。</li>
 </ul>
 <pre><code>$GATK BaseRecalibrator \
 -R hg19.fa \
@@ -216,13 +219,16 @@ GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
 <h4 id="正常-肿瘤样本对照寻找snp">正常-肿瘤样本对照寻找snp</h4>
 <p>非常复杂，需要构建PoN（Panel Of Normals），下载germline-resource。另外还有去除污染和链方向偏差矫正，这两块我没有做。</p>
 <ol>
-<li>PoN构建，推荐40个样本以上，注意要用健康年轻的样本构建，来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。构建PoN的目的一是排除种系突变，二是排除测序技术误差。构建分三步。<br>
+<li><a href="https://software.broadinstitute.org/gatk/documentation/article?id=11053">Panel of Normals (PON)</a>：官方建议使用健康的年轻的至少40例样本构建PoN，且测序实验技术上应尽可能与肿瘤样本相似，其作用主要是排除种系突变和排除实验误差。来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。构建PoN的目的一是排除种系突变，二是排除测序技术误差。构建分三步。<br>
 PS：但是这里有一个问题，根据PoN的作用，我觉得构建PoN的健康样本的测序时间及测序条件应该与要寻找突变的肿瘤样本相近，这点不利于长期实践和标准流程构建，如果在生产过程中，要加入寻找突变的检测，长期下来，可能需设定PoN更新周期来更新PoN。</li>
 </ol>
 <ul>
-<li>第一步，对每个样本寻找体细胞突变。此处由于后续工具有beta版的，导致这里必须加--max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）<br>
-这里要注意构建PoN的第一步不能加--germline-resource参数。</li>
+<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_Mutect2.php">Mutect2</a>的Tumor-only mode对每个样本寻找体细胞突变。构建PoN的第一步不能加--germline-resource参数。此处由于后续工具有beta版的，导致这里必须加--max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）<br>
+在GATK4.1.4.0的CreateSomaticPanelOfNormals部分有详细介绍，以下为<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">引用原文</a>：</li>
 </ul>
+<blockquote>
+<p>Note that as of May, 2019 -max-mnp-distance must be set to zero to avoid a bug in GenomicsDBImport.</p>
+</blockquote>
 <pre><code>$GATK Mutect2 \
 -R hg19.fa \
 --max-mnp-distance 0 \
@@ -244,7 +250,7 @@ $GATK GenomicsDBImport \
 --genomicsdb-workspace-path pon_db \
 ${merge_vcfs}
 </code></pre>
-<p>这里又有坑了，-L参数是个位置参数，必须传入文件，我是针对全基因组的，实在不知道该传什么，就下载了hg19.bed，用picard的BedToIntervalList获得了interval_list。（picard功能好多，简直是救我狗命，好崩溃呀）</p>
+<p>这里又有坑了<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_genomicsdb_GenomicsDBImport.php">GenomicsDBImport</a>：在GATK4.1.2.0中该工具的-L是必须参数，我是针对全基因组的，实在不知道该传什么，就下载了hg19.bed，用picard的BedToIntervalList获得了hg9.interval_list。（picard功能好多，简直是救我狗命，好崩溃呀）</p>
 <pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar BedToIntervalList \
 I=hg19.bed \
 O=hg19.interval_list \
@@ -259,7 +265,7 @@ SD=human.dict
 -V gendb://pon_db \
 -O pon_db.vcf.gz
 </code></pre>
-<p>这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu--germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）<br>
+<p><a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">CreateSomaticPanelOfNormals</a>是beta版的。这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu--germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）<br>
 备注：我下载了这个资源，用官方的b37也生成了一个自己的，两个文件大小不一致，统计其中记录的突变数据行数是一样的，在CreateSomaticPanelOfNormals这步获得的pon_db.vcf.gz结果也是一样，diff了一下，差别仅在文件头里里记录的执行语句及任务开始时间不同。所以我认为这个可以用。自己生成的是可以复现溯源。</p>
 <pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar LiftoverVcf \
 I=af-only-gnomad.raw.sites.b37.vcf.gz \
@@ -337,7 +343,7 @@ $GATK VariantFiltration \
 <h2 id="结语">结语</h2>
 <p>获得的突变结果文件是vcf格式的，过滤前后的FILTER位有差异，过滤前的文件FILTER位是一个点号，过滤后的通过过滤的位点后为“PASS”，其他的还有各种标记，还需进一步研究。<br>
 这个GATK4找突变，真的很难很复杂。还在摸索中。<br>
-关于种系突变VQSR里要用到的4个参考文件、硬过滤参数阈值设定、vcf文件格式说明之类的，相关知识和内容实在太多，在一篇文章中讲不完，再说我也不怎么会。</p>
+关于种系突变VQSR里硬过滤参数阈值设定、vcf文件格式说明之类的，相关知识和内容实在太多，在一篇文章中讲不完，再说我也不怎么会。</p>
 <p>参考资料：<br>
 （1）<a href="https://ming-lian.github.io/2019/02/08/call-snp/">深入了解snp-calling流程</a><br>
 （2）<a href="http://www.bioinfo-scrounger.com/archives/699">Mutect2-肿瘤不同转移时期的免疫微环境异质性研究</a><br>
