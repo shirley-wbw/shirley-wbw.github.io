@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-17T05:26:32.578Z</updated>
+    <updated>2019-10-17T05:28:41.406Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -16,7 +16,10 @@
         <link href="https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu">
         </link>
         <updated>2019-10-17T05:18:49.000Z</updated>
+        <summary type="html"><![CDATA[<p>写python代码经常遇到各种报错，有时是脚本写错，但有时是环境问题。做一些记录。</p>
+]]></summary>
         <content type="html"><![CDATA[<p>写python代码经常遇到各种报错，有时是脚本写错，但有时是环境问题。做一些记录。</p>
+<!-- more -->
 <ul>
 <li>集群上执行python代码多进程报错，脚本中用到multiprocessing</li>
 </ul>
