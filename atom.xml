@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-15T09:12:02.071Z</updated>
+    <updated>2019-10-17T05:26:32.578Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -10,6 +10,22 @@
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Shirley&apos;s Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[python相关报错记录]]></title>
+        <id>https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu</id>
+        <link href="https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu">
+        </link>
+        <updated>2019-10-17T05:18:49.000Z</updated>
+        <content type="html"><![CDATA[<p>写python代码经常遇到各种报错，有时是脚本写错，但有时是环境问题。做一些记录。</p>
+<ul>
+<li>集群上执行python代码多进程报错，脚本中用到multiprocessing</li>
+</ul>
+<pre><code>return Lock(ctx=self.get_context()) #即有lock等字样
+PermissionError: [Errno 13] Permission denied
+</code></pre>
+<p>问题出在/dev/shm的权限，解决办法是让管理员调权限，参考stackoverflow上<a href="https://stackoverflow.com/questions/2009278/python-multiprocessing-permission-denied">Python multiprocessing: Permission denied</a>。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[jupyter notebook配置问题记录]]></title>
         <id>https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu</id>
@@ -350,6 +366,27 @@ $GATK VariantFiltration \
 （3）<a href="http://www.bioinfo-scrounger.com/archives/666">初试GATK4-mutect2来call somatic mutation</a><br>
 （4）<a href="http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html">【原创】GATK使用方法详解（包含bwa使用）第三部分</a><br>
 （5）<a href="https://software.broadinstitute.org/gatk/">GATK官方网站</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[小工具记录]]></title>
+        <id>https://shirley-wbw.github.io/post/xiao-gong-ju-ji-lu</id>
+        <link href="https://shirley-wbw.github.io/post/xiao-gong-ju-ji-lu">
+        </link>
+        <updated>2019-07-11T05:54:24.000Z</updated>
+        <summary type="html"><![CDATA[<p>记录几个小工具，常言道：书到用时方恨少。为避免紧急情况下实现一些功能，还是平日里积累些小工具吧。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>记录几个小工具，常言道：书到用时方恨少。为避免紧急情况下实现一些功能，还是平日里积累些小工具吧。</p>
+<!-- more -->
+<ul>
+<li>GeoGebra<br>
+可视化界面作图，<a href="https://blog.csdn.net/dog250/article/details/77148217">相关文章</a></li>
+<li>LaTeX<br>
+编辑器，<a href="https://liam.page/2014/09/08/latex-introduction/">一份其实很短的 LaTeX 入门文档</a></li>
+<li>methylKit<br>
+DNA methylation analysis from high-throughput bisulfite sequencing results</li>
+<li>samtools depth</li>
+</ul>
 ]]></content>
     </entry>
     <entry>
