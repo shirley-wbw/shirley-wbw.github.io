@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-10-17T05:28:41.406Z</updated>
+    <updated>2019-10-22T02:13:58.661Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -439,6 +439,12 @@ data_arr=data.loc[:need_column].T.values
 </ul>
 <pre><code>data_split = np.hsplit(data_arr, 3)
 data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
+</code></pre>
+<ul>
+<li>双重索引。</li>
+</ul>
+<pre><code>subset.index=pd.MultiIndex.from_arrays([np.full(subset.shape[0], i),subset[&quot;a&quot;]+&quot;:&quot;+subset['b'].astype(&quot;str&quot;)], names=['num','id'])
+subset = subset.set_index(['a','b'])
 </code></pre>
 ]]></content>
     </entry>
