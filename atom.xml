@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2019-11-07T03:02:43.205Z</updated>
+    <updated>2019-11-19T02:19:41.793Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -193,7 +193,7 @@ GATK对有@RG文件头的dup.bam文件进行碱基质量矫正。</p>
 <li>碱基质量校正分两步。</li>
 </ol>
 <ul>
-<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php">BaseRecalibrator</a>的--known-sites参数需要的文件可以从GATK官网Resource Bundle下载，几个文件的解释有相关介绍：<a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=1259">官网解释</a>，<br>
+<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php">BaseRecalibrator</a>的--known-sites参数需要的文件可以从GATK官网Resource Bundle下载，参考了github上的<a href="https://github.com/gatk-workflows/gatk4-data-processing">官方流程</a>以及一些国内教程，几个文件的选择未有定论，官方只用了两个，其他教程有用三个的。具体参看了公众号“碱基旷工”的选择。几个文件的解释有相关介绍：<a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=1259">官网解释</a>，<br>
 <a href="http://www.huangshujia.me/2018/07/29/2018-07-29-Which-training-sets-arguments-should-I-use-for-running-vqsr.html">国内解释文章</a>。</li>
 </ul>
 <pre><code>$GATK BaseRecalibrator \
