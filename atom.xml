@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2020-01-10T11:20:33.316Z</updated>
+    <updated>2020-01-10T11:23:41.442Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
@@ -16,9 +16,9 @@
         <link href="https://shirley-wbw.github.io/post/sui-bi">
         </link>
         <updated>2020-01-10T10:58:14.000Z</updated>
-        <summary type="html"><![CDATA[<p>先前我是很爱写作的，自己写一些东西，渐渐年长，渐渐实际，很少去想些伤春悲秋的事情来，便成了偶尔记几笔。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>先前我是很爱写作的，自己写一些东西，渐渐年长，渐渐实际，很少去想些伤春悲秋的事情来，便成了偶尔记几笔。</p>
+        <content type="html"><![CDATA[<!-- more -->
+<!-- more -->
+<p>先前我是很爱写作的，自己写一些东西，渐渐年长，渐渐实际，很少去想些伤春悲秋的事情来，便成了偶尔记几笔。</p>
 <!-- more -->
 <ul>
 <li>”一蓑烟雨任平生“，”无人会，登临意 “<br>
