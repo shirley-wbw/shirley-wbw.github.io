@@ -2,14 +2,14 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://shirley-wbw.github.io</id>
     <title>Shirley&apos;s Gridea</title>
-    <updated>2020-11-17T05:48:37.643Z</updated>
+    <updated>2021-03-05T02:12:00.377Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://shirley-wbw.github.io"/>
     <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
     <subtitle>行则将至</subtitle>
     <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
     <icon>https://shirley-wbw.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Shirley&apos;s Gridea</rights>
+    <rights>All rights reserved 2021, Shirley&apos;s Gridea</rights>
     <entry>
         <title type="html"><![CDATA[python相关报错记录]]></title>
         <id>https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu/</id>
@@ -373,83 +373,6 @@ $GATK VariantFiltration \
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[小工具记录]]></title>
-        <id>https://shirley-wbw.github.io/post/xiao-gong-ju-ji-lu/</id>
-        <link href="https://shirley-wbw.github.io/post/xiao-gong-ju-ji-lu/">
-        </link>
-        <updated>2019-07-11T05:54:24.000Z</updated>
-        <summary type="html"><![CDATA[<p>记录几个小工具，常言道：书到用时方恨少。为避免紧急情况下实现一些功能，还是平日里积累些小工具吧。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>记录几个小工具，常言道：书到用时方恨少。为避免紧急情况下实现一些功能，还是平日里积累些小工具吧。</p>
-<!-- more -->
-<ul>
-<li>GeoGebra<br>
-可视化界面作图，<a href="https://blog.csdn.net/dog250/article/details/77148217">相关文章</a></li>
-<li>LaTeX<br>
-编辑器，<a href="https://liam.page/2014/09/08/latex-introduction/">一份其实很短的 LaTeX 入门文档</a></li>
-<li>methylKit<br>
-DNA methylation analysis from high-throughput bisulfite sequencing results</li>
-<li>samtools depth</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[python简单功能实现语句集锦]]></title>
-        <id>https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/</id>
-        <link href="https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/">
-        </link>
-        <updated>2019-07-11T05:01:20.000Z</updated>
-        <summary type="html"><![CDATA[<p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
-<!-- more -->
-<ul>
-<li>pandas dataframe取列名，可用于判断某列名是否在列名列表里。</li>
-</ul>
-<pre><code>DataFrame.columns.values.tolist()
-</code></pre>
-<ul>
-<li>pandas按某列指定字符顺序给行排序。</li>
-</ul>
-<pre><code>word_order=['b','d','a','c']
-df['word'] = df['word'].astype('category')
-# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
-df['word'].cat.set_categories(word_order, inplace=True)
-df.sort_values(by=[&quot;word&quot;,&quot;num&quot;],inplace=True)
-</code></pre>
-<ul>
-<li>pandas按某指定列名顺序给列重排序。</li>
-</ul>
-<pre><code>column_order=['cd','ac','bd','da']
-df = df[column_order]
-</code></pre>
-<ul>
-<li>pandas对行去重。</li>
-</ul>
-<pre><code>df.drop_duplicates(['colname1','colname2','colname3'], 'last')
-</code></pre>
-<ul>
-<li>numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。</li>
-</ul>
-<pre><code>df = pd.read_csv(&quot;xxx.csv&quot;)
-need_column=['S1','S5','S6','S9']
-data_arr=data.loc[:need_column].T.values
-</code></pre>
-<ul>
-<li>接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。</li>
-</ul>
-<pre><code>data_split = np.hsplit(data_arr, 3)
-data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
-</code></pre>
-<ul>
-<li>双重索引。</li>
-</ul>
-<pre><code>subset.index=pd.MultiIndex.from_arrays([np.full(subset.shape[0], i),subset[&quot;a&quot;]+&quot;:&quot;+subset['b'].astype(&quot;str&quot;)], names=['num','id'])
-subset = subset.set_index(['a','b'])
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[libsvm二分类实践总结]]></title>
         <id>https://shirley-wbw.github.io/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi/</id>
         <link href="https://shirley-wbw.github.io/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi/">
@@ -562,123 +485,15 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[常用的R语言及R绘图语句集锦]]></title>
-        <id>https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/</id>
-        <link href="https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/">
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://shirley-wbw.github.io/post/about/</id>
+        <link href="https://shirley-wbw.github.io/post/about/">
         </link>
-        <updated>2019-07-05T09:16:37.000Z</updated>
-        <summary type="html"><![CDATA[<p>工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。</p>
+        <updated>2019-01-25T11:09:48.000Z</updated>
+        <summary type="html"><![CDATA[<p>技术性及知识性文章直接在首页展示，个人心情个人生活类文章在“个人日志”栏目，基本上是随笔。</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。</p>
-<!--more-->
-<ul>
-<li>R中ggplot绘图使添加的标题居中</li>
-</ul>
-<pre><code>ggplot(stage_data,aes(x=stage,y=num)) + 
-    labs(title=&quot;Stage Distribution&quot;) +
-    theme(plot.title = element_text(hjust = 0.5))
-</code></pre>
-<ul>
-<li>R中ggplot绘密度曲线</li>
-</ul>
-<pre><code>ggplot(origin_input, aes(x = xvalue)) + 
-geom_histogram(position = &quot;identity&quot;,alpha = 0.2,aes(y = ..density..))
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[工作中常用的Shell语句集锦]]></title>
-        <id>https://shirley-wbw.github.io/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin/</id>
-        <link href="https://shirley-wbw.github.io/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin/">
-        </link>
-        <updated>2019-07-05T07:16:02.000Z</updated>
-        <summary type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
-<!--more-->
-<ul>
-<li>查看文件占用空间大小</li>
-</ul>
-<pre><code>du -sh * | sort -rh #按从大到小的顺序排
-du -sh * | sort -h #按从小到大的顺序排
-</code></pre>
-<ul>
-<li>统计文件行数</li>
-</ul>
-<pre><code>wc -l filename
-</code></pre>
-<ul>
-<li>删除文件的1-7行，在原文件上修改</li>
-</ul>
-<pre><code>sed -i '1,7d' filename
-</code></pre>
-<ul>
-<li>查看文件的某一行并提取该行的最后一列，如第1845行</li>
-</ul>
-<pre><code>sed -n 1845p filename
-cat filename | awk 'NR==1845' | awk '{print $NF}'
-</code></pre>
-<ul>
-<li>查看文件的3000行到4000行</li>
-</ul>
-<pre><code>cat filename | head -n 3000 | tail -n +1000
-</code></pre>
-<ul>
-<li>提取文件中某一列符合要求的行</li>
-</ul>
-<pre><code>cat filename | awk '$4 == &quot;n37&quot; {print}'
-</code></pre>
-<ul>
-<li>提取文件中某几列符合要求的行到新文件</li>
-</ul>
-<pre><code>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile
-</code></pre>
-<ul>
-<li>计算文件最后一列的和并输出</li>
-</ul>
-<pre><code>awk '{sum +=$NF}; END {print sum}' filename
-</code></pre>
-<ul>
-<li>计算文件每行的和并输出为一个列向量</li>
-</ul>
-<pre><code>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile
-</code></pre>
-<ul>
-<li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
-</ul>
-<pre><code>long=$(sed -n ' $=' filename1)
-short=$(sed -n ' $=' filename2)
-sed $ (( $short+1)), ${long}d filename1 &gt; filename3
-</code></pre>
-<ul>
-<li>删除文件的后3行</li>
-</ul>
-<pre><code>tac filename | sed 1,3d | tac &gt; newfile
-sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile
-</code></pre>
-<ul>
-<li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
-</ul>
-<pre><code>cat filename | awk '{print $1}' | sort | uniq -c
-sort -k1,1 -k2,2n filename | uniq &gt; newfile
-</code></pre>
-<ul>
-<li>输出文件第一列的最大值/最小值</li>
-</ul>
-<pre><code>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'
-cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'
-</code></pre>
-<ul>
-<li>批量清除任务</li>
-</ul>
-<pre><code>ps -ef | grep taskscriptname | cut -c9-15 | xargs kill -9
-</code></pre>
-<ul>
-<li>提取含关键字的行相关命令</li>
-</ul>
-<pre><code>#提取含real的行输出其第二列，每三个写入一行中
-grep -n -E 'real' nohup.log | awk '{print $2}' | awk '{if(NR%3!=0)ORS=&quot; &quot;;else ORS=&quot;\n&quot;}1' &gt; time3.log
-</code></pre>
+        <content type="html"><![CDATA[<p>技术性及知识性文章直接在首页展示，个人心情个人生活类文章在“个人日志”栏目，基本上是随笔。</p>
+<!-- more -->
 ]]></content>
     </entry>
 </feed>
