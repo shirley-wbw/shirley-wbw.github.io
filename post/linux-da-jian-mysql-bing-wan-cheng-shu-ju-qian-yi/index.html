@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于基因ID的知识记录 | Shirley&#39;s Gridea</title>
+<title>Linux搭建MySQL并完成数据迁移 | Shirley&#39;s Gridea</title>
 <meta name="description" content="行则将至">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -104,44 +104,83 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于基因ID的知识记录</h2>
-            <div class="post-date">2019-08-06</div>
+            <h2 class="post-title">Linux搭建MySQL并完成数据迁移</h2>
+            <div class="post-date">2021-07-05</div>
             
             <div class="post-content">
-              <p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+              <p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
 <!-- more -->
-<h3 id="基因id的问题">基因ID的问题</h3>
-<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
-entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
-<h3 id="基因id的转换">基因ID的转换</h3>
-<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
-<pre><code>library(AnnotationDbi)
-library(org.Hs.eg.db)
-#查看org.Hs.eg.db里可用的key.
-keytypes(org.Hs.eg.db)
-#读取特定key中的值,读取前五个.
-keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
-#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
-list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
-                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+<h3 id="查看服务器版本">查看服务器版本</h3>
+<ol>
+<li><code>uname -a</code>查看Linux操作系统版本。</li>
+<li><code>cat /proc/version</code>查看内核版本。</li>
+<li><code>cat /etc/issue</code>查看发行版本信息。</li>
+<li><code>lsb_release -a</code>也可以查看。<br>
+例如经过以上指令后获得服务器版本为Linux的16.04.1-Ubuntu，x86_64。</li>
+</ol>
+<h3 id="下载并安装mysql-社区通用版">下载并安装MySQL 社区通用版</h3>
+<ol>
+<li>进入官网-DOWNLOADS-MySQL Community (GPL) Downloads-MySQL Community Server，切换到Archives，例如选择Product Version：5.7.30，Operating System：Linux-Generic，OS Version：Linux-Generic(glibc 2.12)(x86,64-bit)，随后点击Download下载安装包。</li>
+<li>下载完成后将安装包上传至服务器自己的目录下，解压：<br>
+<code>tar -zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz</code><br>
+编辑my.cnf配置文件如下（仅作为示例，可根据实际需求设置各种配置项），放在当前mysql安装目录下：</li>
+</ol>
+<pre><code>[client]
+port=3306					#服务端口
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+
+[mysqld]
+port=3306					#服务端口
+basedir=/home/apps/mysql			#mysql安装路径
+datadir=/home/apps/mysql/data                   #数据目录
+pid-file=/home/apps/mysql/mysql.pid		#指定pid文件
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+log_error=/home/apps/mysql/error.log            #指定错误日志
+server-id=100                                   #Mysql主从唯一标识
+</code></pre>
+<p>随后进入bin目录<code>cd bin</code>，后执行以下语句安装并初始化：<br>
+<code>./mysqld --defaults-file=/home/apps/mysql/my.cnf --initialize --user=apps --basedir=/home/apps/mysql --datadir=/home/apps/mysql/data</code><br>
+启动mysql服务<code>./mysqld_safe --defaults-file=/home/apps/mysql/my.cnf --user=apps &amp;</code><br>
+启动成功后监听端口<code>netstat -tln | grep 3306</code><br>
+3. 获取root用户的初始密码<code>less error.log | grep root@localhost</code><br>
+使用密码登录<code>bin/mysql -u root -p -S /home/apps/mysql/mysql.sock</code><br>
+登录成功后修改密码并刷新权限生效</p>
+<pre><code>SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+flush privileges;
+</code></pre>
+<ol start="4">
+<li>开启远程访问，创建用户admin并授权。</li>
+</ol>
+<pre><code>use mysql		--切换至mysql数据库
+select User,authentication_string,Host from user;	
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';	--允许其他主机访问
+flush privileges;
+create user 'admin'@'%' identified by '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+select User,authentication_string,Host from user;	
+</code></pre>
+<h3 id="数据迁移">数据迁移</h3>
+<ol>
+<li>在原有数据库进行数据备份，例如可以再Windos端使用MySQL Workbench软件连接数据库，Management-Data Export选择要导出的数据库，需要有备份权限才可以。</li>
+<li>可能会报错mysqldump xxx mismatch，此时可以再电脑上下载Windos版的MySQL，在MySQL Workbench里Edit-Preferences-Administration-Path to mysqldump Tools里选择MySQL目录bin中的mysqldump.exe即可完成备份获得.sql文件。</li>
+<li>如果还是通过MySQL Workbench迁移，Management-Data Import/Restore选择要恢复的数据库文件即可。</li>
+<li>如果要迁移到Linux服务器上，在服务器上进入mysql，创建一个test数据库，为防止数据库文件出现乱码，进入数据库，将编码设置为utf8，加载备份的数据库，查看数据库中的表，无误，此时也可以再远程Windows的MySQL Workbench软件里查看。</li>
+</ol>
+<pre><code>create database test;
+use test
+set names utf8;
+source /root/Envs/yw_crm_project/backup.sql
+show tables;
 </code></pre>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://shirley-wbw.github.io/tag/MdyzJQ4FV/" class="tag">
-                    Bioinfo
-                  </a>
-                
-              </div>
-            
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/">
+                <a href="https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu/">
                   <h3 class="post-title">
-                    myVCF对突变文件进行可视化分析
+                    python相关报错记录
                   </h3>
                 </a>
               </div>
