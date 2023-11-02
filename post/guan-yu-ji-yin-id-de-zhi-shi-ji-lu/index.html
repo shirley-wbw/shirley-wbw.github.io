@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>关于基因ID的知识记录 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">关于基因ID的知识记录</h2>
+            <div class="post-date">2019-08-06</div>
+            
+            <div class="post-content">
+              <p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+<!-- more -->
+<h3 id="基因id的问题">基因ID的问题</h3>
+<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
+entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
+<h3 id="基因id的转换">基因ID的转换</h3>
+<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
+<pre><code>library(AnnotationDbi)
+library(org.Hs.eg.db)
+#查看org.Hs.eg.db里可用的key.
+keytypes(org.Hs.eg.db)
+#读取特定key中的值,读取前五个.
+keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
+#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
+list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
+                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/MdyzJQ4FV/" class="tag">
+                    Bioinfo
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/">
+                  <h3 class="post-title">
+                    myVCF对突变文件进行可视化分析
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>jupyter notebook配置问题记录 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">jupyter notebook配置问题记录</h2>
+            <div class="post-date">2019-08-14</div>
+            
+            <div class="post-content">
+              <p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+<!-- more -->
+<h3 id="背景">背景</h3>
+<p>在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。</p>
+<h3 id="问题及解决办法1">问题及解决办法1</h3>
+<p>激活py2环境后启动jupyter notebook报错如下：</p>
+<pre><code>UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 4: ordinal not in range(128)
+</code></pre>
+<p>解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：</p>
+<pre><code>LANG=zn jupyter lab
+jupyter lab
+</code></pre>
+<h3 id="问题及解决办法2">问题及解决办法2</h3>
+<p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
+<pre><code>PyInit__pywrap_tensorflow_internal
+</code></pre>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。</p>
+<pre><code>import platform
+print(platform.python_version())
+</code></pre>
+<p>这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：</p>
+<pre><code>pip install ipykernel
+python -m ipykernel install --name your_env_name
+# 以上语句没有权限执行，则运行以下语句
+python -m ipykernel install --user --name your_env_name
+</code></pre>
+<h3 id="总结">总结</h3>
+<p>这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/eAr4aG930/" class="tag">
+                    Python
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/">
+                  <h3 class="post-title">
+                    关于基因ID的知识记录
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

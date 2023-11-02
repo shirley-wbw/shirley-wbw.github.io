@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://shirley-wbw.github.io</id>
+    <title>Shirley&apos;s Gridea</title>
+    <updated>2023-11-02T08:28:34.532Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://shirley-wbw.github.io"/>
+    <link rel="self" href="https://shirley-wbw.github.io/atom.xml"/>
+    <subtitle>行则将至</subtitle>
+    <logo>https://shirley-wbw.github.io/images/avatar.png</logo>
+    <icon>https://shirley-wbw.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2023, Shirley&apos;s Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Linux搭建MySQL并完成数据迁移]]></title>
+        <id>https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/</id>
+        <link href="https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/">
+        </link>
+        <updated>2021-07-05T02:47:51.000Z</updated>
+        <summary type="html"><![CDATA[<p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
+<!-- more -->
+<h3 id="查看服务器版本">查看服务器版本</h3>
+<ol>
+<li><code>uname -a</code>查看Linux操作系统版本。</li>
+<li><code>cat /proc/version</code>查看内核版本。</li>
+<li><code>cat /etc/issue</code>查看发行版本信息。</li>
+<li><code>lsb_release -a</code>也可以查看。<br>
+例如经过以上指令后获得服务器版本为Linux的16.04.1-Ubuntu，x86_64。</li>
+</ol>
+<h3 id="下载并安装mysql-社区通用版">下载并安装MySQL 社区通用版</h3>
+<ol>
+<li>进入官网-DOWNLOADS-MySQL Community (GPL) Downloads-MySQL Community Server，切换到Archives，例如选择Product Version：5.7.30，Operating System：Linux-Generic，OS Version：Linux-Generic(glibc 2.12)(x86,64-bit)，随后点击Download下载安装包。</li>
+<li>下载完成后将安装包上传至服务器自己的目录下，解压：<br>
+<code>tar -zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz</code><br>
+编辑my.cnf配置文件如下（仅作为示例，可根据实际需求设置各种配置项），放在当前mysql安装目录下：</li>
+</ol>
+<pre><code>[client]
+port=3306					#服务端口
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+
+[mysqld]
+port=3306					#服务端口
+basedir=/home/apps/mysql			#mysql安装路径
+datadir=/home/apps/mysql/data                   #数据目录
+pid-file=/home/apps/mysql/mysql.pid		#指定pid文件
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+log_error=/home/apps/mysql/error.log            #指定错误日志
+server-id=100                                   #Mysql主从唯一标识
+</code></pre>
+<p>随后进入bin目录<code>cd bin</code>，后执行以下语句安装并初始化：<br>
+<code>./mysqld --defaults-file=/home/apps/mysql/my.cnf --initialize --user=apps --basedir=/home/apps/mysql --datadir=/home/apps/mysql/data</code><br>
+启动mysql服务<code>./mysqld_safe --defaults-file=/home/apps/mysql/my.cnf --user=apps &amp;</code><br>
+启动成功后监听端口<code>netstat -tln | grep 3306</code><br>
+3. 获取root用户的初始密码<code>less error.log | grep root@localhost</code><br>
+使用密码登录<code>bin/mysql -u root -p -S /home/apps/mysql/mysql.sock</code><br>
+登录成功后修改密码并刷新权限生效</p>
+<pre><code>SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+flush privileges;
+</code></pre>
+<ol start="4">
+<li>开启远程访问，创建用户admin并授权。</li>
+</ol>
+<pre><code>use mysql		--切换至mysql数据库
+select User,authentication_string,Host from user;	
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';	--允许其他主机访问
+flush privileges;
+create user 'admin'@'%' identified by '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+select User,authentication_string,Host from user;	
+</code></pre>
+<h3 id="数据迁移">数据迁移</h3>
+<ol>
+<li>在原有数据库进行数据备份，例如可以再Windos端使用MySQL Workbench软件连接数据库，Management-Data Export选择要导出的数据库，需要有备份权限才可以。</li>
+<li>可能会报错mysqldump xxx mismatch，此时可以再电脑上下载Windos版的MySQL，在MySQL Workbench里Edit-Preferences-Administration-Path to mysqldump Tools里选择MySQL目录bin中的mysqldump.exe即可完成备份获得.sql文件。</li>
+<li>如果还是通过MySQL Workbench迁移，Management-Data Import/Restore选择要恢复的数据库文件即可。</li>
+<li>如果要迁移到Linux服务器上，在服务器上进入mysql，创建一个test数据库，为防止数据库文件出现乱码，进入数据库，将编码设置为utf8，加载备份的数据库，查看数据库中的表，无误，此时也可以再远程Windows的MySQL Workbench软件里查看。</li>
+</ol>
+<pre><code>create database test;
+use test
+set names utf8;
+source /root/Envs/yw_crm_project/backup.sql
+show tables;
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[python相关报错记录]]></title>
+        <id>https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu/</id>
+        <link href="https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu/">
+        </link>
+        <updated>2019-10-17T05:18:49.000Z</updated>
+        <summary type="html"><![CDATA[<p>写python代码经常遇到各种报错，有时是脚本写错，但有时是环境问题。做一些记录。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>写python代码经常遇到各种报错，有时是脚本写错，但有时是环境问题。做一些记录。</p>
+<!-- more -->
+<ul>
+<li>集群上执行python代码多进程报错，脚本中用到multiprocessing</li>
+</ul>
+<pre><code>return Lock(ctx=self.get_context()) #即有lock等字样
+PermissionError: [Errno 13] Permission denied
+</code></pre>
+<p>问题出在/dev/shm的权限，解决办法是让管理员调权限，参考stackoverflow上<a href="https://stackoverflow.com/questions/2009278/python-multiprocessing-permission-denied">Python multiprocessing: Permission denied</a>。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[jupyter notebook配置问题记录]]></title>
+        <id>https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu/</id>
+        <link href="https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu/">
+        </link>
+        <updated>2019-08-14T07:53:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+<!-- more -->
+<h3 id="背景">背景</h3>
+<p>在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。</p>
+<h3 id="问题及解决办法1">问题及解决办法1</h3>
+<p>激活py2环境后启动jupyter notebook报错如下：</p>
+<pre><code>UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 4: ordinal not in range(128)
+</code></pre>
+<p>解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：</p>
+<pre><code>LANG=zn jupyter lab
+jupyter lab
+</code></pre>
+<h3 id="问题及解决办法2">问题及解决办法2</h3>
+<p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
+<pre><code>PyInit__pywrap_tensorflow_internal
+</code></pre>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。</p>
+<pre><code>import platform
+print(platform.python_version())
+</code></pre>
+<p>这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：</p>
+<pre><code>pip install ipykernel
+python -m ipykernel install --name your_env_name
+# 以上语句没有权限执行，则运行以下语句
+python -m ipykernel install --user --name your_env_name
+</code></pre>
+<h3 id="总结">总结</h3>
+<p>这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于基因ID的知识记录]]></title>
+        <id>https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/</id>
+        <link href="https://shirley-wbw.github.io/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/">
+        </link>
+        <updated>2019-08-06T08:57:31.000Z</updated>
+        <summary type="html"><![CDATA[<p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>之前没注意这方面的知识，后来有次要作图，KEGG和GO的图，才发现基因ID的问题，记录如下。</p>
+<!-- more -->
+<h3 id="基因id的问题">基因ID的问题</h3>
+<p>生物信息处理时，需要从不同数据库下载数据时，基因的标识不同，所以对于同一个基因，有不同ID，常见的有entrez ID、ensembl ID、HGNC ID、refseq ID等。因此在处理数据时可能要进行基因ID的转换。<br>
+entrez ID是美国NCBI数据库中的基因标识，常由纯数字表示，ensembl ID是欧洲生物信息数据库的基因标识，都是由ENSG开头后面跟11位数字，HGNC ID是人类基因命名委员会指定的基因标识符，通常一个基因赋予一个名字和一个ID，例如人类TP53基因，标准symbol是TP53，即简称，全称是tumor protein p53，ID是11998。发表文章时用的都是基因的HGNC symbol。</p>
+<h3 id="基因id的转换">基因ID的转换</h3>
+<p>在R里可以使用AnnotationDbi和org.Hs.eg.db。不仅可以用来进行基因ID的转换，可用的key之间都可以获取对应关系。 同理，例如reactome.db里的key有ENTREZID、GO、PATHID、PATHNAME、REACTOMEID，可以进行对应关系获取。</p>
+<pre><code>library(AnnotationDbi)
+library(org.Hs.eg.db)
+#查看org.Hs.eg.db里可用的key.
+keytypes(org.Hs.eg.db)
+#读取特定key中的值,读取前五个.
+keys(org.Hs.eg.db,keytypes=&quot;ENTREZID&quot;) %&gt;% head
+#输出gene_list里的基因对应的SYMBOL和ENTREZID(基因ID转换).gene_list里是SYMBOL.
+list &lt;- AnnotationDbi::select(org.Hs.eg.db, keys = gene_list, 
+                              columns = c(&quot;ENTREZID&quot;), keytypes=&quot;SYMBOL&quot;)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[myVCF对突变文件进行可视化分析]]></title>
+        <id>https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/</id>
+        <link href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/">
+        </link>
+        <updated>2019-08-06T08:09:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。</p>
+<!-- more -->
+<h3 id="安装">安装</h3>
+<p>myVCF的功能，简单一句话，就是可视化vcf文件。我用到的就是这块。<a href="https://github.com/apietrelli/myVCF">myVCF下载路径</a>，在GitHub上。<br>
+推荐安装到Linux系统上，因为我在Windows上安装折腾了很久也没成功。</p>
+<ol>
+<li>克隆GitHub上myVCF的源码。例如我安装到以下目录。</li>
+</ol>
+<pre><code>cd  /home/username/software
+git clone https://github.com/apietrelli/myVCF.git
+</code></pre>
+<ol start="2">
+<li>在Linux系统下自己的home目录下创建python2环境，并安装依赖包。</li>
+</ol>
+<pre><code>cd /home/username/envis
+virtualenv -p /usr/bin/python2 python27
+pip install -r /home/username/software/myVCF-master/requirements.txt
+</code></pre>
+<h3 id="使用">使用</h3>
+<ol>
+<li>用终端调用时，我这里使用Xmanager Enterprise 5，因为这个里面的Xshell可以转发到X11桌面，不然的话无法显示，会报错：no display name and no $DISPLAY environment variable。</li>
+</ol>
+<pre><code>/home/username/envis/python27/bin/python2.7 -u /home/username/software/myVCF-master/myVCF_GUI.py 
+</code></pre>
+<p><img src="https://shirley-wbw.github.io/post-images/1565080122040.png" alt="" loading="lazy"><br>
+调用成功会显示如图界面，点击“Run myVCF”即可弹出火狐浏览器，进入软件界面。<br>
+2. 进入界面后如下图所示。<img src="https://shirley-wbw.github.io/post-images/1565080355859.png" alt="" loading="lazy">点击“Upload new project”即可创建自己的项目。软件自带几个例子，可以自己运行一下。要运行自己的数据需要将自己的vcf文件放入软件目录下：/home/username/software/myVCF-master/data/VCFs。<br>
+3. 运行了一个例子，结果展示如下，一系列可视化图片，简约美观，还能打印输出，能缩放，是交互式的，感觉很有趣。<br>
+<img src="https://shirley-wbw.github.io/post-images/1565080904697.png" alt="" loading="lazy"><br>
+<img src="https://shirley-wbw.github.io/post-images/1565080929812.png" alt="" loading="lazy"><br>
+<img src="https://shirley-wbw.github.io/post-images/1565080946383.png" alt="" loading="lazy"><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081012810.png" alt="" loading="lazy"><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081022519.png" alt="" loading="lazy"><br>
+<img src="https://shirley-wbw.github.io/post-images/1565081033448.png" alt="" loading="lazy"></p>
+<h3 id="总结">总结</h3>
+<p>测试了一些例子，我发现这个工具对注释后的vcf文件比较友好，没有注释的在可视化的步骤会受到影响。<br>
+挺有趣的小工具，但是也没有维护了。还有我运行的例子gene名称用的是ensembl ID，可能跟注释有关吧，看着不太方便。我工作中常用的是HGNC symbol。<br>
+跑了一个自己的未注释的vcf文件，结果只能出Mutations distribution: by Chromosome这张图，别的都没有。vcf注释工具我还没有研究，只能先这样了。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[GATK4实现寻找SNP记录]]></title>
+        <id>https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/</id>
+        <link href="https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/">
+        </link>
+        <updated>2019-07-24T03:07:34.000Z</updated>
+        <summary type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br>
+<strong>2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong><br>
+<strong>2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关</strong><br>
+<strong>2022.7.13：GATK官网持续改版，部分链接失效，更新链接</strong></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br>
+<strong>2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong><br>
+<strong>2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关</strong><br>
+<strong>2022.7.13：GATK官网持续改版，部分链接失效，更新链接</strong></p>
+<!-- more -->
+<p>基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。其中数据预处理部分是一样的，后两部分又分为寻找种系突变和体细胞突变。本文侧重寻找体细胞突变。<br>
+建议在代码化的时候设置好各项变量，比如参考文件路径，软件路径，输出文件路径等等，这样在批量出结果的时候就可以脉络清晰，方便查看及引用。</p>
+<h2 id="数据预处理">数据预处理</h2>
+<h3 id="下机数据处理获得dupbam文件">下机数据处理获得dup.bam文件</h3>
+<p>由于我拿到的数据是dup.bam（即经过比对、排序、去重、索引后），所以数据预处理这部分基本不需要做什么了，但是有以下几点注意事项。</p>
+<ol>
+<li>dup.bam文件必须有文件头，此处指的是要包含@RG信息，没有这个信息的话无法使用，可以用picard的<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_AddOrReplaceReadGroups.php">AddOrReplaceReadGroups</a>手动加。</li>
+</ol>
+<pre><code>$JAVA/java -Xmx2g -jar $PICARD/picard.jar AddOrReplaceReadGroups \
+I=$sample.dup.bam O=$sample.ah.bam \
+ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
+</code></pre>
+<ol start="2">
+<li>看到很多bwa比对的，但我这里用的是bowtie2，如果要在bowtie2步骤把@RG加上，比对获得sam文件，排序去重建索引后，获得的dup.bam文件直接就可以进行下游分析了。</li>
+</ol>
+<pre><code>$BOWTIE/bowtie2 -q --phred33 --sensitive --end-to-end \
+-x $ref/hg19/Bowtie2Index/human_hg19 \
+--rg-id $sample \
+--rg &quot;PL:illumina&quot; \
+--rg &quot;LB:$sample&quot; \
+--rg &quot;PU:$sample&quot; \
+--rg &quot;SM:$sample&quot; \
+-1 ${sample}_1.clean.fastq.gz -2 ${sample}_2.clean.fastq.gz -S ${sample}.sam
+</code></pre>
+<ol start="3">
+<li>做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。</li>
+</ol>
+<h3 id="碱基质量校正bqsr">碱基质量校正（BQSR）</h3>
+<p>BQSR:Base Quality Score Recalibration.<br>
+GATK对有@RG文件头的dup.bam文件进行碱基质量校正。</p>
+<ol>
+<li>所需文件准备，可以从GATK官网Resource Bundle下载需要的参考文件。或者根据自己的文件生成，以hg19为例，需要hg19.fa，hg19.fa.fai，hg19.dict。没有.fa.fai可以用samtools的faidx生成，没有.dict可以用picard的CreateSequenceDictionary生成。</li>
+</ol>
+<pre><code>$SAMTOOLS/samtools faidx hg19.fa
+$JAVA/java -Xmx2g -jar $PICARD/picard.jar CreateSequenceDictionary R=hg19.fa O=hg19.dict
+</code></pre>
+<ol start="2">
+<li>碱基质量校正分两步。</li>
+</ol>
+<ul>
+<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php">BaseRecalibrator</a>的--known-sites参数需要的文件可以从GATK官网Resource Bundle下载，参考了github上的<a href="https://github.com/gatk-workflows/gatk4-data-processing">官方流程</a>以及一些国内教程，几个文件的选择未有定论，官方只用了两个，其他教程有用三个的。具体参看了公众号“碱基旷工”的选择。几个文件的解释有相关介绍：<a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=1259">官网解释</a>。</li>
+</ul>
+<pre><code>$GATK BaseRecalibrator \
+-R hg19.fa \
+-I ${sample}.ah.bam -O ${sample}.recal.table \
+--known-sites dbsnp_138.hg19.vcf \
+--known-sites 1000G_phase1.indels.hg19.sites.vcf \
+--known-sites Mills_and_1000G_gold_standard.indels.hg19.sites.vcf
+</code></pre>
+<ul>
+<li>第二步，获得校正后的文件，我这里的后缀为ah.recal.bam。记得samtools建立索引。</li>
+</ul>
+<pre><code>$GATK ApplyBQSR \
+-bqsr ${sample}.recal.table \
+-R hg19.fa \
+-I ${sample}.ah.bam -O ${sample}.ah.recal.bam
+</code></pre>
+<h3 id="可选步骤">可选步骤</h3>
+<p>可以生成一个pdf文件，里面有一些统计和图，其实我没看懂这些图。找到一个资源，有一些关于这些图的讲解，仅供参考<a href="http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html">GATK使用方法详解</a>，系列文章里有不少关于原理方面的知识值得学习。</p>
+<pre><code>$GATK AnalyzeCovariates -bqsr ${sample}.recal.table -plots ${sample}.recal.pdf
+</code></pre>
+<h2 id="变异检测">变异检测</h2>
+<p>变异检测分为种系突变和体细胞突变，过程复杂到令人崩溃。</p>
+<h3 id="种系突变haplotypecaller">种系突变（HaplotypeCaller）</h3>
+<p>相对来说寻找种系突变还算简单点。以下方式是计算较慢，需要速度提升的话可以拆成对每个染色体做snp calling，最后合并。这里我考虑到chr*_random和chrUn_*可能有其意义，所以也没有拆成每个染色体寻找突变。加--dbsnp可以在结果vcf文件中注释一些研究过的snp。</p>
+<pre><code>$GATK HaplotypeCaller \
+-R hg19.fa \
+--dbsnp dbsnp_138.hg19.vcf \
+-I ${sample}.ah.recal.bam \
+-O ${sample}.hc.vcf \
+-ERC GVCF \
+-G StandardAnnotation \
+-G AS_StandardAnnotation \
+-bamout ${sample}.hc.bam
+</code></pre>
+<h3 id="体细胞突变mutect2">体细胞突变（Mutect2）</h3>
+<p>做肿瘤研究这一块更侧重做体细胞突变。Mutect2主要是根据对正常-肿瘤样本进行位点比较寻找突变，如果没有正常样本，那么软件能使用，但假阳性会很高。</p>
+<h4 id="直接对每个样本寻找体细胞突变">直接对每个样本寻找体细胞突变</h4>
+<p>即不进行对照，也很简单快捷。这里要记得加--germline-resource。后面会提到该文件的获取途径。</p>
+<pre><code>$GATK Mutect2 \
+-R hg19.fa \
+--germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
+-I ${sample}.ah.recal.bam \
+-O ${sample}.mu.vcf
+</code></pre>
+<h4 id="正常-肿瘤样本对照寻找snp">正常-肿瘤样本对照寻找snp</h4>
+<p>非常复杂，需要构建PoN（Panel Of Normals），下载germline-resource。另外还有去除污染和链方向偏差矫正，这两块我没有做。</p>
+<ol>
+<li><a href="https://software.broadinstitute.org/gatk/documentation/article?id=11053">Panel of Normals (PON)</a>：官方建议使用健康的年轻的至少40例样本构建PoN，且测序实验技术上应尽可能与肿瘤样本相似，构建PoN的目的一是排除种系突变，二是排除测序技术误差。来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。官方也提供了Public GATK Panel of Normals，可以从其谷歌云存储里下载。<br>
+PS：但是这里有一个问题，根据PoN的作用，我觉得构建PoN的健康样本的测序时间及测序条件应该与要寻找突变的肿瘤样本相近，这点不利于长期实践和标准流程构建，如果在生产过程中，要加入寻找突变的检测，长期下来，可能需设定PoN更新周期来更新PoN。</li>
+</ol>
+<ul>
+<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_Mutect2.php">Mutect2</a>的Tumor-only mode对每个样本寻找体细胞突变。构建PoN的第一步不能加--germline-resource参数。此处由于后续工具有beta版的，导致这里必须加--max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）<br>
+在GATK4.1.4.0的CreateSomaticPanelOfNormals部分有详细介绍，以下为<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">引用原文</a>：</li>
+</ul>
+<blockquote>
+<p>Note that as of May, 2019 -max-mnp-distance must be set to zero to avoid a bug in GenomicsDBImport.</p>
+</blockquote>
+<pre><code>$GATK Mutect2 \
+-R hg19.fa \
+--max-mnp-distance 0 \
+-I ${sample}.ah.recal.bam \
+-O ${sample}.re.vcf.gz
+</code></pre>
+<ul>
+<li>第二步，把第一步获得的结果合并。</li>
+</ul>
+<pre><code>merge_vcfs=&quot;&quot;
+while read sample
+do
+	  merge_vcfs=${merge_vcfs}&quot; -V ${sample}.re.vcf.gz &quot;
+done&lt;samplelist_pon
+
+$GATK GenomicsDBImport \
+-R hg19.fa \
+-L hg19.interval_list \
+--genomicsdb-workspace-path pon_db \
+${merge_vcfs}
+</code></pre>
+<p>这里又有坑了<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_genomicsdb_GenomicsDBImport.php">GenomicsDBImport</a>：在GATK4.1.2.0中该工具的-L是必须参数，我是针对全基因组的，实在不知道该传什么，就下载了hg19.bed，用picard的BedToIntervalList获得了hg19.interval_list。（picard功能好多，简直是救我狗命，好崩溃呀）<br>
+补充：对于外显子数据，还要加上一个参数--merge-input-intervals true，同一条染色体会整合到一起运行，并将结果保存到同一个文件夹中。另外如果在/tmp文件夹存储过小的服务器，还需指定临时文件目录，否则会因临时文件目录被写满而终止程序，使用--tmp-dir /data/group/tmp。</p>
+<pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar BedToIntervalList \
+I=hg19.bed \
+O=hg19.interval_list \
+SD=human.dict
+</code></pre>
+<ul>
+<li>第三步，将自己构建的pon_db和germline-resource相结合获得PoN。这个工具目前是beta版。</li>
+</ul>
+<pre><code>$GATK CreateSomaticPanelOfNormals \
+-R hg19.fa \
+--germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
+-V gendb://pon_db \
+-O pon_db.vcf.gz
+</code></pre>
+<p><a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">CreateSomaticPanelOfNormals</a>是beta版的。这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu--germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）<br>
+备注：我下载了这个资源，用官方的b37也生成了一个自己的，两个文件大小不一致，统计其中记录的突变数据行数是一样的，在CreateSomaticPanelOfNormals这步获得的pon_db.vcf.gz结果也是一样，diff了一下，差别仅在文件头里里记录的执行语句及任务开始时间不同。所以我认为这个可以用。自己生成的是可以复现溯源。</p>
+<pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar LiftoverVcf \
+I=af-only-gnomad.raw.sites.b37.vcf.gz \
+O=af-only-gnomad.raw.sites.hg19.vcf.gz \
+CHAIN=b37tohg19.chain \
+REJECT=rejected_variants.vcf \
+R=hg19.fa
+</code></pre>
+<ol>
+<li>对每对正常-肿瘤样本寻找体细胞突变。正常-肿瘤需要是来自同一个体的，我这里用的是TI、TU样本。这里-normal参数即正常样本bam文件头@RG里SM的值。</li>
+</ol>
+<pre><code>$GATK Mutect2 \
+-R hg19.fa \
+-I ${sample_tu}.ah.recal.bam \
+-I ${sample_ti}.ah.recal.bam \
+-normal ${sample_ti} \
+--germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
+--panel-of-normals pon_db.vcf.gz \
+-O ${sample_tu}_${sample_ti}.vcf
+</code></pre>
+<h2 id="结果文件过滤">结果文件过滤</h2>
+<h3 id="种系突变结果过滤vqsrhard-filtering">种系突变结果过滤（VQSR/hard-filtering）</h3>
+<p>过滤这里是种系突变过滤比较复杂。这里只讲snp的，indel的同理。</p>
+<ol>
+<li>做VQSR过滤是建立了GMM模型进行过滤。要求样本量大，且有足够多的已知变异参考信息（比如人类）。分两步。</li>
+</ol>
+<ul>
+<li>第一步。</li>
+</ul>
+<pre><code>$GATK VariantRecalibrator \
+-R hg19.fa \
+-V ${sample}.hc.vcf \
+--resource:hapmap,known=false,training=true,truth=true,prior=15.0 hapmap_3.3.hg19.sites.vcf \
+--resource:omini,known=false,training=true,truth=false,prior=12.0 1000G_omni2.5.hg19.sites.vcf \
+--resource:1000G,known=false,training=true,truth=false,prior=10.0 1000G_phase1.snps.high_confidence.hg19.sites.vcf \
+--resource:dbsnp,known=true,training=false,truth=false,prior=2.0 dbsnp_138.hg19.vcf \
+-an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR \
+-mode SNP \
+--rscript-file ${sample}.plots.R \
+--tranches-file ${sample}.hc.snp.tranches \
+-O ${sample}.hc.snp.recal
+</code></pre>
+<ul>
+<li>第二步。</li>
+</ul>
+<pre><code>$GATK ApplyVQSR \
+-R hg19.fa \
+-V ${sample}.hc.vcf \
+--tranches-file ${sample}.hc.snp.tranches \
+--recal-file ${sample}.hc.snp.recal \
+-mode SNP \
+-O ${sample}.hc.VQSR.vcf
+</code></pre>
+<ol start="2">
+<li>但是不是所有数据都符合做VQSR的要求，不能做的就需要硬过滤（待验证），我没有用硬过滤，这里还要学习如何定义各个指标的阈值，也很复杂。</li>
+</ol>
+<pre><code>$GATK SelectVariants \
+-select-type SNP \
+-V ${sample}.hc.vcf \
+-O ${sample}.hc.snp.vcf
+
+$GATK VariantFiltration \
+-V ${sample}.hc.snp.vcf \
+--filter-expression &quot;QD &lt; 2.0 || MQ &lt; 40.0 || FS &gt; 60.0 || SOR &gt; 3.0 || MQRankSum &lt; -12.5 || ReadPosRankSum &lt; -8.0&quot; \
+--filter-name &quot;Filter&quot; \
+-O ${sample}.hc.snp.filter.vcf
+</code></pre>
+<h3 id="体细胞突变过滤">体细胞突变过滤</h3>
+<p>感觉这里可以用先苦后甜来形容了，一行命令搞定。</p>
+<pre><code>$GATK FilterMutectCalls \
+-R hg19.fa \
+-V ${sample}.mu.vcf \
+-O ${sample}.mu.filter.vcf
+</code></pre>
+<h2 id="参考文件下载">参考文件下载</h2>
+<p><a href="https://console.cloud.google.com/storage/browser/gatk-best-practices/somatic-hg38">hg38的germline-resource下载地址</a>，下载的文件叫af-only-gnomad.hg38.vcf.gz，对应索引也要下载。<br>
+<a href="https://console.cloud.google.com/storage/browser/gcp-public-data--broad-references/hg38/v0/HybSelOligos">hg38的interval_list下载地址</a>，下载的文件叫whole_exome_illumina_coding_v1.Homo_sapiens_assembly38.targets.interval_list，<a href="https://gatk.broadinstitute.org/hc/en-us/community/posts/360057855032-Broad-hg38-ICE-interval-list">论坛上关于该文件的说明</a>，引用其中一句&quot;In general you probably want to be using at the targets file, that's the region of interest&quot;。<br>
+<a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle">GATK官网Resource Bundle</a>，持续改版，目前存放在谷歌云存储里，只包含部分文件，如有其他需求，可在<a href="https://gatk.broadinstitute.org/hc/en-us/community/topics">GATK官方论坛</a>里检索。</p>
+<h2 id="结语">结语</h2>
+<p>获得的突变结果文件是vcf格式的，过滤前后的FILTER位有差异，过滤前的文件FILTER位是一个点号，过滤后的通过过滤的位点后为“PASS”，其他的还有各种标记，还需进一步研究。<br>
+这个GATK4找突变，真的很难很复杂。还在摸索中。<br>
+关于种系突变VQSR里硬过滤参数阈值设定、vcf文件格式说明之类的，相关知识和内容实在太多，在一篇文章中讲不完，再说我也不怎么会。</p>
+<p>参考资料：<br>
+（1）<a href="https://ming-lian.github.io/2019/02/08/call-snp/">深入了解snp-calling流程</a><br>
+（2）<a href="http://www.bioinfo-scrounger.com/archives/699">Mutect2-肿瘤不同转移时期的免疫微环境异质性研究</a><br>
+（3）<a href="http://www.bioinfo-scrounger.com/archives/666">初试GATK4-mutect2来call somatic mutation</a><br>
+（4）<a href="http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html">【原创】GATK使用方法详解（包含bwa使用）第三部分</a><br>
+（5）<a href="https://software.broadinstitute.org/gatk/">GATK官方网站</a><br>
+（6）<a href="https://cloud.tencent.com/developer/article/1901514">GATK 的 Germline mutation 流程</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[libsvm二分类实践总结]]></title>
+        <id>https://shirley-wbw.github.io/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi/</id>
+        <link href="https://shirley-wbw.github.io/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi/">
+        </link>
+        <updated>2019-07-10T06:24:39.000Z</updated>
+        <summary type="html"><![CDATA[<p>在做SVM实际应用时，检索资料大多都推荐了libsvm，这是台湾大学教授林智仁等开发的一个包，查看了很多教程，大多表述模糊，经过自己动手实践摸索，终于有一点小体悟，分享并记录。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>在做SVM实际应用时，检索资料大多都推荐了libsvm，这是台湾大学教授林智仁等开发的一个包，查看了很多教程，大多表述模糊，经过自己动手实践摸索，终于有一点小体悟，分享并记录。</p>
+<!-- more -->
+<ul>
+<li>软件安装</li>
+</ul>
+<p>libsvm实际上是一个linux工具，但其开发者也做了python包，本文主要讲述在linux上python里配置并使用libsvm。<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">libsvm官方网站</a>，下载tar.gz压缩包文件并解压<code>tar -zxvf *.tar.gz</code>，进入解压后目录<code>make</code>，进入解压后目录的python子目录中<code>make</code>，此时解压目录下生成了libsvm.so.2文件，将其拷贝至自己python环境下的/lib/python3.6目录下，python子目录下的各*.py文件拷贝至自己python环境下的lib/python3.6/site-packages目录下，加入环境变量<code>export PYTHONPATH=/home/user/envis/test/liblinear-2.30/python:$PAYTHONPATH</code>。进入jupyter notebook运行以下代码，无报错说明安装成功。liblinear安装方法同libsvm安装方法基本一致。</p>
+<pre><code>import svmutil
+from svmutil import *
+</code></pre>
+<p>另外安装libsvm后还需安装gnuplot软件，下载后解压安装包，进入执行<code>make</code>和<code>make install</code>后，将路径加入环境变量。</p>
+<ul>
+<li>libsvm使用</li>
+</ul>
+<p>如果不是一线搞算法研发的人员，有时候对于机器学习的算法原理其实掌握得并不是很透彻，工作中学习和了解一个算法，我们更想知道的是：该算法适用什么问题？如何应用？用哪个工具或包可以实现其应用？现在主要回答后两个问题。</p>
+<ol>
+<li>首先libsvm需要输入什么数据：输入数据矩阵，每行代表一个样本，第一列为label，本文做二分类，此时第一列值可以为0和1或者为-1和+1，之后的每列数据为一个特征，每个特征需要有一个index。数据格式如下：</li>
+</ol>
+<p>[label] [index1]:[value1] [index2]:[value2] ...</p>
+<p>以下python代码可以把txt输入格式文件<br>
+[label] [value1] [value2]转换为[label] [index1]:[value1] [index2]:[value2]格式</p>
+<pre><code>readin = open('home/user/input_feature.txt', 'r')
+#write data file
+output = open('home/user/revise_feature.txt', 'r')
+try:
+    the_line = readin.readline()
+    while the_line:
+        # delete the \n
+        the_line = the_line.strip('\n')
+        index = 0;
+        output_line = ''
+        for sub_line in the_line.split('\t'):
+            #the label col
+            if index == 0:
+                output_line = sub_line
+            #the features cols
+            if sub_line != 'NULL' and index != 0:
+                the_text = ' ' + str(index) + ':' + sub_line
+                output_line = output_line + the_text
+            index = index + 1
+        output_line = output_line + '\n'
+        output.write(output_line)
+        the_line = readin.readline()
+finally:
+    readin.close()
+</code></pre>
+<ol start="2">
+<li>获得合适格式的文件之后，以下代码可以建立svm分类器并输出其判别准确率。我们可以将数据集分为训练集和测试集，训练集建模并进行自判，测试集用模型判别。</li>
+</ol>
+<pre><code>y,x=svm_read_problem('home/user/revise_feature.txt')
+m = svm_train(y, x, '-c 0.5 -g 0.0078125')
+p_label, p_acc, p_val = svm_predict(y,x, m)
+</code></pre>
+<pre><code>test_y,test_x =svm_read_problem('home/user/test_feature.txt')
+p_label, p_acc, p_val = svm_predict(test_y,test_x, m)
+</code></pre>
+<ol start="3">
+<li>
+<p>libsvm建模优化<br>
+用以上方法做出的模型分类效果不佳，这时可以考虑建模优化问题。libsvm有以下几个可以考虑的地方。</p>
+<ol>
+<li>svm-scale：功能是将所有特征默认normalization到[-1,1]范围，有参数可指定上下限。-s参数可将其缩放规则存在文件中。-r参数可指定按某种缩放规则缩放本次输入文件，实际应用中可将训练集的缩放规则用于测试集缩放。经normalization后的数据再用来建模。</li>
+</ol>
+<p><code>svm-scale -l -10 -u 10 -s trian.range input.txt &gt; out.txt</code><br>
+2. grid.py：在libsvm的tools目录下，有grid.py工具，功能是通过网格搜索寻找最佳的svm训练超参数c值和g值。输出结果会在终端显示，如果终端有X11转发功能，还会实时显示图片，经过网格搜索会给出最佳c值和g值，用于svm训练。但该方法并不能保证找出的c值和g值是合理的，还需判断。</p>
+<p><code>python grid.py input.txt</code></p>
+</li>
+</ol>
+<ul>
+<li>libsvm一些参数解释<br>
+libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter notebook。<br>
+<code>svmtrain [options] input [model]</code></li>
+</ul>
+<p>-s svm类型：SVM设置类型(默认0)<br>
+0 -- C-SVC：C-支持向量分类机；参数C为惩罚系数，C越大表示对错误分类的惩罚越大，适当的参数C对分类Accuracy很关键。<br>
+1 --v-SVC：v-支持向量分类机；由于C的选取比较困难，用另一个参数v代替C。C是“无意义”的，v是有意义的。（与C_SVC其实采用的模型相同，但是它们的参数C的范围不同,C_SVC采用的是0到正无穷，该类型是[0,1]。）<br>
+2 – 一类SVM：单类别-支持向量机，不需要类标号,用于支持向量的密度估计和聚类。<br>
+3 -- e -SVR：ε-支持向量回归机，不敏感损失函数，对样本点来说，存在着一个不为目标函数提供任何损失值的区域。<br>
+4 -- v-SVR：n-支持向量回归机，由于EPSILON_SVR需要事先确定参数，然而在某些情况下选择合适的参数却不是一件容易的事情。而NU_SVR能够自动计算参数。<br>
+显然，后两者是针对回归问题的，分类问题与回归问题最大的不同就是label，分类的label是类别，比如+1，-1，回归的label是目标值，可能为任意值。</p>
+<ul>
+<li>总结</li>
+</ul>
+<p>以上是一些基本用法以及不全面的总结，遗憾的是在我的测试数据上libsvm的效果不佳，经过normalization以及网格搜索最佳超参数后效果仍然较差，有待进一步摸索和学习。</p>
+<ul>
+<li>背景知识补充</li>
+</ul>
+<p>在做测试前也检索了不少资料。摘抄一部分资料，主要是关于libsvm到底适用于解决什么样的问题。</p>
+<p>libsvm用来解决通用典型的分类问题，liblinear适用于大规模数据的线性模型和高维稀疏特征问题。</p>
+<p>非线性分类不一定比线性分类器好，尤其是在样本极其有限而特征维度很高的情况下，因为这是kernel map通常不准确，很可能错误划分类别空间，乃至比线性分类效果更差。</p>
+<p>有几点经验性的东西：</p>
+<ol>
+<li>如果特征远远大于样本数，使用线性核就可以。</li>
+<li>特征数和样本数都很大，如文档分类，一般使用线性核。</li>
+<li>特征数远小于样本数，一般用RBF，若一定要用线性核，用liblinear时-s 2选项较好。</li>
+</ol>
+<ul>
+<li>问题</li>
+</ul>
+<p>经过一系列检索总结实践，我的数据集属于特征数远远大于样本数的数据集，但是在svm做分类时不知是否应该先进行特征工程来减少特征。另外就是截至目前，svm的方法在我的数据集上表现仍然很差，不知是因为svm不适用于解决该问题还是我的优化仍不到位。<br>
+探索是一个艰难的过程。永远没有能百分百分正确的模型。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[关于]]></title>
+        <id>https://shirley-wbw.github.io/post/about/</id>
+        <link href="https://shirley-wbw.github.io/post/about/">
+        </link>
+        <updated>2019-01-25T11:09:48.000Z</updated>
+        <summary type="html"><![CDATA[<p>技术性及知识性文章直接在首页展示，个人心情个人生活类文章在“个人日志”栏目，基本上是随笔。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>技术性及知识性文章直接在首页展示，个人心情个人生活类文章在“个人日志”栏目，基本上是随笔。</p>
+<!-- more -->
+]]></content>
+    </entry>
+</feed>

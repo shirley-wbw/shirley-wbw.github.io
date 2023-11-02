@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Linux搭建MySQL并完成数据迁移 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Linux搭建MySQL并完成数据迁移</h2>
+            <div class="post-date">2021-07-05</div>
+            
+            <div class="post-content">
+              <p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
+<!-- more -->
+<h3 id="查看服务器版本">查看服务器版本</h3>
+<ol>
+<li><code>uname -a</code>查看Linux操作系统版本。</li>
+<li><code>cat /proc/version</code>查看内核版本。</li>
+<li><code>cat /etc/issue</code>查看发行版本信息。</li>
+<li><code>lsb_release -a</code>也可以查看。<br>
+例如经过以上指令后获得服务器版本为Linux的16.04.1-Ubuntu，x86_64。</li>
+</ol>
+<h3 id="下载并安装mysql-社区通用版">下载并安装MySQL 社区通用版</h3>
+<ol>
+<li>进入官网-DOWNLOADS-MySQL Community (GPL) Downloads-MySQL Community Server，切换到Archives，例如选择Product Version：5.7.30，Operating System：Linux-Generic，OS Version：Linux-Generic(glibc 2.12)(x86,64-bit)，随后点击Download下载安装包。</li>
+<li>下载完成后将安装包上传至服务器自己的目录下，解压：<br>
+<code>tar -zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz</code><br>
+编辑my.cnf配置文件如下（仅作为示例，可根据实际需求设置各种配置项），放在当前mysql安装目录下：</li>
+</ol>
+<pre><code>[client]
+port=3306					#服务端口
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+
+[mysqld]
+port=3306					#服务端口
+basedir=/home/apps/mysql			#mysql安装路径
+datadir=/home/apps/mysql/data                   #数据目录
+pid-file=/home/apps/mysql/mysql.pid		#指定pid文件
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+log_error=/home/apps/mysql/error.log            #指定错误日志
+server-id=100                                   #Mysql主从唯一标识
+</code></pre>
+<p>随后进入bin目录<code>cd bin</code>，后执行以下语句安装并初始化：<br>
+<code>./mysqld --defaults-file=/home/apps/mysql/my.cnf --initialize --user=apps --basedir=/home/apps/mysql --datadir=/home/apps/mysql/data</code><br>
+启动mysql服务<code>./mysqld_safe --defaults-file=/home/apps/mysql/my.cnf --user=apps &amp;</code><br>
+启动成功后监听端口<code>netstat -tln | grep 3306</code><br>
+3. 获取root用户的初始密码<code>less error.log | grep root@localhost</code><br>
+使用密码登录<code>bin/mysql -u root -p -S /home/apps/mysql/mysql.sock</code><br>
+登录成功后修改密码并刷新权限生效</p>
+<pre><code>SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+flush privileges;
+</code></pre>
+<ol start="4">
+<li>开启远程访问，创建用户admin并授权。</li>
+</ol>
+<pre><code>use mysql		--切换至mysql数据库
+select User,authentication_string,Host from user;	
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';	--允许其他主机访问
+flush privileges;
+create user 'admin'@'%' identified by '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+select User,authentication_string,Host from user;	
+</code></pre>
+<h3 id="数据迁移">数据迁移</h3>
+<ol>
+<li>在原有数据库进行数据备份，例如可以再Windos端使用MySQL Workbench软件连接数据库，Management-Data Export选择要导出的数据库，需要有备份权限才可以。</li>
+<li>可能会报错mysqldump xxx mismatch，此时可以再电脑上下载Windos版的MySQL，在MySQL Workbench里Edit-Preferences-Administration-Path to mysqldump Tools里选择MySQL目录bin中的mysqldump.exe即可完成备份获得.sql文件。</li>
+<li>如果还是通过MySQL Workbench迁移，Management-Data Import/Restore选择要恢复的数据库文件即可。</li>
+<li>如果要迁移到Linux服务器上，在服务器上进入mysql，创建一个test数据库，为防止数据库文件出现乱码，进入数据库，将编码设置为utf8，加载备份的数据库，查看数据库中的表，无误，此时也可以再远程Windows的MySQL Workbench软件里查看。</li>
+</ol>
+<pre><code>create database test;
+use test
+set names utf8;
+source /root/Envs/yw_crm_project/backup.sql
+show tables;
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/tvStup-GI/" class="tag">
+                    Shell
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://shirley-wbw.github.io/post/python-xiang-guan-bao-cuo-ji-lu/">
+                  <h3 class="post-title">
+                    python相关报错记录
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>python简单功能实现语句集锦 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">python简单功能实现语句集锦</h2>
+            <div class="post-date">2019-07-11</div>
+            
+            <div class="post-content">
+              <p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
+<!-- more -->
+<ul>
+<li>pandas dataframe取列名，可用于判断某列名是否在列名列表里。</li>
+</ul>
+<pre><code>DataFrame.columns.values.tolist()
+</code></pre>
+<ul>
+<li>pandas按某列指定字符顺序给行排序。</li>
+</ul>
+<pre><code>word_order=['b','d','a','c']
+df['word'] = df['word'].astype('category')
+# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
+df['word'].cat.set_categories(word_order, inplace=True)
+df.sort_values(by=[&quot;word&quot;,&quot;num&quot;],inplace=True)
+</code></pre>
+<ul>
+<li>pandas按某指定列名顺序给列重排序。</li>
+</ul>
+<pre><code>column_order=['cd','ac','bd','da']
+df = df[column_order]
+</code></pre>
+<ul>
+<li>pandas对行去重。</li>
+</ul>
+<pre><code>df.drop_duplicates(['colname1','colname2','colname3'], 'last')
+</code></pre>
+<ul>
+<li>numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。</li>
+</ul>
+<pre><code>df = pd.read_csv(&quot;xxx.csv&quot;)
+need_column=['S1','S5','S6','S9']
+data_arr=data.loc[:need_column].T.values
+</code></pre>
+<ul>
+<li>接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。</li>
+</ul>
+<pre><code>data_split = np.hsplit(data_arr, 3)
+data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
+</code></pre>
+<ul>
+<li>双重索引。</li>
+</ul>
+<pre><code>subset.index=pd.MultiIndex.from_arrays([np.full(subset.shape[0], i),subset[&quot;a&quot;]+&quot;:&quot;+subset['b'].astype(&quot;str&quot;)], names=['num','id'])
+subset = subset.set_index(['a','b'])
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/eAr4aG930/" class="tag">
+                    Python
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

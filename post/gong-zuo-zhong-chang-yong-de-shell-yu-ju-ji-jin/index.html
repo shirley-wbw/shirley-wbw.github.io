@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>工作中常用的Shell语句集锦 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">工作中常用的Shell语句集锦</h2>
+            <div class="post-date">2019-07-05</div>
+            
+            <div class="post-content">
+              <p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
+<!--more-->
+<ul>
+<li>查看文件占用空间大小</li>
+</ul>
+<pre><code>du -sh * | sort -rh #按从大到小的顺序排
+du -sh * | sort -h #按从小到大的顺序排
+</code></pre>
+<ul>
+<li>统计文件行数</li>
+</ul>
+<pre><code>wc -l filename
+</code></pre>
+<ul>
+<li>删除文件的1-7行，在原文件上修改</li>
+</ul>
+<pre><code>sed -i '1,7d' filename
+</code></pre>
+<ul>
+<li>查看文件的某一行并提取该行的最后一列，如第1845行</li>
+</ul>
+<pre><code>sed -n 1845p filename
+cat filename | awk 'NR==1845' | awk '{print $NF}'
+</code></pre>
+<ul>
+<li>查看文件的3000行到4000行</li>
+</ul>
+<pre><code>cat filename | head -n 3000 | tail -n +1000
+</code></pre>
+<ul>
+<li>提取文件中某一列符合要求的行</li>
+</ul>
+<pre><code>cat filename | awk '$4 == &quot;n37&quot; {print}'
+</code></pre>
+<ul>
+<li>提取文件中某几列符合要求的行到新文件</li>
+</ul>
+<pre><code>cat filename | awk '{if($2 == 99)print}{if($2 == 163)print}' | awk '{print $3&quot;\t&quot;$4&quot;\t&quot;$4+38}' &gt; newfile
+</code></pre>
+<ul>
+<li>计算文件最后一列的和并输出</li>
+</ul>
+<pre><code>awk '{sum +=$NF}; END {print sum}' filename
+</code></pre>
+<ul>
+<li>计算文件每行的和并输出为一个列向量</li>
+</ul>
+<pre><code>awk '{for (i=1; i&lt;= NF; i++) sum += $i;print sum;sum=0;}' filename &gt; newfile
+</code></pre>
+<ul>
+<li>删去文件1的最后几行使其与文件2行数一致，存为文件3</li>
+</ul>
+<pre><code>long=$(sed -n ' $=' filename1)
+short=$(sed -n ' $=' filename2)
+sed $ (( $short+1)), ${long}d filename1 &gt; filename3
+</code></pre>
+<ul>
+<li>删除文件的后3行</li>
+</ul>
+<pre><code>tac filename | sed 1,3d | tac &gt; newfile
+sed ' $d' filename | sed ' $d' |sed ' $d' &gt; newfile
+</code></pre>
+<ul>
+<li>计算文件第一列有哪些不同值并输出/对文件排序去重后输出为新文件</li>
+</ul>
+<pre><code>cat filename | awk '{print $1}' | sort | uniq -c
+sort -k1,1 -k2,2n filename | uniq &gt; newfile
+</code></pre>
+<ul>
+<li>输出文件第一列的最大值/最小值</li>
+</ul>
+<pre><code>cat filename | awk 'NR == 1{max=$1;next}{max=max&gt;$1?max:$1}END{print max}'
+cat filename | awk 'NR == 1{min=$1;next}{min=min&lt;$1?min:$1}END{print min}'
+</code></pre>
+<ul>
+<li>批量清除任务</li>
+</ul>
+<pre><code>ps -ef | grep taskscriptname | cut -c9-15 | xargs kill -9
+</code></pre>
+<ul>
+<li>提取含关键字的行相关命令</li>
+</ul>
+<pre><code>#提取含real的行输出其第二列，每三个写入一行中
+grep -n -E 'real' nohup.log | awk '{print $2}' | awk '{if(NR%3!=0)ORS=&quot; &quot;;else ORS=&quot;\n&quot;}1' &gt; time3.log
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/tvStup-GI/" class="tag">
+                    Shell
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

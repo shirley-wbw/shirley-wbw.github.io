@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>libsvm二分类实践总结 | Shirley&#39;s Gridea</title>
+<meta name="description" content="行则将至">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://shirley-wbw.github.io/favicon.ico?v=1698913709557">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://shirley-wbw.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://shirley-wbw.github.io">
+        <img src="https://shirley-wbw.github.io/images/avatar.png?v=1698913709557" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/tag/6LX-4fzsC/" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://shirley-wbw.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">libsvm二分类实践总结</h2>
+            <div class="post-date">2019-07-10</div>
+            
+            <div class="post-content">
+              <p>在做SVM实际应用时，检索资料大多都推荐了libsvm，这是台湾大学教授林智仁等开发的一个包，查看了很多教程，大多表述模糊，经过自己动手实践摸索，终于有一点小体悟，分享并记录。</p>
+<!-- more -->
+<ul>
+<li>软件安装</li>
+</ul>
+<p>libsvm实际上是一个linux工具，但其开发者也做了python包，本文主要讲述在linux上python里配置并使用libsvm。<a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">libsvm官方网站</a>，下载tar.gz压缩包文件并解压<code>tar -zxvf *.tar.gz</code>，进入解压后目录<code>make</code>，进入解压后目录的python子目录中<code>make</code>，此时解压目录下生成了libsvm.so.2文件，将其拷贝至自己python环境下的/lib/python3.6目录下，python子目录下的各*.py文件拷贝至自己python环境下的lib/python3.6/site-packages目录下，加入环境变量<code>export PYTHONPATH=/home/user/envis/test/liblinear-2.30/python:$PAYTHONPATH</code>。进入jupyter notebook运行以下代码，无报错说明安装成功。liblinear安装方法同libsvm安装方法基本一致。</p>
+<pre><code>import svmutil
+from svmutil import *
+</code></pre>
+<p>另外安装libsvm后还需安装gnuplot软件，下载后解压安装包，进入执行<code>make</code>和<code>make install</code>后，将路径加入环境变量。</p>
+<ul>
+<li>libsvm使用</li>
+</ul>
+<p>如果不是一线搞算法研发的人员，有时候对于机器学习的算法原理其实掌握得并不是很透彻，工作中学习和了解一个算法，我们更想知道的是：该算法适用什么问题？如何应用？用哪个工具或包可以实现其应用？现在主要回答后两个问题。</p>
+<ol>
+<li>首先libsvm需要输入什么数据：输入数据矩阵，每行代表一个样本，第一列为label，本文做二分类，此时第一列值可以为0和1或者为-1和+1，之后的每列数据为一个特征，每个特征需要有一个index。数据格式如下：</li>
+</ol>
+<p>[label] [index1]:[value1] [index2]:[value2] ...</p>
+<p>以下python代码可以把txt输入格式文件<br>
+[label] [value1] [value2]转换为[label] [index1]:[value1] [index2]:[value2]格式</p>
+<pre><code>readin = open('home/user/input_feature.txt', 'r')
+#write data file
+output = open('home/user/revise_feature.txt', 'r')
+try:
+    the_line = readin.readline()
+    while the_line:
+        # delete the \n
+        the_line = the_line.strip('\n')
+        index = 0;
+        output_line = ''
+        for sub_line in the_line.split('\t'):
+            #the label col
+            if index == 0:
+                output_line = sub_line
+            #the features cols
+            if sub_line != 'NULL' and index != 0:
+                the_text = ' ' + str(index) + ':' + sub_line
+                output_line = output_line + the_text
+            index = index + 1
+        output_line = output_line + '\n'
+        output.write(output_line)
+        the_line = readin.readline()
+finally:
+    readin.close()
+</code></pre>
+<ol start="2">
+<li>获得合适格式的文件之后，以下代码可以建立svm分类器并输出其判别准确率。我们可以将数据集分为训练集和测试集，训练集建模并进行自判，测试集用模型判别。</li>
+</ol>
+<pre><code>y,x=svm_read_problem('home/user/revise_feature.txt')
+m = svm_train(y, x, '-c 0.5 -g 0.0078125')
+p_label, p_acc, p_val = svm_predict(y,x, m)
+</code></pre>
+<pre><code>test_y,test_x =svm_read_problem('home/user/test_feature.txt')
+p_label, p_acc, p_val = svm_predict(test_y,test_x, m)
+</code></pre>
+<ol start="3">
+<li>
+<p>libsvm建模优化<br>
+用以上方法做出的模型分类效果不佳，这时可以考虑建模优化问题。libsvm有以下几个可以考虑的地方。</p>
+<ol>
+<li>svm-scale：功能是将所有特征默认normalization到[-1,1]范围，有参数可指定上下限。-s参数可将其缩放规则存在文件中。-r参数可指定按某种缩放规则缩放本次输入文件，实际应用中可将训练集的缩放规则用于测试集缩放。经normalization后的数据再用来建模。</li>
+</ol>
+<p><code>svm-scale -l -10 -u 10 -s trian.range input.txt &gt; out.txt</code><br>
+2. grid.py：在libsvm的tools目录下，有grid.py工具，功能是通过网格搜索寻找最佳的svm训练超参数c值和g值。输出结果会在终端显示，如果终端有X11转发功能，还会实时显示图片，经过网格搜索会给出最佳c值和g值，用于svm训练。但该方法并不能保证找出的c值和g值是合理的，还需判断。</p>
+<p><code>python grid.py input.txt</code></p>
+</li>
+</ol>
+<ul>
+<li>libsvm一些参数解释<br>
+libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter notebook。<br>
+<code>svmtrain [options] input [model]</code></li>
+</ul>
+<p>-s svm类型：SVM设置类型(默认0)<br>
+0 -- C-SVC：C-支持向量分类机；参数C为惩罚系数，C越大表示对错误分类的惩罚越大，适当的参数C对分类Accuracy很关键。<br>
+1 --v-SVC：v-支持向量分类机；由于C的选取比较困难，用另一个参数v代替C。C是“无意义”的，v是有意义的。（与C_SVC其实采用的模型相同，但是它们的参数C的范围不同,C_SVC采用的是0到正无穷，该类型是[0,1]。）<br>
+2 – 一类SVM：单类别-支持向量机，不需要类标号,用于支持向量的密度估计和聚类。<br>
+3 -- e -SVR：ε-支持向量回归机，不敏感损失函数，对样本点来说，存在着一个不为目标函数提供任何损失值的区域。<br>
+4 -- v-SVR：n-支持向量回归机，由于EPSILON_SVR需要事先确定参数，然而在某些情况下选择合适的参数却不是一件容易的事情。而NU_SVR能够自动计算参数。<br>
+显然，后两者是针对回归问题的，分类问题与回归问题最大的不同就是label，分类的label是类别，比如+1，-1，回归的label是目标值，可能为任意值。</p>
+<ul>
+<li>总结</li>
+</ul>
+<p>以上是一些基本用法以及不全面的总结，遗憾的是在我的测试数据上libsvm的效果不佳，经过normalization以及网格搜索最佳超参数后效果仍然较差，有待进一步摸索和学习。</p>
+<ul>
+<li>背景知识补充</li>
+</ul>
+<p>在做测试前也检索了不少资料。摘抄一部分资料，主要是关于libsvm到底适用于解决什么样的问题。</p>
+<p>libsvm用来解决通用典型的分类问题，liblinear适用于大规模数据的线性模型和高维稀疏特征问题。</p>
+<p>非线性分类不一定比线性分类器好，尤其是在样本极其有限而特征维度很高的情况下，因为这是kernel map通常不准确，很可能错误划分类别空间，乃至比线性分类效果更差。</p>
+<p>有几点经验性的东西：</p>
+<ol>
+<li>如果特征远远大于样本数，使用线性核就可以。</li>
+<li>特征数和样本数都很大，如文档分类，一般使用线性核。</li>
+<li>特征数远小于样本数，一般用RBF，若一定要用线性核，用liblinear时-s 2选项较好。</li>
+</ol>
+<ul>
+<li>问题</li>
+</ul>
+<p>经过一系列检索总结实践，我的数据集属于特征数远远大于样本数的数据集，但是在svm做分类时不知是否应该先进行特征工程来减少特征。另外就是截至目前，svm的方法在我的数据集上表现仍然很差，不知是因为svm不适用于解决该问题还是我的优化仍不到位。<br>
+探索是一个艰难的过程。永远没有能百分百分正确的模型。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://shirley-wbw.github.io/tag/_KN5K5NIi/" class="tag">
+                    ML
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://shirley-wbw.github.io/post/about/">
+                  <h3 class="post-title">
+                    关于
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '4f531b99c071ebc005f6',
+        clientSecret: 'c95a4366729c766ebc0f6a81970987364695c531',
+        repo: 'shirley-wbw.github.io',
+        owner: 'shirley-wbw',
+        admin: ['shirley-wbw'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
