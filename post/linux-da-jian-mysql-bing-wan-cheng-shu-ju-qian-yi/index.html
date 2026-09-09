@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<meta name="generator" content="Gridea Pro 1.2.2">
+<title>Linux搭建MySQL并完成数据迁移 | Shirley&#39;s Gridea Pro</title>
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="/favicon.ico?v=1788938916">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="/styles/main.css">
+
+
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  <meta name="description" content="记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。">
+<link rel="canonical" href="https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Linux搭建MySQL并完成数据迁移","url":"https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/","description":"记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。","datePublished":"2021-07-05T10:47:51+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/","name":"Linux搭建MySQL并完成数据迁移","position":2}]}</script>
+<meta property="og:title" content="Linux搭建MySQL并完成数据迁移">
+<meta property="og:description" content="记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。">
+<meta property="og:url" content="https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Shirley's Gridea Pro">
+<meta property="og:image" content="/images/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://shirley-wbw.github.io/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/">
+<meta name="twitter:title" content="Linux搭建MySQL并完成数据迁移">
+<meta name="twitter:description" content="记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。">
+<meta name="twitter:image" content="/images/avatar.png">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://shirley-wbw.github.io">
+        <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1788938916" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://shirley-wbw.github.io">
+        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/post" class="menu purple-link">
+            博客
+          </a>
+        
+      
+        
+          <a href="/memos" class="menu purple-link">
+            闪念
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/links" class="menu purple-link">
+            友链
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Linux搭建MySQL并完成数据迁移</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2021-07-05</span>
+            
+              <span>
+                <i class="icon-pricetags-outline"></i>
+                
+                  <a href="/tag/shell/">
+                    Shell
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
+<!-- more -->
+<h3 id="heading">查看服务器版本</h3>
+<ol>
+<li><code>uname -a</code>查看Linux操作系统版本。</li>
+<li><code>cat /proc/version</code>查看内核版本。</li>
+<li><code>cat /etc/issue</code>查看发行版本信息。</li>
+<li><code>lsb_release -a</code>也可以查看。<br />
+例如经过以上指令后获得服务器版本为Linux的16.04.1-Ubuntu，x86_64。</li>
+</ol>
+<h3 id="mysql-">下载并安装MySQL 社区通用版</h3>
+<ol>
+<li>进入官网-DOWNLOADS-MySQL Community (GPL) Downloads-MySQL Community Server，切换到Archives，例如选择Product Version：5.7.30，Operating System：Linux-Generic，OS Version：Linux-Generic(glibc 2.12)(x86,64-bit)，随后点击Download下载安装包。</li>
+<li>下载完成后将安装包上传至服务器自己的目录下，解压：<br />
+<code>tar -zxvf mysql-5.7.30-linux-glibc2.12-x86_64.tar.gz</code><br />
+编辑my.cnf配置文件如下（仅作为示例，可根据实际需求设置各种配置项），放在当前mysql安装目录下：</li>
+</ol>
+<pre><code>[client]
+port=3306					#服务端口
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+
+[mysqld]
+port=3306					#服务端口
+basedir=/home/apps/mysql			#mysql安装路径
+datadir=/home/apps/mysql/data                   #数据目录
+pid-file=/home/apps/mysql/mysql.pid		#指定pid文件
+socket=/home/apps/mysql/mysql.sock		#指定套接字文件
+log_error=/home/apps/mysql/error.log            #指定错误日志
+server-id=100                                   #Mysql主从唯一标识
+</code></pre>
+<p>随后进入bin目录<code>cd bin</code>，后执行以下语句安装并初始化：<br />
+<code>./mysqld --defaults-file=/home/apps/mysql/my.cnf --initialize --user=apps --basedir=/home/apps/mysql --datadir=/home/apps/mysql/data</code><br />
+启动mysql服务<code>./mysqld_safe --defaults-file=/home/apps/mysql/my.cnf --user=apps &amp;</code><br />
+启动成功后监听端口<code>netstat -tln | grep 3306</code><br />
+3. 获取root用户的初始密码<code>less error.log | grep root@localhost</code><br />
+使用密码登录<code>bin/mysql -u root -p -S /home/apps/mysql/mysql.sock</code><br />
+登录成功后修改密码并刷新权限生效</p>
+<pre><code>SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+flush privileges;
+</code></pre>
+<ol start="4">
+<li>开启远程访问，创建用户admin并授权。</li>
+</ol>
+<pre><code>use mysql		--切换至mysql数据库
+select User,authentication_string,Host from user;	
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';	--允许其他主机访问
+flush privileges;
+create user 'admin'@'%' identified by '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%';
+select User,authentication_string,Host from user;	
+</code></pre>
+<h3 id="heading-1">数据迁移</h3>
+<ol>
+<li>在原有数据库进行数据备份，例如可以再Windos端使用MySQL Workbench软件连接数据库，Management-Data Export选择要导出的数据库，需要有备份权限才可以。</li>
+<li>可能会报错mysqldump xxx mismatch，此时可以再电脑上下载Windos版的MySQL，在MySQL Workbench里Edit-Preferences-Administration-Path to mysqldump Tools里选择MySQL目录bin中的mysqldump.exe即可完成备份获得.sql文件。</li>
+<li>如果还是通过MySQL Workbench迁移，Management-Data Import/Restore选择要恢复的数据库文件即可。</li>
+<li>如果要迁移到Linux服务器上，在服务器上进入mysql，创建一个test数据库，为防止数据库文件出现乱码，进入数据库，将编码设置为utf8，加载备份的数据库，查看数据库中的表，无误，此时也可以再远程Windows的MySQL Workbench软件里查看。</li>
+</ol>
+<pre><code>create database test;
+use test
+set names utf8;
+source /root/Envs/yw_crm_project/backup.sql
+show tables;
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/post/python-xiang-guan-bao-cuo-ji-lu/">
+              <h3 class="post-title">
+                下一篇：python相关报错记录
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">行则将至</div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+
+  
+
+
+
+
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: fly v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+</body>
+</html>
