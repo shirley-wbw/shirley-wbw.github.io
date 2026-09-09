@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" >
+<html lang="zh-CN">
 
-<meta name="generator" content="Gridea Pro 1.2.2">
-<title>Shell | Shirley&#39;s Gridea Pro</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
-<link rel="stylesheet" href="/styles/main.css">
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Gridea Pro 1.2.2">
+  <title>#Shell | Shirley&#39;s Gridea Pro</title>
 
   
 
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
 
+  
+  <link rel="stylesheet" href="/styles/main.css">
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  
+  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
 
+  
+  
 
-
-    <meta name="description" content="行则将至">
-  <meta name="description" content="行则将至">
+  
+  
+<meta name="description" content="行则将至">
 <link rel="canonical" href="https://shirley-wbw.github.io/tag/shell/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Shirley's Gridea Pro","url":"https://shirley-wbw.github.io","description":"行则将至","potentialAction":{"@type":"SearchAction","query-input":"required name=search_term_string","target":"https://shirley-wbw.github.io/search?q={search_term_string}"}}</script>
 <meta property="og:title" content="Shirley's Gridea Pro">
@@ -39,161 +42,167 @@
 <meta name="twitter:description" content="行则将至">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-  <body>
-    <div id="app" class="main">
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="/">
-        <img src="/images/avatar.png?v=1788939651" class="site-logo">
-        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+<body>
+  <header class="site-header">
+  <div class="container">
+    <a href="https://shirley-wbw.github.io" class="site-logo">
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+      <span class="site-name">Shirley&#39;s Gridea Pro</span>
+    </a>
+
+    <nav class="nav-links">
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
       
-        
-          <a href="/post" class="site-nav">
-            个人日志
-          </a>
-        
+      <a href="/" >首页</a>
       
-        
-          <a href="/memos" class="site-nav">
-            闪念
-          </a>
-        
+      <a href="/archives" >归档</a>
       
-        
-          <a href="/links" class="site-nav">
-            友链
-          </a>
-        
+      <a href="/tag" >标签</a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+      <a href="/post" >个人日志</a>
       
-    </div>
+      <a href="/memos" >闪念</a>
+      
+      <a href="/links" >友链</a>
+      
+      <a href="/post/about" >关于</a>
+      
+
+      
+      
+
+      
+
+      
+      
+    </nav>
+
+    
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      行则将至
-    </div>
-    <div class="site-footer">
-      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-    </div>
+
+  
+  <div class="mobile-nav" id="mobileNav">
+    
+    <a href="/">首页</a>
+    
+    <a href="/archives">归档</a>
+    
+    <a href="/tag">标签</a>
+    
+    <a href="/post">个人日志</a>
+    
+    <a href="/memos">闪念</a>
+    
+    <a href="/links">友链</a>
+    
+    <a href="/post/about">关于</a>
+    
+    
+    
+    
   </div>
-</div>
+</header>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: Shell</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/">
-                  <h2 class="post-title">Linux搭建MySQL并完成数据迁移</h2>
-                </a>
-                <div class="post-date">
-                  2021-07-05
-                </div>
-                <div class="post-abstract">
-                  <p>记录一下非root用户自行在Linux服务器上搭建MySQL的过程，作为学习资料。</p>
-
-                </div>
-              </div>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin/">
-                  <h2 class="post-title">工作中常用的Shell语句集锦</h2>
-                </a>
-                <div class="post-date">
-                  2019-07-05
-                </div>
-                <div class="post-abstract">
-                  <p>工作中用到Shell脚本一般不是太复杂，会有一些即时的统计计数、文件查看。总结一些语句，方便在自己遗忘时查看。</p>
-
-                </div>
-              </div>
-              
-            </article>
-          
-
-          <div class="pagination-container">
-  
-  
-</div>
-
-        </div>
-      </div>
-    </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+<script>
+  function toggleMobileMenu() {
+    var menu = document.getElementById('mobileNav');
+    var btn = document.getElementById('hamburgerBtn');
+    menu.classList.toggle('open');
+    btn.classList.toggle('active');
+  }
 </script>
 
+  <main class="site-main">
+    
+<section class="tag-section">
+  <div class="page-header">
+    <h1 class="page-title"># Shell</h1>
+    <p class="page-description">2 posts tagged</p>
+  </div>
+
+  <div class="post-list">
+    
+    
 
 
+<article class="post-card">
+  <a href="/post/linux-da-jian-mysql-bing-wan-cheng-shu-ju-qian-yi/" class="post-card-link">
+    <div class="post-card-content">
+      <h3 class="post-card-title">Linux搭建MySQL并完成数据迁移</h3>
+      
+      <div class="post-card-meta">
+        <time class="post-card-date">2021-07-05T10:47:51+08:00</time>
+        
+        <span class="post-card-tags">
+          
+          <span class="post-card-tag">Shell</span>
+          
+        </span>
+        
+      </div>
+    </div>
+    
+  </a>
+</article>
+
+    
+    
 
 
+<article class="post-card">
+  <a href="/post/gong-zuo-zhong-chang-yong-de-shell-yu-ju-ji-jin/" class="post-card-link">
+    <div class="post-card-content">
+      <h3 class="post-card-title">工作中常用的Shell语句集锦</h3>
+      
+      <div class="post-card-meta">
+        <time class="post-card-date">2019-07-05T15:16:02+08:00</time>
+        
+        <span class="post-card-tags">
+          
+          <span class="post-card-tag">Shell</span>
+          
+        </span>
+        
+      </div>
+    </div>
+    
+  </a>
+</article>
+
+    
+  </div>
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-copyright">
+      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
+    </div>
+    <div class="footer-powered">
+      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
+    </div>
+  </div>
+</footer>
+
+  
   
 
   
+  
 
-
-
-
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  
+  
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
+
 </html>

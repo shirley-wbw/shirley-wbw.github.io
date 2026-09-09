@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" >
+<html lang="zh-CN">
 
-<meta name="generator" content="Gridea Pro 1.2.2">
-<title>GATK4实现寻找SNP记录 | Shirley&#39;s Gridea Pro</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
-<link rel="stylesheet" href="/styles/main.css">
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Gridea Pro 1.2.2">
+  <title>GATK4实现寻找SNP记录 | Shirley&#39;s Gridea Pro</title>
 
   
 
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/styles/main.css">
+
+  
+  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
+
+  
+  
+
+  
+  
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-
-
-    <meta name="description" content="" />
-    <meta name="keywords" content="Bioinfo" />
-  <meta name="description" content="GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接">
+<meta name="description" content="GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"GATK4实现寻找SNP记录","url":"https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/","description":"GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q\u0026amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接","datePublished":"2019-07-24T11:07:34+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"GATK4实现寻找SNP记录","url":"https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/","description":"GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q\u0026amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接","datePublished":"2019-07-24T11:07:34+08:00","dateModified":"2026-09-09T15:49:01+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/","name":"GATK4实现寻找SNP记录","position":2}]}</script>
 <meta property="og:title" content="GATK4实现寻找SNP记录">
 <meta property="og:description" content="GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接">
@@ -41,168 +45,178 @@
 <meta name="twitter:description" content="GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-  <body>
-    <div id="app" class="main">
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="/">
-        <img src="/images/avatar.png?v=1788939651" class="site-logo">
-        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
+<body>
+  <header class="site-header">
+  <div class="container">
+    <a href="https://shirley-wbw.github.io" class="site-logo">
+      
+      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
+      
+      <span class="site-name">Shirley&#39;s Gridea Pro</span>
+    </a>
+
+    <nav class="nav-links">
+      
+      
+      <a href="/" >首页</a>
+      
+      <a href="/archives" >归档</a>
+      
+      <a href="/tag" >标签</a>
+      
+      <a href="/post" >个人日志</a>
+      
+      <a href="/memos" >闪念</a>
+      
+      <a href="/links" >友链</a>
+      
+      <a href="/post/about" >关于</a>
+      
+
+      
+      
+
+      
+
+      
+      
+    </nav>
+
+    
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  
+  <div class="mobile-nav" id="mobileNav">
+    
+    <a href="/">首页</a>
+    
+    <a href="/archives">归档</a>
+    
+    <a href="/tag">标签</a>
+    
+    <a href="/post">个人日志</a>
+    
+    <a href="/memos">闪念</a>
+    
+    <a href="/links">友链</a>
+    
+    <a href="/post/about">关于</a>
+    
+    
+    
+    
+  </div>
+</header>
+
+<script>
+  function toggleMobileMenu() {
+    var menu = document.getElementById('mobileNav');
+    var btn = document.getElementById('hamburgerBtn');
+    menu.classList.toggle('open');
+    btn.classList.toggle('active');
+  }
+</script>
+
+  <main class="site-main">
+    
+<article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">GATK4实现寻找SNP记录</h1>
+    <div class="post-meta">
+      <time class="post-date">2019-07-24</time>
+      
+      <span class="post-reading-time">16 分钟阅读</span>
+      
+      
+      <div class="post-tags-inline">
+        
+        <a href="/tag/bioinfo/" class="tag-link">Bioinfo</a>
+        
       </div>
-    </div>
-    <div>
-      
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
-      
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
-      
-        
-          <a href="/post" class="site-nav">
-            个人日志
-          </a>
-        
-      
-        
-          <a href="/memos" class="site-nav">
-            闪念
-          </a>
-        
-      
-        
-          <a href="/links" class="site-nav">
-            友链
-          </a>
-        
-      
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
       
     </div>
-  </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      行则将至
-    </div>
-    <div class="site-footer">
-      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-    </div>
-  </div>
-</div>
+  </header>
 
+  
 
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">GATK4实现寻找SNP记录</h2>
-            <div class="post-date">2019-07-24</div>
-            
-            <div class="post-content" v-pre>
-              <p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br />
-<strong>2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong><br />
-<strong>2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关</strong><br />
-<strong>2022.7.13：GATK官网持续改版，部分链接失效，更新链接</strong></p>
-<!-- more -->
-<p>基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。其中数据预处理部分是一样的，后两部分又分为寻找种系突变和体细胞突变。本文侧重寻找体细胞突变。<br />
-建议在代码化的时候设置好各项变量，比如参考文件路径，软件路径，输出文件路径等等，这样在批量出结果的时候就可以脉络清晰，方便查看及引用。</p>
-<h2 id="heading">数据预处理</h2>
-<h3 id="dupbam">下机数据处理获得dup.bam文件</h3>
-<p>由于我拿到的数据是dup.bam（即经过比对、排序、去重、索引后），所以数据预处理这部分基本不需要做什么了，但是有以下几点注意事项。</p>
-<ol>
-<li>dup.bam文件必须有文件头，此处指的是要包含@RG信息，没有这个信息的话无法使用，可以用picard的<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_AddOrReplaceReadGroups.php">AddOrReplaceReadGroups</a>手动加。</li>
-</ol>
-<pre><code>$JAVA/java -Xmx2g -jar $PICARD/picard.jar AddOrReplaceReadGroups \
+  <div class="post-content-wrapper">
+    <div class="post-content" v-pre>&lt;p&gt;GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。&lt;br /&gt;
+&lt;strong&gt;2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。&lt;/strong&gt;&lt;br /&gt;
+&lt;strong&gt;2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关&lt;/strong&gt;&lt;br /&gt;
+&lt;strong&gt;2022.7.13：GATK官网持续改版，部分链接失效，更新链接&lt;/strong&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;p&gt;基本流程简单来说，分为三部分：数据预处理——变异检测——结果文件过滤。其中数据预处理部分是一样的，后两部分又分为寻找种系突变和体细胞突变。本文侧重寻找体细胞突变。&lt;br /&gt;
+建议在代码化的时候设置好各项变量，比如参考文件路径，软件路径，输出文件路径等等，这样在批量出结果的时候就可以脉络清晰，方便查看及引用。&lt;/p&gt;
+&lt;h2 id=&quot;heading&quot;&gt;数据预处理&lt;/h2&gt;
+&lt;h3 id=&quot;dupbam&quot;&gt;下机数据处理获得dup.bam文件&lt;/h3&gt;
+&lt;p&gt;由于我拿到的数据是dup.bam（即经过比对、排序、去重、索引后），所以数据预处理这部分基本不需要做什么了，但是有以下几点注意事项。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;dup.bam文件必须有文件头，此处指的是要包含@RG信息，没有这个信息的话无法使用，可以用picard的&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/picard_sam_AddOrReplaceReadGroups.php&quot;&gt;AddOrReplaceReadGroups&lt;/a&gt;手动加。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$JAVA/java -Xmx2g -jar $PICARD/picard.jar AddOrReplaceReadGroups \
 I=$sample.dup.bam O=$sample.ah.bam \
 ID=$sample LB=$sample PL=illumina PU=$sample SM=$sample
-</code></pre>
-<ol start="2">
-<li>看到很多bwa比对的，但我这里用的是bowtie2，如果要在bowtie2步骤把@RG加上，比对获得sam文件，排序去重建索引后，获得的dup.bam文件直接就可以进行下游分析了。</li>
-</ol>
-<pre><code>$BOWTIE/bowtie2 -q --phred33 --sensitive --end-to-end \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;看到很多bwa比对的，但我这里用的是bowtie2，如果要在bowtie2步骤把@RG加上，比对获得sam文件，排序去重建索引后，获得的dup.bam文件直接就可以进行下游分析了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$BOWTIE/bowtie2 -q --phred33 --sensitive --end-to-end \
 -x $ref/hg19/Bowtie2Index/human_hg19 \
 --rg-id $sample \
---rg &quot;PL:illumina&quot; \
---rg &quot;LB:$sample&quot; \
---rg &quot;PU:$sample&quot; \
---rg &quot;SM:$sample&quot; \
+--rg &amp;quot;PL:illumina&amp;quot; \
+--rg &amp;quot;LB:$sample&amp;quot; \
+--rg &amp;quot;PU:$sample&amp;quot; \
+--rg &amp;quot;SM:$sample&amp;quot; \
 -1 ${sample}_1.clean.fastq.gz -2 ${sample}_2.clean.fastq.gz -S ${sample}.sam
-</code></pre>
-<ol start="3">
-<li>做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。</li>
-</ol>
-<h3 id="bqsr">碱基质量校正（BQSR）</h3>
-<p>BQSR:Base Quality Score Recalibration.<br />
-GATK对有@RG文件头的dup.bam文件进行碱基质量校正。</p>
-<ol>
-<li>所需文件准备，可以从GATK官网Resource Bundle下载需要的参考文件。或者根据自己的文件生成，以hg19为例，需要hg19.fa，hg19.fa.fai，hg19.dict。没有.fa.fai可以用samtools的faidx生成，没有.dict可以用picard的CreateSequenceDictionary生成。</li>
-</ol>
-<pre><code>$SAMTOOLS/samtools faidx hg19.fa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;做变异检测应该都是文件头必须包含@RG，我测试Deepvariant时它也需要带@RG的bam文件。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;bqsr&quot;&gt;碱基质量校正（BQSR）&lt;/h3&gt;
+&lt;p&gt;BQSR:Base Quality Score Recalibration.&lt;br /&gt;
+GATK对有@RG文件头的dup.bam文件进行碱基质量校正。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;所需文件准备，可以从GATK官网Resource Bundle下载需要的参考文件。或者根据自己的文件生成，以hg19为例，需要hg19.fa，hg19.fa.fai，hg19.dict。没有.fa.fai可以用samtools的faidx生成，没有.dict可以用picard的CreateSequenceDictionary生成。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$SAMTOOLS/samtools faidx hg19.fa
 $JAVA/java -Xmx2g -jar $PICARD/picard.jar CreateSequenceDictionary R=hg19.fa O=hg19.dict
-</code></pre>
-<ol start="2">
-<li>碱基质量校正分两步。</li>
-</ol>
-<ul>
-<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php">BaseRecalibrator</a>的&ndash;known-sites参数需要的文件可以从GATK官网Resource Bundle下载，参考了github上的<a href="https://github.com/gatk-workflows/gatk4-data-processing">官方流程</a>以及一些国内教程，几个文件的选择未有定论，官方只用了两个，其他教程有用三个的。具体参看了公众号“碱基旷工”的选择。几个文件的解释有相关介绍：<a href="https://software.broadinstitute.org/gatk/documentation/article.php?id=1259">官网解释</a>。</li>
-</ul>
-<pre><code>$GATK BaseRecalibrator \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;碱基质量校正分两步。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;第一步，&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_bqsr_BaseRecalibrator.php&quot;&gt;BaseRecalibrator&lt;/a&gt;的&amp;ndash;known-sites参数需要的文件可以从GATK官网Resource Bundle下载，参考了github上的&lt;a href=&quot;https://github.com/gatk-workflows/gatk4-data-processing&quot;&gt;官方流程&lt;/a&gt;以及一些国内教程，几个文件的选择未有定论，官方只用了两个，其他教程有用三个的。具体参看了公众号“碱基旷工”的选择。几个文件的解释有相关介绍：&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/article.php?id=1259&quot;&gt;官网解释&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;$GATK BaseRecalibrator \
 -R hg19.fa \
 -I ${sample}.ah.bam -O ${sample}.recal.table \
 --known-sites dbsnp_138.hg19.vcf \
 --known-sites 1000G_phase1.indels.hg19.sites.vcf \
 --known-sites Mills_and_1000G_gold_standard.indels.hg19.sites.vcf
-</code></pre>
-<ul>
-<li>第二步，获得校正后的文件，我这里的后缀为ah.recal.bam。记得samtools建立索引。</li>
-</ul>
-<pre><code>$GATK ApplyBQSR \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;第二步，获得校正后的文件，我这里的后缀为ah.recal.bam。记得samtools建立索引。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;$GATK ApplyBQSR \
 -bqsr ${sample}.recal.table \
 -R hg19.fa \
 -I ${sample}.ah.bam -O ${sample}.ah.recal.bam
-</code></pre>
-<h3 id="heading-1">可选步骤</h3>
-<p>可以生成一个pdf文件，里面有一些统计和图，其实我没看懂这些图。找到一个资源，有一些关于这些图的讲解，仅供参考<a href="http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html">GATK使用方法详解</a>，系列文章里有不少关于原理方面的知识值得学习。</p>
-<pre><code>$GATK AnalyzeCovariates -bqsr ${sample}.recal.table -plots ${sample}.recal.pdf
-</code></pre>
-<h2 id="heading-2">变异检测</h2>
-<p>变异检测分为种系突变和体细胞突变，过程复杂到令人崩溃。</p>
-<h3 id="haplotypecaller">种系突变（HaplotypeCaller）</h3>
-<p>相对来说寻找种系突变还算简单点。以下方式是计算较慢，需要速度提升的话可以拆成对每个染色体做snp calling，最后合并。这里我考虑到chr*_random和chrUn_*可能有其意义，所以也没有拆成每个染色体寻找突变。加&ndash;dbsnp可以在结果vcf文件中注释一些研究过的snp。</p>
-<pre><code>$GATK HaplotypeCaller \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;heading-1&quot;&gt;可选步骤&lt;/h3&gt;
+&lt;p&gt;可以生成一个pdf文件，里面有一些统计和图，其实我没看懂这些图。找到一个资源，有一些关于这些图的讲解，仅供参考&lt;a href=&quot;http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html&quot;&gt;GATK使用方法详解&lt;/a&gt;，系列文章里有不少关于原理方面的知识值得学习。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$GATK AnalyzeCovariates -bqsr ${sample}.recal.table -plots ${sample}.recal.pdf
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;heading-2&quot;&gt;变异检测&lt;/h2&gt;
+&lt;p&gt;变异检测分为种系突变和体细胞突变，过程复杂到令人崩溃。&lt;/p&gt;
+&lt;h3 id=&quot;haplotypecaller&quot;&gt;种系突变（HaplotypeCaller）&lt;/h3&gt;
+&lt;p&gt;相对来说寻找种系突变还算简单点。以下方式是计算较慢，需要速度提升的话可以拆成对每个染色体做snp calling，最后合并。这里我考虑到chr*_random和chrUn_*可能有其意义，所以也没有拆成每个染色体寻找突变。加&amp;ndash;dbsnp可以在结果vcf文件中注释一些研究过的snp。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$GATK HaplotypeCaller \
 -R hg19.fa \
 --dbsnp dbsnp_138.hg19.vcf \
 -I ${sample}.ah.recal.bam \
@@ -211,80 +225,80 @@ $JAVA/java -Xmx2g -jar $PICARD/picard.jar CreateSequenceDictionary R=hg19.fa O=h
 -G StandardAnnotation \
 -G AS_StandardAnnotation \
 -bamout ${sample}.hc.bam
-</code></pre>
-<h3 id="mutect2">体细胞突变（Mutect2）</h3>
-<p>做肿瘤研究这一块更侧重做体细胞突变。Mutect2主要是根据对正常-肿瘤样本进行位点比较寻找突变，如果没有正常样本，那么软件能使用，但假阳性会很高。</p>
-<h4 id="heading-3">直接对每个样本寻找体细胞突变</h4>
-<p>即不进行对照，也很简单快捷。这里要记得加&ndash;germline-resource。后面会提到该文件的获取途径。</p>
-<pre><code>$GATK Mutect2 \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;mutect2&quot;&gt;体细胞突变（Mutect2）&lt;/h3&gt;
+&lt;p&gt;做肿瘤研究这一块更侧重做体细胞突变。Mutect2主要是根据对正常-肿瘤样本进行位点比较寻找突变，如果没有正常样本，那么软件能使用，但假阳性会很高。&lt;/p&gt;
+&lt;h4 id=&quot;heading-3&quot;&gt;直接对每个样本寻找体细胞突变&lt;/h4&gt;
+&lt;p&gt;即不进行对照，也很简单快捷。这里要记得加&amp;ndash;germline-resource。后面会提到该文件的获取途径。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$GATK Mutect2 \
 -R hg19.fa \
 --germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
 -I ${sample}.ah.recal.bam \
 -O ${sample}.mu.vcf
-</code></pre>
-<h4 id="-snp">正常-肿瘤样本对照寻找snp</h4>
-<p>非常复杂，需要构建PoN（Panel Of Normals），下载germline-resource。另外还有去除污染和链方向偏差矫正，这两块我没有做。</p>
-<ol>
-<li><a href="https://software.broadinstitute.org/gatk/documentation/article?id=11053">Panel of Normals (PON)</a>：官方建议使用健康的年轻的至少40例样本构建PoN，且测序实验技术上应尽可能与肿瘤样本相似，构建PoN的目的一是排除种系突变，二是排除测序技术误差。来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。官方也提供了Public GATK Panel of Normals，可以从其谷歌云存储里下载。<br />
-PS：但是这里有一个问题，根据PoN的作用，我觉得构建PoN的健康样本的测序时间及测序条件应该与要寻找突变的肿瘤样本相近，这点不利于长期实践和标准流程构建，如果在生产过程中，要加入寻找突变的检测，长期下来，可能需设定PoN更新周期来更新PoN。</li>
-</ol>
-<ul>
-<li>第一步，<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_Mutect2.php">Mutect2</a>的Tumor-only mode对每个样本寻找体细胞突变。构建PoN的第一步不能加&ndash;germline-resource参数。此处由于后续工具有beta版的，导致这里必须加&ndash;max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）<br />
-在GATK4.1.4.0的CreateSomaticPanelOfNormals部分有详细介绍，以下为<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">引用原文</a>：</li>
-</ul>
-<blockquote>
-<p>Note that as of May, 2019 -max-mnp-distance must be set to zero to avoid a bug in GenomicsDBImport.</p>
-</blockquote>
-<pre><code>$GATK Mutect2 \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;-snp&quot;&gt;正常-肿瘤样本对照寻找snp&lt;/h4&gt;
+&lt;p&gt;非常复杂，需要构建PoN（Panel Of Normals），下载germline-resource。另外还有去除污染和链方向偏差矫正，这两块我没有做。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/article?id=11053&quot;&gt;Panel of Normals (PON)&lt;/a&gt;：官方建议使用健康的年轻的至少40例样本构建PoN，且测序实验技术上应尽可能与肿瘤样本相似，构建PoN的目的一是排除种系突变，二是排除测序技术误差。来自同一组织的更佳，不足40例样本也可以构建，聊胜于无，比没有强，我用了8个样本构建。官方也提供了Public GATK Panel of Normals，可以从其谷歌云存储里下载。&lt;br /&gt;
+PS：但是这里有一个问题，根据PoN的作用，我觉得构建PoN的健康样本的测序时间及测序条件应该与要寻找突变的肿瘤样本相近，这点不利于长期实践和标准流程构建，如果在生产过程中，要加入寻找突变的检测，长期下来，可能需设定PoN更新周期来更新PoN。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;第一步，&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_Mutect2.php&quot;&gt;Mutect2&lt;/a&gt;的Tumor-only mode对每个样本寻找体细胞突变。构建PoN的第一步不能加&amp;ndash;germline-resource参数。此处由于后续工具有beta版的，导致这里必须加&amp;ndash;max-mnp-distance 0参数，否则下一步报错或无法获得结果文件。（此处官网不同页面下的两个例子不一致，第一次我没加这个参数得到了血泪教训，重跑了好久）&lt;br /&gt;
+在GATK4.1.4.0的CreateSomaticPanelOfNormals部分有详细介绍，以下为&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/current/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php&quot;&gt;引用原文&lt;/a&gt;：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note that as of May, 2019 -max-mnp-distance must be set to zero to avoid a bug in GenomicsDBImport.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;$GATK Mutect2 \
 -R hg19.fa \
 --max-mnp-distance 0 \
 -I ${sample}.ah.recal.bam \
 -O ${sample}.re.vcf.gz
-</code></pre>
-<ul>
-<li>第二步，把第一步获得的结果合并。</li>
-</ul>
-<pre><code>merge_vcfs=&quot;&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;第二步，把第一步获得的结果合并。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;merge_vcfs=&amp;quot;&amp;quot;
 while read sample
 do
-	  merge_vcfs=${merge_vcfs}&quot; -V ${sample}.re.vcf.gz &quot;
-done&lt;samplelist_pon
+	  merge_vcfs=${merge_vcfs}&amp;quot; -V ${sample}.re.vcf.gz &amp;quot;
+done&amp;lt;samplelist_pon
 
 $GATK GenomicsDBImport \
 -R hg19.fa \
 -L hg19.interval_list \
 --genomicsdb-workspace-path pon_db \
 ${merge_vcfs}
-</code></pre>
-<p>这里又有坑了<a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_genomicsdb_GenomicsDBImport.php">GenomicsDBImport</a>：在GATK4.1.2.0中该工具的-L是必须参数，我是针对全基因组的，实在不知道该传什么，就下载了hg19.bed，用picard的BedToIntervalList获得了hg19.interval_list。（picard功能好多，简直是救我狗命，好崩溃呀）<br />
-补充：对于外显子数据，还要加上一个参数&ndash;merge-input-intervals true，同一条染色体会整合到一起运行，并将结果保存到同一个文件夹中。另外如果在/tmp文件夹存储过小的服务器，还需指定临时文件目录，否则会因临时文件目录被写满而终止程序，使用&ndash;tmp-dir /data/group/tmp。</p>
-<pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar BedToIntervalList \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这里又有坑了&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_genomicsdb_GenomicsDBImport.php&quot;&gt;GenomicsDBImport&lt;/a&gt;：在GATK4.1.2.0中该工具的-L是必须参数，我是针对全基因组的，实在不知道该传什么，就下载了hg19.bed，用picard的BedToIntervalList获得了hg19.interval_list。（picard功能好多，简直是救我狗命，好崩溃呀）&lt;br /&gt;
+补充：对于外显子数据，还要加上一个参数&amp;ndash;merge-input-intervals true，同一条染色体会整合到一起运行，并将结果保存到同一个文件夹中。另外如果在/tmp文件夹存储过小的服务器，还需指定临时文件目录，否则会因临时文件目录被写满而终止程序，使用&amp;ndash;tmp-dir /data/group/tmp。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$JAVA/java -Xmx10g -jar $PICARD/picard.jar BedToIntervalList \
 I=hg19.bed \
 O=hg19.interval_list \
 SD=human.dict
-</code></pre>
-<ul>
-<li>第三步，将自己构建的pon_db和germline-resource相结合获得PoN。这个工具目前是beta版。</li>
-</ul>
-<pre><code>$GATK CreateSomaticPanelOfNormals \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;第三步，将自己构建的pon_db和germline-resource相结合获得PoN。这个工具目前是beta版。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;$GATK CreateSomaticPanelOfNormals \
 -R hg19.fa \
 --germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
 -V gendb://pon_db \
 -O pon_db.vcf.gz
-</code></pre>
-<p><a href="https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php">CreateSomaticPanelOfNormals</a>是beta版的。这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答<a href="https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37">guanyu&ndash;germline-resource参数</a>，回答里有一个资源<a href="http://bioinfo5pilm46.mit.edu/software/GATK/resources/">hg19资源，未经验证</a>。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）<br />
-备注：我下载了这个资源，用官方的b37也生成了一个自己的，两个文件大小不一致，统计其中记录的突变数据行数是一样的，在CreateSomaticPanelOfNormals这步获得的pon_db.vcf.gz结果也是一样，diff了一下，差别仅在文件头里里记录的执行语句及任务开始时间不同。所以我认为这个可以用。自己生成的是可以复现溯源。</p>
-<pre><code>$JAVA/java -Xmx10g -jar $PICARD/picard.jar LiftoverVcf \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&quot;https://software.broadinstitute.org/gatk/documentation/tooldocs/4.1.2.0/org_broadinstitute_hellbender_tools_walkers_mutect_CreateSomaticPanelOfNormals.php&quot;&gt;CreateSomaticPanelOfNormals&lt;/a&gt;是beta版的。这里的坑是用hg19的话，GATK官网Resource Bundle里面没有af-only-gnomad.raw.sites.hg19.vcf.gz文件，在讨论区看到回答&lt;a href=&quot;https://gatkforums.broadinstitute.org/gatk/discussion/10023/mutect2-beta-germline-resource-for-build-b37&quot;&gt;guanyu&amp;ndash;germline-resource参数&lt;/a&gt;，回答里有一个资源&lt;a href=&quot;http://bioinfo5pilm46.mit.edu/software/GATK/resources/&quot;&gt;hg19资源，未经验证&lt;/a&gt;。还提供了另一种方法，官网下载b37的，转为hg19的，这个方法可通过picard的LiftoverVcf转换，需要一个b37tohg19.chain文件。（又是picard，好厉害）&lt;br /&gt;
+备注：我下载了这个资源，用官方的b37也生成了一个自己的，两个文件大小不一致，统计其中记录的突变数据行数是一样的，在CreateSomaticPanelOfNormals这步获得的pon_db.vcf.gz结果也是一样，diff了一下，差别仅在文件头里里记录的执行语句及任务开始时间不同。所以我认为这个可以用。自己生成的是可以复现溯源。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$JAVA/java -Xmx10g -jar $PICARD/picard.jar LiftoverVcf \
 I=af-only-gnomad.raw.sites.b37.vcf.gz \
 O=af-only-gnomad.raw.sites.hg19.vcf.gz \
 CHAIN=b37tohg19.chain \
 REJECT=rejected_variants.vcf \
 R=hg19.fa
-</code></pre>
-<ol>
-<li>对每对正常-肿瘤样本寻找体细胞突变。正常-肿瘤需要是来自同一个体的，我这里用的是TI、TU样本。这里-normal参数即正常样本bam文件头@RG里SM的值。</li>
-</ol>
-<pre><code>$GATK Mutect2 \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;对每对正常-肿瘤样本寻找体细胞突变。正常-肿瘤需要是来自同一个体的，我这里用的是TI、TU样本。这里-normal参数即正常样本bam文件头@RG里SM的值。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$GATK Mutect2 \
 -R hg19.fa \
 -I ${sample_tu}.ah.recal.bam \
 -I ${sample_ti}.ah.recal.bam \
@@ -292,17 +306,17 @@ R=hg19.fa
 --germline-resource af-only-gnomad.raw.sites.hg19.vcf.gz \
 --panel-of-normals pon_db.vcf.gz \
 -O ${sample_tu}_${sample_ti}.vcf
-</code></pre>
-<h2 id="heading-4">结果文件过滤</h2>
-<h3 id="vqsrhard-filtering">种系突变结果过滤（VQSR/hard-filtering）</h3>
-<p>过滤这里是种系突变过滤比较复杂。这里只讲snp的，indel的同理。</p>
-<ol>
-<li>做VQSR过滤是建立了GMM模型进行过滤。要求样本量大，且有足够多的已知变异参考信息（比如人类）。分两步。</li>
-</ol>
-<ul>
-<li>第一步。</li>
-</ul>
-<pre><code>$GATK VariantRecalibrator \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;heading-4&quot;&gt;结果文件过滤&lt;/h2&gt;
+&lt;h3 id=&quot;vqsrhard-filtering&quot;&gt;种系突变结果过滤（VQSR/hard-filtering）&lt;/h3&gt;
+&lt;p&gt;过滤这里是种系突变过滤比较复杂。这里只讲snp的，indel的同理。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;做VQSR过滤是建立了GMM模型进行过滤。要求样本量大，且有足够多的已知变异参考信息（比如人类）。分两步。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;第一步。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;$GATK VariantRecalibrator \
 -R hg19.fa \
 -V ${sample}.hc.vcf \
 --resource:hapmap,known=false,training=true,truth=true,prior=15.0 hapmap_3.3.hg19.sites.vcf \
@@ -314,113 +328,103 @@ R=hg19.fa
 --rscript-file ${sample}.plots.R \
 --tranches-file ${sample}.hc.snp.tranches \
 -O ${sample}.hc.snp.recal
-</code></pre>
-<ul>
-<li>第二步。</li>
-</ul>
-<pre><code>$GATK ApplyVQSR \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;第二步。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;$GATK ApplyVQSR \
 -R hg19.fa \
 -V ${sample}.hc.vcf \
 --tranches-file ${sample}.hc.snp.tranches \
 --recal-file ${sample}.hc.snp.recal \
 -mode SNP \
 -O ${sample}.hc.VQSR.vcf
-</code></pre>
-<ol start="2">
-<li>但是不是所有数据都符合做VQSR的要求，不能做的就需要硬过滤（待验证），我没有用硬过滤，这里还要学习如何定义各个指标的阈值，也很复杂。</li>
-</ol>
-<pre><code>$GATK SelectVariants \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;但是不是所有数据都符合做VQSR的要求，不能做的就需要硬过滤（待验证），我没有用硬过滤，这里还要学习如何定义各个指标的阈值，也很复杂。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$GATK SelectVariants \
 -select-type SNP \
 -V ${sample}.hc.vcf \
 -O ${sample}.hc.snp.vcf
 
 $GATK VariantFiltration \
 -V ${sample}.hc.snp.vcf \
---filter-expression &quot;QD &lt; 2.0 || MQ &lt; 40.0 || FS &gt; 60.0 || SOR &gt; 3.0 || MQRankSum &lt; -12.5 || ReadPosRankSum &lt; -8.0&quot; \
---filter-name &quot;Filter&quot; \
+--filter-expression &amp;quot;QD &amp;lt; 2.0 || MQ &amp;lt; 40.0 || FS &amp;gt; 60.0 || SOR &amp;gt; 3.0 || MQRankSum &amp;lt; -12.5 || ReadPosRankSum &amp;lt; -8.0&amp;quot; \
+--filter-name &amp;quot;Filter&amp;quot; \
 -O ${sample}.hc.snp.filter.vcf
-</code></pre>
-<h3 id="heading-5">体细胞突变过滤</h3>
-<p>感觉这里可以用先苦后甜来形容了，一行命令搞定。</p>
-<pre><code>$GATK FilterMutectCalls \
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;heading-5&quot;&gt;体细胞突变过滤&lt;/h3&gt;
+&lt;p&gt;感觉这里可以用先苦后甜来形容了，一行命令搞定。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$GATK FilterMutectCalls \
 -R hg19.fa \
 -V ${sample}.mu.vcf \
 -O ${sample}.mu.filter.vcf
-</code></pre>
-<h2 id="heading-6">参考文件下载</h2>
-<p><a href="https://console.cloud.google.com/storage/browser/gatk-best-practices/somatic-hg38">hg38的germline-resource下载地址</a>，下载的文件叫af-only-gnomad.hg38.vcf.gz，对应索引也要下载。<br />
-<a href="https://console.cloud.google.com/storage/browser/gcp-public-data--broad-references/hg38/v0/HybSelOligos">hg38的interval_list下载地址</a>，下载的文件叫whole_exome_illumina_coding_v1.Homo_sapiens_assembly38.targets.interval_list，<a href="https://gatk.broadinstitute.org/hc/en-us/community/posts/360057855032-Broad-hg38-ICE-interval-list">论坛上关于该文件的说明</a>，引用其中一句&quot;In general you probably want to be using at the targets file, that&rsquo;s the region of interest&quot;。<br />
-<a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle">GATK官网Resource Bundle</a>，持续改版，目前存放在谷歌云存储里，只包含部分文件，如有其他需求，可在<a href="https://gatk.broadinstitute.org/hc/en-us/community/topics">GATK官方论坛</a>里检索。</p>
-<h2 id="heading-7">结语</h2>
-<p>获得的突变结果文件是vcf格式的，过滤前后的FILTER位有差异，过滤前的文件FILTER位是一个点号，过滤后的通过过滤的位点后为“PASS”，其他的还有各种标记，还需进一步研究。<br />
-这个GATK4找突变，真的很难很复杂。还在摸索中。<br />
-关于种系突变VQSR里硬过滤参数阈值设定、vcf文件格式说明之类的，相关知识和内容实在太多，在一篇文章中讲不完，再说我也不怎么会。</p>
-<p>参考资料：<br />
-（1）<a href="https://ming-lian.github.io/2019/02/08/call-snp/">深入了解snp-calling流程</a><br />
-（2）<a href="http://www.bioinfo-scrounger.com/archives/699">Mutect2-肿瘤不同转移时期的免疫微环境异质性研究</a><br />
-（3）<a href="http://www.bioinfo-scrounger.com/archives/666">初试GATK4-mutect2来call somatic mutation</a><br />
-（4）<a href="http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html">【原创】GATK使用方法详解（包含bwa使用）第三部分</a><br />
-（5）<a href="https://software.broadinstitute.org/gatk/">GATK官方网站</a><br />
-（6）<a href="https://cloud.tencent.com/developer/article/1901514">GATK 的 Germline mutation 流程</a></p>
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;heading-6&quot;&gt;参考文件下载&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://console.cloud.google.com/storage/browser/gatk-best-practices/somatic-hg38&quot;&gt;hg38的germline-resource下载地址&lt;/a&gt;，下载的文件叫af-only-gnomad.hg38.vcf.gz，对应索引也要下载。&lt;br /&gt;
+&lt;a href=&quot;https://console.cloud.google.com/storage/browser/gcp-public-data--broad-references/hg38/v0/HybSelOligos&quot;&gt;hg38的interval_list下载地址&lt;/a&gt;，下载的文件叫whole_exome_illumina_coding_v1.Homo_sapiens_assembly38.targets.interval_list，&lt;a href=&quot;https://gatk.broadinstitute.org/hc/en-us/community/posts/360057855032-Broad-hg38-ICE-interval-list&quot;&gt;论坛上关于该文件的说明&lt;/a&gt;，引用其中一句&amp;quot;In general you probably want to be using at the targets file, that&amp;rsquo;s the region of interest&amp;quot;。&lt;br /&gt;
+&lt;a href=&quot;https://gatk.broadinstitute.org/hc/en-us/articles/360035890811-Resource-bundle&quot;&gt;GATK官网Resource Bundle&lt;/a&gt;，持续改版，目前存放在谷歌云存储里，只包含部分文件，如有其他需求，可在&lt;a href=&quot;https://gatk.broadinstitute.org/hc/en-us/community/topics&quot;&gt;GATK官方论坛&lt;/a&gt;里检索。&lt;/p&gt;
+&lt;h2 id=&quot;heading-7&quot;&gt;结语&lt;/h2&gt;
+&lt;p&gt;获得的突变结果文件是vcf格式的，过滤前后的FILTER位有差异，过滤前的文件FILTER位是一个点号，过滤后的通过过滤的位点后为“PASS”，其他的还有各种标记，还需进一步研究。&lt;br /&gt;
+这个GATK4找突变，真的很难很复杂。还在摸索中。&lt;br /&gt;
+关于种系突变VQSR里硬过滤参数阈值设定、vcf文件格式说明之类的，相关知识和内容实在太多，在一篇文章中讲不完，再说我也不怎么会。&lt;/p&gt;
+&lt;p&gt;参考资料：&lt;br /&gt;
+（1）&lt;a href=&quot;https://ming-lian.github.io/2019/02/08/call-snp/&quot;&gt;深入了解snp-calling流程&lt;/a&gt;&lt;br /&gt;
+（2）&lt;a href=&quot;http://www.bioinfo-scrounger.com/archives/699&quot;&gt;Mutect2-肿瘤不同转移时期的免疫微环境异质性研究&lt;/a&gt;&lt;br /&gt;
+（3）&lt;a href=&quot;http://www.bioinfo-scrounger.com/archives/666&quot;&gt;初试GATK4-mutect2来call somatic mutation&lt;/a&gt;&lt;br /&gt;
+（4）&lt;a href=&quot;http://blog.sina.com.cn/s/blog_12d5e3d3c0101qu6r.html&quot;&gt;【原创】GATK使用方法详解（包含bwa使用）第三部分&lt;/a&gt;&lt;br /&gt;
+（5）&lt;a href=&quot;https://software.broadinstitute.org/gatk/&quot;&gt;GATK官方网站&lt;/a&gt;&lt;br /&gt;
+（6）&lt;a href=&quot;https://cloud.tencent.com/developer/article/1901514&quot;&gt;GATK 的 Germline mutation 流程&lt;/a&gt;&lt;/p&gt;
+</div>
 
-            </div>
-            
-              <div class="tag-container">
-                
-                  <a href="/tag/bioinfo/" class="tag">
-                    Bioinfo
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="/post/about/">
-                  <h3 class="post-title">
-                    关于
-                  </h3>
-                </a>
-              </div>
-            
+    
+  </div>
 
-            
-              
+  
+  
+  <div class="post-nav">
+    <div class="post-nav-label">Next Post</div>
+    <a href="/post/about/" class="post-nav-link">
+      <span class="post-nav-title">关于</span>
+      <span class="post-nav-arrow">→</span>
+    </a>
+  </div>
+  
 
-              
-            
+  
+  <div class="post-nav">
+    <div class="post-nav-label">Previous Post</div>
+    <a href="/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/" class="post-nav-link">
+      <span class="post-nav-title">myVCF对突变文件进行可视化分析</span>
+      <span class="post-nav-arrow">←</span>
+    </a>
+  </div>
+  
+</article>
 
-          </div>
+  </main>
 
-        </div>
-      </div>
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-copyright">
+      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
     </div>
+    <div class="footer-powered">
+      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
+    </div>
+  </div>
+</footer>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
-</script>
-
-
-
-
-
+  
   
 
   
+  
 
-
-
-
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  
+  
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
+
 </html>

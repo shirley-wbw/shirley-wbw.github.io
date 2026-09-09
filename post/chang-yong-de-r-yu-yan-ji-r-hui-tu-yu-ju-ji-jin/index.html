@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" >
+<html lang="zh-CN">
 
-<meta name="generator" content="Gridea Pro 1.2.2">
-<title>常用的R语言及R绘图语句集锦 | Shirley&#39;s Gridea Pro</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
-<link rel="stylesheet" href="/styles/main.css">
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Gridea Pro 1.2.2">
+  <title>常用的R语言及R绘图语句集锦 | Shirley&#39;s Gridea Pro</title>
 
   
 
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/styles/main.css">
+
+  
+  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
+
+  
+  
+
+  
+  
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-
-
-    <meta name="description" content="" />
-    <meta name="keywords" content="R" />
-  <meta name="description" content="工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。">
+<meta name="description" content="工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"常用的R语言及R绘图语句集锦","url":"https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/","description":"工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。","datePublished":"2019-07-05T17:16:37+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"常用的R语言及R绘图语句集锦","url":"https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/","description":"工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。","datePublished":"2019-07-05T17:16:37+08:00","dateModified":"2026-09-09T15:49:01+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/chang-yong-de-r-yu-yan-ji-r-hui-tu-yu-ju-ji-jin/","name":"常用的R语言及R绘图语句集锦","position":2}]}</script>
 <meta property="og:title" content="常用的R语言及R绘图语句集锦">
 <meta property="og:description" content="工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。">
@@ -41,162 +45,155 @@
 <meta name="twitter:description" content="工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-  <body>
-    <div id="app" class="main">
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="/">
-        <img src="/images/avatar.png?v=1788939651" class="site-logo">
-        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+<body>
+  <header class="site-header">
+  <div class="container">
+    <a href="https://shirley-wbw.github.io" class="site-logo">
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+      <span class="site-name">Shirley&#39;s Gridea Pro</span>
+    </a>
+
+    <nav class="nav-links">
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
       
-        
-          <a href="/post" class="site-nav">
-            个人日志
-          </a>
-        
+      <a href="/" >首页</a>
       
-        
-          <a href="/memos" class="site-nav">
-            闪念
-          </a>
-        
+      <a href="/archives" >归档</a>
       
-        
-          <a href="/links" class="site-nav">
-            友链
-          </a>
-        
+      <a href="/tag" >标签</a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+      <a href="/post" >个人日志</a>
       
-    </div>
+      <a href="/memos" >闪念</a>
+      
+      <a href="/links" >友链</a>
+      
+      <a href="/post/about" >关于</a>
+      
+
+      
+      
+
+      
+
+      
+      
+    </nav>
+
+    
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      行则将至
-    </div>
-    <div class="site-footer">
-      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-    </div>
+
+  
+  <div class="mobile-nav" id="mobileNav">
+    
+    <a href="/">首页</a>
+    
+    <a href="/archives">归档</a>
+    
+    <a href="/tag">标签</a>
+    
+    <a href="/post">个人日志</a>
+    
+    <a href="/memos">闪念</a>
+    
+    <a href="/links">友链</a>
+    
+    <a href="/post/about">关于</a>
+    
+    
+    
+    
   </div>
-</div>
+</header>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">常用的R语言及R绘图语句集锦</h2>
-            <div class="post-date">2019-07-05</div>
-            
-            <div class="post-content" v-pre>
-              <p>工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。</p>
-<!--more-->
-<ul>
-<li>R中ggplot绘图使添加的标题居中</li>
-</ul>
-<pre><code>ggplot(stage_data,aes(x=stage,y=num)) + 
-    labs(title=&quot;Stage Distribution&quot;) +
-    theme(plot.title = element_text(hjust = 0.5))
-</code></pre>
-<ul>
-<li>R中ggplot绘密度曲线</li>
-</ul>
-<pre><code>ggplot(origin_input, aes(x = xvalue)) + 
-geom_histogram(position = &quot;identity&quot;,alpha = 0.2,aes(y = ..density..))
-</code></pre>
-
-            </div>
-            
-              <div class="tag-container">
-                
-                  <a href="/tag/r/" class="tag">
-                    R
-                  </a>
-                
-              </div>
-            
-            
-
-            
-              
-
-              
-            
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+<script>
+  function toggleMobileMenu() {
+    var menu = document.getElementById('mobileNav');
+    var btn = document.getElementById('hamburgerBtn');
+    menu.classList.toggle('open');
+    btn.classList.toggle('active');
+  }
 </script>
 
-
-
-
+  <main class="site-main">
+    
+<article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">常用的R语言及R绘图语句集锦</h1>
+    <div class="post-meta">
+      <time class="post-date">2019-07-05</time>
+      
+      <span class="post-reading-time">1 分钟阅读</span>
+      
+      
+      <div class="post-tags-inline">
+        
+        <a href="/tag/r/" class="tag-link">R</a>
+        
+      </div>
+      
+    </div>
+  </header>
 
   
 
+  <div class="post-content-wrapper">
+    <div class="post-content" v-pre>&lt;p&gt;工作中总结的一些R语言的语句，以备不时之需，避免重复检索。有待补充整理收集。&lt;/p&gt;
+&lt;!--more--&gt;
+&lt;ul&gt;
+&lt;li&gt;R中ggplot绘图使添加的标题居中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;ggplot(stage_data,aes(x=stage,y=num)) + 
+    labs(title=&amp;quot;Stage Distribution&amp;quot;) +
+    theme(plot.title = element_text(hjust = 0.5))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;R中ggplot绘密度曲线&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;ggplot(origin_input, aes(x = xvalue)) + 
+geom_histogram(position = &amp;quot;identity&amp;quot;,alpha = 0.2,aes(y = ..density..))
+&lt;/code&gt;&lt;/pre&gt;
+</div>
+
+    
+  </div>
+
+  
   
 
+  
+</article>
 
+  </main>
 
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-copyright">
+      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
+    </div>
+    <div class="footer-powered">
+      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
+    </div>
+  </div>
+</footer>
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  
+  
+
+  
+  
+
+  
+  
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
+
 </html>

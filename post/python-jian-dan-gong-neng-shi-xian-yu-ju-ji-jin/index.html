@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" >
+<html lang="zh-CN">
 
-<meta name="generator" content="Gridea Pro 1.2.2">
-<title>python简单功能实现语句集锦 | Shirley&#39;s Gridea Pro</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
-<link rel="stylesheet" href="/styles/main.css">
-
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Gridea Pro 1.2.2">
+  <title>python简单功能实现语句集锦 | Shirley&#39;s Gridea Pro</title>
 
   
 
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="/styles/main.css">
+
+  
+  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
+
+  
+  
+
+  
+  
 
 
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-
-
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-  <meta name="description" content="在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。">
+<meta name="description" content="在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"python简单功能实现语句集锦","url":"https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/","description":"在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。","datePublished":"2019-07-11T13:01:20+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"python简单功能实现语句集锦","url":"https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/","description":"在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。","datePublished":"2019-07-11T13:01:20+08:00","dateModified":"2026-09-09T15:49:01+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/python-jian-dan-gong-neng-shi-xian-yu-ju-ji-jin/","name":"python简单功能实现语句集锦","position":2}]}</script>
 <meta property="og:title" content="python简单功能实现语句集锦">
 <meta property="og:description" content="在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。">
@@ -41,185 +45,186 @@
 <meta name="twitter:description" content="在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
-  <body>
-    <div id="app" class="main">
 
-      <div class="sidebar" :class="{ 'full-height': menuVisible }">
-  <div class="top-container" data-aos="fade-right">
-    <div class="top-header-container">
-      <a class="site-title-container" href="/">
-        <img src="/images/avatar.png?v=1788939651" class="site-logo">
-        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
-      </a>
-      <div class="menu-btn" @click="menuVisible = !menuVisible">
-        <div class="line"></div>
-      </div>
-    </div>
-    <div>
+<body>
+  <header class="site-header">
+  <div class="container">
+    <a href="https://shirley-wbw.github.io" class="site-logo">
       
-        
-          <a href="/" class="site-nav">
-            首页
-          </a>
-        
+      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
       
-        
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
+      <span class="site-name">Shirley&#39;s Gridea Pro</span>
+    </a>
+
+    <nav class="nav-links">
       
-        
-          <a href="/tags" class="site-nav">
-            标签
-          </a>
-        
       
-        
-          <a href="/post" class="site-nav">
-            个人日志
-          </a>
-        
+      <a href="/" >首页</a>
       
-        
-          <a href="/memos" class="site-nav">
-            闪念
-          </a>
-        
+      <a href="/archives" >归档</a>
       
-        
-          <a href="/links" class="site-nav">
-            友链
-          </a>
-        
+      <a href="/tag" >标签</a>
       
-        
-          <a href="/post/about" class="site-nav">
-            关于
-          </a>
-        
+      <a href="/post" >个人日志</a>
       
-    </div>
+      <a href="/memos" >闪念</a>
+      
+      <a href="/links" >友链</a>
+      
+      <a href="/post/about" >关于</a>
+      
+
+      
+      
+
+      
+
+      
+      
+    </nav>
+
+    
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
-    <div class="social-container">
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-    <div class="site-description">
-      行则将至
-    </div>
-    <div class="site-footer">
-      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-    </div>
+
+  
+  <div class="mobile-nav" id="mobileNav">
+    
+    <a href="/">首页</a>
+    
+    <a href="/archives">归档</a>
+    
+    <a href="/tag">标签</a>
+    
+    <a href="/post">个人日志</a>
+    
+    <a href="/memos">闪念</a>
+    
+    <a href="/links">友链</a>
+    
+    <a href="/post/about">关于</a>
+    
+    
+    
+    
   </div>
-</div>
+</header>
 
-
-      <div class="main-container">
-        <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">python简单功能实现语句集锦</h2>
-            <div class="post-date">2019-07-11</div>
-            
-            <div class="post-content" v-pre>
-              <p>在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。</p>
-<!-- more -->
-<ul>
-<li>pandas dataframe取列名，可用于判断某列名是否在列名列表里。</li>
-</ul>
-<pre><code>DataFrame.columns.values.tolist()
-</code></pre>
-<ul>
-<li>pandas按某列指定字符顺序给行排序。</li>
-</ul>
-<pre><code>word_order=['b','d','a','c']
-df['word'] = df['word'].astype('category')
-# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
-df['word'].cat.set_categories(word_order, inplace=True)
-df.sort_values(by=[&quot;word&quot;,&quot;num&quot;],inplace=True)
-</code></pre>
-<ul>
-<li>pandas按某指定列名顺序给列重排序。</li>
-</ul>
-<pre><code>column_order=['cd','ac','bd','da']
-df = df[column_order]
-</code></pre>
-<ul>
-<li>pandas对行去重。</li>
-</ul>
-<pre><code>df.drop_duplicates(['colname1','colname2','colname3'], 'last')
-</code></pre>
-<ul>
-<li>numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。</li>
-</ul>
-<pre><code>df = pd.read_csv(&quot;xxx.csv&quot;)
-need_column=['S1','S5','S6','S9']
-data_arr=data.loc[:need_column].T.values
-</code></pre>
-<ul>
-<li>接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。</li>
-</ul>
-<pre><code>data_split = np.hsplit(data_arr, 3)
-data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
-</code></pre>
-<ul>
-<li>双重索引。</li>
-</ul>
-<pre><code>subset.index=pd.MultiIndex.from_arrays([np.full(subset.shape[0], i),subset[&quot;a&quot;]+&quot;:&quot;+subset['b'].astype(&quot;str&quot;)], names=['num','id'])
-subset = subset.set_index(['a','b'])
-</code></pre>
-
-            </div>
-            
-            
-
-            
-              
-
-              
-            
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="application/javascript">
-
-AOS.init();
-
-var app = new Vue({
-  el: '#app',
-  data: {
-    menuVisible: false,
-  },
-})
-
+<script>
+  function toggleMobileMenu() {
+    var menu = document.getElementById('mobileNav');
+    var btn = document.getElementById('hamburgerBtn');
+    menu.classList.toggle('open');
+    btn.classList.toggle('active');
+  }
 </script>
 
-
-
-
+  <main class="site-main">
+    
+<article class="post-detail">
+  <header class="post-header">
+    <h1 class="post-title">python简单功能实现语句集锦</h1>
+    <div class="post-meta">
+      <time class="post-date">2019-07-11</time>
+      
+      <span class="post-reading-time">1 分钟阅读</span>
+      
+      
+      <div class="post-tags-inline">
+        
+        <a href="/tag/python/" class="tag-link">Python</a>
+        
+      </div>
+      
+    </div>
+  </header>
 
   
 
+  <div class="post-content-wrapper">
+    <div class="post-content" v-pre>&lt;p&gt;在python里进行数据处理时对数据框经常要做一些操作，总结一些简单功能实现的语句。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;ul&gt;
+&lt;li&gt;pandas dataframe取列名，可用于判断某列名是否在列名列表里。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;DataFrame.columns.values.tolist()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;pandas按某列指定字符顺序给行排序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;word_order=[&#39;b&#39;,&#39;d&#39;,&#39;a&#39;,&#39;c&#39;]
+df[&#39;word&#39;] = df[&#39;word&#39;].astype(&#39;category&#39;)
+# 当指定顺序字符列表里的字符种类比df中的多时用set_categories，否则用reorder_catgories即可
+df[&#39;word&#39;].cat.set_categories(word_order, inplace=True)
+df.sort_values(by=[&amp;quot;word&amp;quot;,&amp;quot;num&amp;quot;],inplace=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;pandas按某指定列名顺序给列重排序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;column_order=[&#39;cd&#39;,&#39;ac&#39;,&#39;bd&#39;,&#39;da&#39;]
+df = df[column_order]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;pandas对行去重。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;df.drop_duplicates([&#39;colname1&#39;,&#39;colname2&#39;,&#39;colname3&#39;], &#39;last&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;numpy和pandas配合使用，读取一个每列为一组特征的csv文件进行数据整形。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;df = pd.read_csv(&amp;quot;xxx.csv&amp;quot;)
+need_column=[&#39;S1&#39;,&#39;S5&#39;,&#39;S6&#39;,&#39;S9&#39;]
+data_arr=data.loc[:need_column].T.values
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;接上条，分割数据为3部分，每部分后面补5个0。注意hsplit函数(col方向)，vsplit函数 (row方向)，视情况使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;data_split = np.hsplit(data_arr, 3)
+data_fill=np.concatenate((data_split[0],np.zeros((len(data_arr),5)),data_split[1],np.zeros((len(data_arr),5)),data_split[2],np.zeros((len(data_arr),5))),axis=1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;双重索引。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;subset.index=pd.MultiIndex.from_arrays([np.full(subset.shape[0], i),subset[&amp;quot;a&amp;quot;]+&amp;quot;:&amp;quot;+subset[&#39;b&#39;].astype(&amp;quot;str&amp;quot;)], names=[&#39;num&#39;,&#39;id&#39;])
+subset = subset.set_index([&#39;a&#39;,&#39;b&#39;])
+&lt;/code&gt;&lt;/pre&gt;
+</div>
+
+    
+  </div>
+
+  
   
 
+  
+</article>
 
+  </main>
 
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-copyright">
+      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
+    </div>
+    <div class="footer-powered">
+      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
+    </div>
+  </div>
+</footer>
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  
+  
+
+  
+  
+
+  
+  
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
+
 </html>
