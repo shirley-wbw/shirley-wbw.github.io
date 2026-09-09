@@ -1,35 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+  <head>
+    <meta charset="utf-8" >
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="Gridea Pro 1.2.2">
-  <title>jupyter notebook配置问题记录 | Shirley&#39;s Gridea Pro</title>
+<meta name="generator" content="Gridea Pro 1.2.2">
+<title>jupyter notebook配置问题记录 | Shirley&#39;s Gridea Pro</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="/favicon.ico?v=1788941344">
+<link rel="stylesheet" href="/styles/main.css">
+
 
   
 
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="/styles/main.css">
-
-  
-  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
-
-  
-  
-
-  
-  
 
 
-<meta name="description" content="jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。">
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="Python" />
+  <meta name="description" content="jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"jupyter notebook配置问题记录","url":"https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu/","description":"jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。","datePublished":"2019-08-14T15:53:57+08:00","dateModified":"2026-09-09T15:49:01+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/jupyter-notebook-pei-zhi-wen-ti-ji-lu/","name":"jupyter notebook配置问题记录","position":2}]}</script>
@@ -45,184 +41,184 @@
 <meta name="twitter:description" content="jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
+  <body>
+    <div id="app" class="main">
 
-<body>
-  <header class="site-header">
-  <div class="container">
-    <a href="https://shirley-wbw.github.io" class="site-logo">
-      
-      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
-      
-      <span class="site-name">Shirley&#39;s Gridea Pro</span>
-    </a>
-
-    <nav class="nav-links">
-      
-      
-      <a href="/" >首页</a>
-      
-      <a href="/archives" >归档</a>
-      
-      <a href="/tag" >标签</a>
-      
-      <a href="/post" >个人日志</a>
-      
-      <a href="/memos" >闪念</a>
-      
-      <a href="/links" >友链</a>
-      
-      <a href="/post/about" >关于</a>
-      
-
-      
-      
-
-      
-
-      
-      
-    </nav>
-
-    
-    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-
-  
-  <div class="mobile-nav" id="mobileNav">
-    
-    <a href="/">首页</a>
-    
-    <a href="/archives">归档</a>
-    
-    <a href="/tag">标签</a>
-    
-    <a href="/post">个人日志</a>
-    
-    <a href="/memos">闪念</a>
-    
-    <a href="/links">友链</a>
-    
-    <a href="/post/about">关于</a>
-    
-    
-    
-    
-  </div>
-</header>
-
-<script>
-  function toggleMobileMenu() {
-    var menu = document.getElementById('mobileNav');
-    var btn = document.getElementById('hamburgerBtn');
-    menu.classList.toggle('open');
-    btn.classList.toggle('active');
-  }
-</script>
-
-  <main class="site-main">
-    
-<article class="post-detail">
-  <header class="post-header">
-    <h1 class="post-title">jupyter notebook配置问题记录</h1>
-    <div class="post-meta">
-      <time class="post-date">2019-08-14</time>
-      
-      <span class="post-reading-time">1 分钟阅读</span>
-      
-      
-      <div class="post-tags-inline">
-        
-        <a href="/tag/python/" class="tag-link">Python</a>
-        
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788941344" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
       </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tag" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/memos" class="site-nav">
+            闪念
+          </a>
+        
+      
+        
+          <a href="/links" class="site-nav">
+            友链
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
       
     </div>
-  </header>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
-  
 
-  <div class="post-content-wrapper">
-    <div class="post-content" v-pre>&lt;p&gt;jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。&lt;/p&gt;
-&lt;!-- more --&gt;
-&lt;h3 id=&quot;heading&quot;&gt;背景&lt;/h3&gt;
-&lt;p&gt;在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。&lt;/p&gt;
-&lt;h3 id=&quot;1&quot;&gt;问题及解决办法1&lt;/h3&gt;
-&lt;p&gt;激活py2环境后启动jupyter notebook报错如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;UnicodeDecodeError: &#39;ascii&#39; codec can&#39;t decode byte 0xe5 in position 4: ordinal not in range(128)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;LANG=zn jupyter lab
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">jupyter notebook配置问题记录</h2>
+            <div class="post-date">2019-08-14</div>
+            
+            <div class="post-content" v-pre>
+              <p>jupyter在linux上的配置，网上有很多教程，我这里就不说了，主要记录近期virtualenv配置python2环境后的jupyter问题。</p>
+<!-- more -->
+<h3 id="heading">背景</h3>
+<p>在linux上用virtualenv配置python环境，配置了py2和py3环境都有，分别激活两种环境后安装了jupyter notebook。这时我以为在两种环境下各自启动jupyter就能分别使用py2和py3，结果发现并非如此。主要是想用py2。</p>
+<h3 id="1">问题及解决办法1</h3>
+<p>激活py2环境后启动jupyter notebook报错如下：</p>
+<pre><code>UnicodeDecodeError: 'ascii' codec can't decode byte 0xe5 in position 4: ordinal not in range(128)
+</code></pre>
+<p>解决办法，输入以下语句即可启动jupyter lab代替jupyter notebook，直接用jupyter lab也可以：</p>
+<pre><code>LANG=zn jupyter lab
 jupyter lab
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;2&quot;&gt;问题及解决办法2&lt;/h3&gt;
-&lt;p&gt;解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;PyInit__pywrap_tensorflow_internal
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;import platform
+</code></pre>
+<h3 id="2">问题及解决办法2</h3>
+<p>解决了问题1后，我以为成功了，结果进入jupyter lab后，因为需要用到tensorflow，导入这个包后报错如下，这个报错我现在找不到了，大概就是有这一句。</p>
+<pre><code>PyInit__pywrap_tensorflow_internal
+</code></pre>
+<p>解决办法，查了好多资料，没搞清楚，终于看到提到内核的问题，就检查了一下内核，发现果然有问题，在py2环境下启动的jupyter内核竟然还是py3。</p>
+<pre><code>import platform
 print(platform.python_version())
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;pip install ipykernel
+</code></pre>
+<p>这时要为jupyter添加py2内核，然后切换内核才可以。添加py2内核的语句如下：</p>
+<pre><code>pip install ipykernel
 python -m ipykernel install --name your_env_name
 # 以上语句没有权限执行，则运行以下语句
 python -m ipykernel install --user --name your_env_name
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;heading-1&quot;&gt;总结&lt;/h3&gt;
-&lt;p&gt;这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。&lt;/p&gt;
-</div>
+</code></pre>
+<h3 id="heading-1">总结</h3>
+<p>这个问题困扰了我好久，通过这个问题的解决又学到了新知识。但是对virtualenv还是感觉比较迷幻，经过测试，发现在py2/py3环境激活的情况下进入的jupyter并不能保证和环境一致，每次进去最好先看一下内核。</p>
 
-    
-  </div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/python/" class="tag">
+                    Python
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/">
+                  <h3 class="post-title">
+                    关于基因ID的知识记录
+                  </h3>
+                </a>
+              </div>
+            
 
-  
-  
-  <div class="post-nav">
-    <div class="post-nav-label">Next Post</div>
-    <a href="/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/" class="post-nav-link">
-      <span class="post-nav-title">关于基因ID的知识记录</span>
-      <span class="post-nav-arrow">→</span>
-    </a>
-  </div>
-  
+            
+              
 
-  
-  <div class="post-nav">
-    <div class="post-nav-label">Previous Post</div>
-    <a href="/post/python-xiang-guan-bao-cuo-ji-lu/" class="post-nav-link">
-      <span class="post-nav-title">python相关报错记录</span>
-      <span class="post-nav-arrow">←</span>
-    </a>
-  </div>
-  
-</article>
+              
+            
 
-  </main>
+          </div>
 
-  <footer class="site-footer">
-  <div class="container">
-    <div class="footer-copyright">
-      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
+        </div>
+      </div>
     </div>
-    <div class="footer-powered">
-      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
-    </div>
-  </div>
-</footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
 
   
-  
 
   
-  
 
-  
-  
-<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+
+
+
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
-
 </html>

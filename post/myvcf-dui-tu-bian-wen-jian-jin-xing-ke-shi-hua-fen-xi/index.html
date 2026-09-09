@@ -1,35 +1,31 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+  <head>
+    <meta charset="utf-8" >
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content="Gridea Pro 1.2.2">
-  <title>myVCF对突变文件进行可视化分析 | Shirley&#39;s Gridea Pro</title>
+<meta name="generator" content="Gridea Pro 1.2.2">
+<title>myVCF对突变文件进行可视化分析 | Shirley&#39;s Gridea Pro</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="/favicon.ico?v=1788941344">
+<link rel="stylesheet" href="/styles/main.css">
+
 
   
 
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet">
-
-  
-  <link rel="stylesheet" href="/styles/main.css">
-
-  
-  <link rel="alternate" type="application/rss+xml" title="Shirley&#39;s Gridea Pro" href="/feed.xml">
-
-  
-  
-
-  
-  
 
 
-<meta name="description" content="最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。">
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="Bioinfo" />
+  <meta name="description" content="最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"myVCF对突变文件进行可视化分析","url":"https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/","description":"最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。","datePublished":"2019-08-06T16:09:00+08:00","dateModified":"2026-09-09T15:49:01+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://shirley-wbw.github.io","name":"Shirley's Gridea Pro","position":1},{"@type":"ListItem","item":"https://shirley-wbw.github.io/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/","name":"myVCF对突变文件进行可视化分析","position":2}]}</script>
@@ -45,194 +41,194 @@
 <meta name="twitter:description" content="最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。">
 <meta name="twitter:image" content="/images/avatar.png">
 </head>
+  <body>
+    <div id="app" class="main">
 
-<body>
-  <header class="site-header">
-  <div class="container">
-    <a href="https://shirley-wbw.github.io" class="site-logo">
-      
-      <img src="/images/avatar.png" alt="Shirley&#39;s Gridea Pro" class="site-avatar">
-      
-      <span class="site-name">Shirley&#39;s Gridea Pro</span>
-    </a>
-
-    <nav class="nav-links">
-      
-      
-      <a href="/" >首页</a>
-      
-      <a href="/archives" >归档</a>
-      
-      <a href="/tag" >标签</a>
-      
-      <a href="/post" >个人日志</a>
-      
-      <a href="/memos" >闪念</a>
-      
-      <a href="/links" >友链</a>
-      
-      <a href="/post/about" >关于</a>
-      
-
-      
-      
-
-      
-
-      
-      
-    </nav>
-
-    
-    <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="菜单">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </div>
-
-  
-  <div class="mobile-nav" id="mobileNav">
-    
-    <a href="/">首页</a>
-    
-    <a href="/archives">归档</a>
-    
-    <a href="/tag">标签</a>
-    
-    <a href="/post">个人日志</a>
-    
-    <a href="/memos">闪念</a>
-    
-    <a href="/links">友链</a>
-    
-    <a href="/post/about">关于</a>
-    
-    
-    
-    
-  </div>
-</header>
-
-<script>
-  function toggleMobileMenu() {
-    var menu = document.getElementById('mobileNav');
-    var btn = document.getElementById('hamburgerBtn');
-    menu.classList.toggle('open');
-    btn.classList.toggle('active');
-  }
-</script>
-
-  <main class="site-main">
-    
-<article class="post-detail">
-  <header class="post-header">
-    <h1 class="post-title">myVCF对突变文件进行可视化分析</h1>
-    <div class="post-meta">
-      <time class="post-date">2019-08-06</time>
-      
-      <span class="post-reading-time">2 分钟阅读</span>
-      
-      
-      <div class="post-tags-inline">
-        
-        <a href="/tag/bioinfo/" class="tag-link">Bioinfo</a>
-        
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788941344" class="site-logo">
+        <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
       </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tag" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post" class="site-nav">
+            个人日志
+          </a>
+        
+      
+        
+          <a href="/memos" class="site-nav">
+            闪念
+          </a>
+        
+      
+        
+          <a href="/links" class="site-nav">
+            友链
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
       
     </div>
-  </header>
-
-  
-
-  <div class="post-content-wrapper">
-    <div class="post-content" v-pre>&lt;p&gt;最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。&lt;/p&gt;
-&lt;!-- more --&gt;
-&lt;h3 id=&quot;heading&quot;&gt;安装&lt;/h3&gt;
-&lt;p&gt;myVCF的功能，简单一句话，就是可视化vcf文件。我用到的就是这块。&lt;a href=&quot;https://github.com/apietrelli/myVCF&quot;&gt;myVCF下载路径&lt;/a&gt;，在GitHub上。&lt;br /&gt;
-推荐安装到Linux系统上，因为我在Windows上安装折腾了很久也没成功。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;克隆GitHub上myVCF的源码。例如我安装到以下目录。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;cd  /home/username/software
-git clone https://github.com/apietrelli/myVCF.git
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&quot;2&quot;&gt;
-&lt;li&gt;在Linux系统下自己的home目录下创建python2环境，并安装依赖包。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;cd /home/username/envis
-virtualenv -p /usr/bin/python2 python27
-pip install -r /home/username/software/myVCF-master/requirements.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;heading-1&quot;&gt;使用&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;用终端调用时，我这里使用Xmanager Enterprise 5，因为这个里面的Xshell可以转发到X11桌面，不然的话无法显示，会报错：no display name and no $DISPLAY environment variable。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;/home/username/envis/python27/bin/python2.7 -u /home/username/software/myVCF-master/myVCF_GUI.py 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565080122040.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-调用成功会显示如图界面，点击“Run myVCF”即可弹出火狐浏览器，进入软件界面。&lt;br /&gt;
-2. 进入界面后如下图所示。&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565080355859.png&quot; alt=&quot;&quot; /&gt;点击“Upload new project”即可创建自己的项目。软件自带几个例子，可以自己运行一下。要运行自己的数据需要将自己的vcf文件放入软件目录下：/home/username/software/myVCF-master/data/VCFs。&lt;br /&gt;
-3. 运行了一个例子，结果展示如下，一系列可视化图片，简约美观，还能打印输出，能缩放，是交互式的，感觉很有趣。&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565080904697.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565080929812.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565080946383.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565081012810.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565081022519.png&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://shirley-wbw.github.io/post-images/1565081033448.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-&lt;h3 id=&quot;heading-2&quot;&gt;总结&lt;/h3&gt;
-&lt;p&gt;测试了一些例子，我发现这个工具对注释后的vcf文件比较友好，没有注释的在可视化的步骤会受到影响。&lt;br /&gt;
-挺有趣的小工具，但是也没有维护了。还有我运行的例子gene名称用的是ensembl ID，可能跟注释有关吧，看着不太方便。我工作中常用的是HGNC symbol。&lt;br /&gt;
-跑了一个自己的未注释的vcf文件，结果只能出Mutations distribution: by Chromosome这张图，别的都没有。vcf注释工具我还没有研究，只能先这样了。&lt;/p&gt;
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
 </div>
 
-    
-  </div>
 
-  
-  
-  <div class="post-nav">
-    <div class="post-nav-label">Next Post</div>
-    <a href="/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/" class="post-nav-link">
-      <span class="post-nav-title">GATK4实现寻找SNP记录</span>
-      <span class="post-nav-arrow">→</span>
-    </a>
-  </div>
-  
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">myVCF对突变文件进行可视化分析</h2>
+            <div class="post-date">2019-08-06</div>
+            
+            <div class="post-content" v-pre>
+              <p>最近在做突变分析，偶然看到有myVCF这个小工具，但是搜到的资料实在有限，自己摸索了摸索，将安装及使用过程总结一下。</p>
+<!-- more -->
+<h3 id="heading">安装</h3>
+<p>myVCF的功能，简单一句话，就是可视化vcf文件。我用到的就是这块。<a href="https://github.com/apietrelli/myVCF">myVCF下载路径</a>，在GitHub上。<br />
+推荐安装到Linux系统上，因为我在Windows上安装折腾了很久也没成功。</p>
+<ol>
+<li>克隆GitHub上myVCF的源码。例如我安装到以下目录。</li>
+</ol>
+<pre><code>cd  /home/username/software
+git clone https://github.com/apietrelli/myVCF.git
+</code></pre>
+<ol start="2">
+<li>在Linux系统下自己的home目录下创建python2环境，并安装依赖包。</li>
+</ol>
+<pre><code>cd /home/username/envis
+virtualenv -p /usr/bin/python2 python27
+pip install -r /home/username/software/myVCF-master/requirements.txt
+</code></pre>
+<h3 id="heading-1">使用</h3>
+<ol>
+<li>用终端调用时，我这里使用Xmanager Enterprise 5，因为这个里面的Xshell可以转发到X11桌面，不然的话无法显示，会报错：no display name and no $DISPLAY environment variable。</li>
+</ol>
+<pre><code>/home/username/envis/python27/bin/python2.7 -u /home/username/software/myVCF-master/myVCF_GUI.py 
+</code></pre>
+<p><img src="https://shirley-wbw.github.io/post-images/1565080122040.png" alt="" /><br />
+调用成功会显示如图界面，点击“Run myVCF”即可弹出火狐浏览器，进入软件界面。<br />
+2. 进入界面后如下图所示。<img src="https://shirley-wbw.github.io/post-images/1565080355859.png" alt="" />点击“Upload new project”即可创建自己的项目。软件自带几个例子，可以自己运行一下。要运行自己的数据需要将自己的vcf文件放入软件目录下：/home/username/software/myVCF-master/data/VCFs。<br />
+3. 运行了一个例子，结果展示如下，一系列可视化图片，简约美观，还能打印输出，能缩放，是交互式的，感觉很有趣。<br />
+<img src="https://shirley-wbw.github.io/post-images/1565080904697.png" alt="" /><br />
+<img src="https://shirley-wbw.github.io/post-images/1565080929812.png" alt="" /><br />
+<img src="https://shirley-wbw.github.io/post-images/1565080946383.png" alt="" /><br />
+<img src="https://shirley-wbw.github.io/post-images/1565081012810.png" alt="" /><br />
+<img src="https://shirley-wbw.github.io/post-images/1565081022519.png" alt="" /><br />
+<img src="https://shirley-wbw.github.io/post-images/1565081033448.png" alt="" /></p>
+<h3 id="heading-2">总结</h3>
+<p>测试了一些例子，我发现这个工具对注释后的vcf文件比较友好，没有注释的在可视化的步骤会受到影响。<br />
+挺有趣的小工具，但是也没有维护了。还有我运行的例子gene名称用的是ensembl ID，可能跟注释有关吧，看着不太方便。我工作中常用的是HGNC symbol。<br />
+跑了一个自己的未注释的vcf文件，结果只能出Mutations distribution: by Chromosome这张图，别的都没有。vcf注释工具我还没有研究，只能先这样了。</p>
 
-  
-  <div class="post-nav">
-    <div class="post-nav-label">Previous Post</div>
-    <a href="/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/" class="post-nav-link">
-      <span class="post-nav-title">关于基因ID的知识记录</span>
-      <span class="post-nav-arrow">←</span>
-    </a>
-  </div>
-  
-</article>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/bioinfo/" class="tag">
+                    Bioinfo
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/">
+                  <h3 class="post-title">
+                    GATK4实现寻找SNP记录
+                  </h3>
+                </a>
+              </div>
+            
 
-  </main>
+            
+              
 
-  <footer class="site-footer">
-  <div class="container">
-    <div class="footer-copyright">
-      &copy; 2026 Shirley&#39;s Gridea Pro. All rights reserved.
+              
+            
+
+          </div>
+
+        </div>
+      </div>
     </div>
-    <div class="footer-powered">
-      Powered by <a href="https://gridea.pro" target="_blank" rel="noopener">Gridea Pro</a>
-    </div>
-  </div>
-</footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
 
   
-  
 
   
-  
 
-  
-  
-<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: letters-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+
+
+
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
-
 </html>
