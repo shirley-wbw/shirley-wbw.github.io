@@ -1,20 +1,15 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
+    <meta charset="utf-8" >
 
 <meta name="generator" content="Gridea Pro 1.2.2">
 <title>GATK4实现寻找SNP记录 | Shirley&#39;s Gridea Pro</title>
 
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939434">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
 <link rel="stylesheet" href="/styles/main.css">
 
 
@@ -23,11 +18,13 @@
   
 
 
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
 
 
 
+    <meta name="description" content="" />
+    <meta name="keywords" content="Bioinfo" />
   <meta name="description" content="GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"GATK4实现寻找SNP记录","url":"https://shirley-wbw.github.io/post/gatk4-shi-xian-xun-zhao-snp-ji-lu/","description":"GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q\u0026amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。 2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。 2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关 2022.7.13：GATK官网持续改版，部分链接失效，更新链接","datePublished":"2019-07-24T11:07:34+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
@@ -46,95 +43,96 @@
 </head>
   <body>
     <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://shirley-wbw.github.io">
-        <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1788939434" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://shirley-wbw.github.io">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788939651" class="site-logo">
         <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
       </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
-  </div>
-</div>
-
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
+    <div>
       
         
-          <a href="/" class="menu purple-link">
+          <a href="/" class="site-nav">
             首页
           </a>
         
       
         
-          <a href="/archives" class="menu purple-link">
+          <a href="/archives" class="site-nav">
             归档
           </a>
         
       
         
-          <a href="/tags" class="menu purple-link">
+          <a href="/tags" class="site-nav">
             标签
           </a>
         
       
         
-          <a href="/post" class="menu purple-link">
+          <a href="/post" class="site-nav">
             个人日志
           </a>
         
       
         
-          <a href="/memos" class="menu purple-link">
+          <a href="/memos" class="site-nav">
             闪念
           </a>
         
       
         
-          <a href="/links" class="menu purple-link">
+          <a href="/links" class="site-nav">
             友链
           </a>
         
       
         
-          <a href="/post/about" class="menu purple-link">
+          <a href="/post/about" class="site-nav">
             关于
           </a>
         
       
     </div>
   </div>
-</transition>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
 
-      <div class="content-container">
-        <div class="post-detail">
-          
-          <h2 class="post-title">GATK4实现寻找SNP记录</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2019-07-24</span>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">GATK4实现寻找SNP记录</h2>
+            <div class="post-date">2019-07-24</div>
             
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="/tag/bioinfo/">
-                    Bioinfo
-                    
-                  </a>
-                
-              </span>
-            
-          </div>
-          <div class="post-content" v-pre>
-            <p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br />
+            <div class="post-content" v-pre>
+              <p>GATK4这个工具我真的想疯狂吐槽一下，不断更新确实是好事，但是官网上关于同一个tool的各种manual以及Q&amp;A给出的例子都不一致，简直抓狂，记录下自己的实践情况吧，非常辛酸。<br />
 <strong>2019.10.15：本记录中使用的是GATK4.1.2.0，不完全适用于最新版本的GATK4。</strong><br />
 <strong>2021.12.03：教程更新为GATK4.2.3.0，增加hg38相关</strong><br />
 <strong>2022.7.13：GATK官网持续改版，部分链接失效，更新链接</strong></p>
@@ -365,49 +363,43 @@ $GATK VariantFiltration \
 （5）<a href="https://software.broadinstitute.org/gatk/">GATK官方网站</a><br />
 （6）<a href="https://cloud.tencent.com/developer/article/1901514">GATK 的 Germline mutation 流程</a></p>
 
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/bioinfo/" class="tag">
+                    Bioinfo
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="/post/about/">
+                  <h3 class="post-title">
+                    关于
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+
+              
+            
+
           </div>
+
         </div>
-
-        
-          <div class="next-post">
-            <a class="purple-link" href="/post/about/">
-              <h3 class="post-title">
-                下一篇：关于
-              </h3>
-            </a>
-          </div>
-          
       </div>
-
-      
-        
-
-        
-      
-
-      <div class="site-footer">
-  <div class="slogan">行则将至</div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-  Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-</div>
-
-
     </div>
-    <script type="application/javascript">
 
-hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
 
 var app = new Vue({
   el: '#app',
@@ -420,6 +412,8 @@ var app = new Vue({
 
 
 
+
+
   
 
   
@@ -427,6 +421,6 @@ var app = new Vue({
 
 
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: fly v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>

@@ -1,20 +1,15 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
+    <meta charset="utf-8" >
 
 <meta name="generator" content="Gridea Pro 1.2.2">
 <title>上下求索 | Shirley&#39;s Gridea Pro</title>
 
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939434">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
 <link rel="stylesheet" href="/styles/main.css">
 
 
@@ -23,11 +18,13 @@
   
 
 
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
 
 
 
+    <meta name="description" content="" />
+    <meta name="keywords" content="Essay" />
   <meta name="description" content="感情与婚姻2023.2 随着年龄的增长，人的想法总是在改变，有时候我很害怕自己现在认定要做的事以后会后悔，可能不久前我还在说现在的日子再过一百年我也不会厌倦，如今却感到厌倦了。 罗永浩有一段话说的很好“他在生命的每个阶段，都说了他相信的东西，那你要他怎么样，什么都没做错”，是的啊，什么都没做错，可是还是觉得自己错了。几年前我还不想结婚生子，可如今也开始考虑这个问题了，去年底终于结束了上一段&amp;hellip;">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/shang-xia-qiu-suo/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"上下求索","url":"https://shirley-wbw.github.io/post/shang-xia-qiu-suo/","description":"感情与婚姻2023.2 随着年龄的增长，人的想法总是在改变，有时候我很害怕自己现在认定要做的事以后会后悔，可能不久前我还在说现在的日子再过一百年我也不会厌倦，如今却感到厌倦了。 罗永浩有一段话说的很好“他在生命的每个阶段，都说了他相信的东西，那你要他怎么样，什么都没做错”，是的啊，什么都没做错，可是还是觉得自己错了。几年前我还不想结婚生子，可如今也开始考虑这个问题了，去年底终于结束了上一段\u0026hellip;","datePublished":"2023-02-17T13:46:02+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
@@ -46,95 +43,96 @@
 </head>
   <body>
     <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://shirley-wbw.github.io">
-        <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1788939434" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://shirley-wbw.github.io">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788939651" class="site-logo">
         <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
       </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
-  </div>
-</div>
-
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
+    <div>
       
         
-          <a href="/" class="menu purple-link">
+          <a href="/" class="site-nav">
             首页
           </a>
         
       
         
-          <a href="/archives" class="menu purple-link">
+          <a href="/archives" class="site-nav">
             归档
           </a>
         
       
         
-          <a href="/tags" class="menu purple-link">
+          <a href="/tags" class="site-nav">
             标签
           </a>
         
       
         
-          <a href="/post" class="menu purple-link">
+          <a href="/post" class="site-nav">
             个人日志
           </a>
         
       
         
-          <a href="/memos" class="menu purple-link">
+          <a href="/memos" class="site-nav">
             闪念
           </a>
         
       
         
-          <a href="/links" class="menu purple-link">
+          <a href="/links" class="site-nav">
             友链
           </a>
         
       
         
-          <a href="/post/about" class="menu purple-link">
+          <a href="/post/about" class="site-nav">
             关于
           </a>
         
       
     </div>
   </div>
-</transition>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
 
-      <div class="content-container">
-        <div class="post-detail">
-          
-          <h2 class="post-title">上下求索</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2023-02-17</span>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">上下求索</h2>
+            <div class="post-date">2023-02-17</div>
             
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="/tag/essay/">
-                    Essay
-                    
-                  </a>
-                
-              </span>
-            
-          </div>
-          <div class="post-content" v-pre>
-            <ul>
+            <div class="post-content" v-pre>
+              <ul>
 <li>感情与婚姻2023.2<br />
 随着年龄的增长，人的想法总是在改变，有时候我很害怕自己现在认定要做的事以后会后悔，可能不久前我还在说现在的日子再过一百年我也不会厌倦，如今却感到厌倦了。<br />
 罗永浩有一段话说的很好“他在生命的每个阶段，都说了他相信的东西，那你要他怎么样，什么都没做错”，是的啊，什么都没做错，可是还是觉得自己错了。几年前我还不想结婚生子，可如今也开始考虑这个问题了，去年底终于结束了上一段感情，也花时间做了情感戒断，因为刚分手的时候看到好吃的好玩的总还是想和对方分享，但克制住，后面很快也就过去了。<br />
@@ -174,41 +172,34 @@
 家人方面，在亲密关系的经历中，我明白相爱的人并不一定要相互很了解对方的想法，选择共度余生的那个人，很多时候也不能给我们安慰和开解，所有人都只能靠自己找到自己的出口和自己的平静，我是非常向内求索的一个人。去年年底结婚了，正式进入家庭生活，并且和对方的家人也共同生活，我认为我是一个非常好相处的人，因为我不想伤害任何人的感情，所以经常勉强自己，或者不能说勉强，对我来说很多事情这样也可，那样也可，但我确实因为不想伤害别人的感情而改变自己原本的打算，因此时间一长可能还是积累了一些不愉快以致于爆发，和长辈之间的习性冲突就成了一个难免的问题。未婚时我也曾经和前任的家人相处过，那时此种问题似乎没有如今更令人烦恼，可能由于我更成熟，不是以前不操心的心态，或者由于我更独立有了更多自己的想法，当然还有可能是因为地域差异，我嫁入的是离我家乡千里之外的地方。其实我理解现在人不愿与长辈同住的心情，尤其是脱离原生家庭已久的成年人，可能自己的父母自己都未必能够容忍他们的生活习惯了，何况对方的父母，从我进入婚姻生活的前后来看，由于晚婚和年龄差距，对方的父母已经较为年长，且对方没有和父母分开生活过，我们的房子也足够大，是独栋的小楼，我觉得如果和长辈分开生活，似乎有些微残忍又是一种不太必要的消费。因此婚后共同生活，当然长辈在生活中帮助我们解决了家务问题，但慢慢的我发现对我来说最大的负担是饮食问题。</li>
 </ul>
 
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/essay/" class="tag">
+                    Essay
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+
+              
+            
+
           </div>
+
         </div>
-
-        
       </div>
-
-      
-        
-
-        
-      
-
-      <div class="site-footer">
-  <div class="slogan">行则将至</div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-  Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-</div>
-
-
     </div>
-    <script type="application/javascript">
 
-hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
 
 var app = new Vue({
   el: '#app',
@@ -221,6 +212,8 @@ var app = new Vue({
 
 
 
+
+
   
 
   
@@ -228,6 +221,6 @@ var app = new Vue({
 
 
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: fly v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>

@@ -1,20 +1,15 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
+    <meta charset="utf-8" >
 
 <meta name="generator" content="Gridea Pro 1.2.2">
 <title>情绪树洞 | Shirley&#39;s Gridea Pro</title>
 
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939434">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
 <link rel="stylesheet" href="/styles/main.css">
 
 
@@ -23,11 +18,13 @@
   
 
 
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
 
 
 
+    <meta name="description" content="" />
+    <meta name="keywords" content="Essay" />
   <meta name="description" content="心情不好时的想法 最近的心情非常down，感觉什么都没意思，可能以后也会进入低欲望的行列，房价和生活成本育儿成本让什么也不敢做，每天吃几块钱的饭，偶尔周末改善生活。不出门，一是不想花钱，二是本来就特别宅。 对八卦也失去了兴趣，这些事关我小猫咪什么事呢，八卦再精彩对我的生活状况又没有什么帮助和改善。八卦里的人道德败坏还是很有钱，我当然也不品德高尚，但是我老老实实又一穷二白，贫穷就是原罪吧，贫&amp;hellip;">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/xiao-ji-shu-dong/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"情绪树洞","url":"https://shirley-wbw.github.io/post/xiao-ji-shu-dong/","description":"心情不好时的想法 最近的心情非常down，感觉什么都没意思，可能以后也会进入低欲望的行列，房价和生活成本育儿成本让什么也不敢做，每天吃几块钱的饭，偶尔周末改善生活。不出门，一是不想花钱，二是本来就特别宅。 对八卦也失去了兴趣，这些事关我小猫咪什么事呢，八卦再精彩对我的生活状况又没有什么帮助和改善。八卦里的人道德败坏还是很有钱，我当然也不品德高尚，但是我老老实实又一穷二白，贫穷就是原罪吧，贫\u0026hellip;","datePublished":"2021-05-09T15:27:25+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
@@ -46,95 +43,96 @@
 </head>
   <body>
     <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://shirley-wbw.github.io">
-        <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1788939434" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://shirley-wbw.github.io">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788939651" class="site-logo">
         <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
       </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
-  </div>
-</div>
-
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
+    <div>
       
         
-          <a href="/" class="menu purple-link">
+          <a href="/" class="site-nav">
             首页
           </a>
         
       
         
-          <a href="/archives" class="menu purple-link">
+          <a href="/archives" class="site-nav">
             归档
           </a>
         
       
         
-          <a href="/tags" class="menu purple-link">
+          <a href="/tags" class="site-nav">
             标签
           </a>
         
       
         
-          <a href="/post" class="menu purple-link">
+          <a href="/post" class="site-nav">
             个人日志
           </a>
         
       
         
-          <a href="/memos" class="menu purple-link">
+          <a href="/memos" class="site-nav">
             闪念
           </a>
         
       
         
-          <a href="/links" class="menu purple-link">
+          <a href="/links" class="site-nav">
             友链
           </a>
         
       
         
-          <a href="/post/about" class="menu purple-link">
+          <a href="/post/about" class="site-nav">
             关于
           </a>
         
       
     </div>
   </div>
-</transition>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
 
-      <div class="content-container">
-        <div class="post-detail">
-          
-          <h2 class="post-title">情绪树洞</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2021-05-09</span>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">情绪树洞</h2>
+            <div class="post-date">2021-05-09</div>
             
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="/tag/essay/">
-                    Essay
-                    
-                  </a>
-                
-              </span>
-            
-          </div>
-          <div class="post-content" v-pre>
-            <ul>
+            <div class="post-content" v-pre>
+              <ul>
 <li>心情不好时的想法<br />
 最近的心情非常down，感觉什么都没意思，可能以后也会进入低欲望的行列，房价和生活成本育儿成本让什么也不敢做，每天吃几块钱的饭，偶尔周末改善生活。不出门，一是不想花钱，二是本来就特别宅。<br />
 对八卦也失去了兴趣，这些事关我小猫咪什么事呢，八卦再精彩对我的生活状况又没有什么帮助和改善。八卦里的人道德败坏还是很有钱，我当然也不品德高尚，但是我老老实实又一穷二白，贫穷就是原罪吧，贫穷的人快乐都不配拥有，只有无穷的压力和精神折磨。</li>
@@ -166,41 +164,34 @@
 有个共事了两周的前同事，因为工资太低就去外国务工了，年薪几十万，后面说我长的符合他审美比较喜欢我，然后每次跟我说话都要显示一下自己的收入，感觉很无趣，现在不是有钱就了不起，孙一宁花了王思聪的钱不也把他骂的狗血淋头么。后来这个朋友回到国内了，他问我我的学校和专业我告诉了他，反问时他不告诉我，然后他再跟我说话我就不怎么理他，问我问题我也不回答，后来我直接开怼，说他有所隐瞒为啥还来让我回答问题，他就问我想问什么，说现在钱不好挣目前无业收入较国外少很多，我说我对你的职业收入毫无兴趣（这些人脑子能正常点么，不要像择偶相亲一样），而是在一段对话里应该礼尚往来，在我提醒后告诉我他是去读了EMBA，他国外务工的同事因为炒币都买了别墅，他现在买别墅还差点（我心想管你呢， 又来炫耀了，令人厌烦），他说他很焦虑没我心态成熟稳定，我开导了他几句，他就神隐了，此人在对话中经常神隐，我讨厌没有礼貌的人，希望以后不再搭理他了。</li>
 </ul>
 
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/essay/" class="tag">
+                    Essay
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+
+              
+            
+
           </div>
+
         </div>
-
-        
       </div>
-
-      
-        
-
-        
-      
-
-      <div class="site-footer">
-  <div class="slogan">行则将至</div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-  Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-</div>
-
-
     </div>
-    <script type="application/javascript">
 
-hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
 
 var app = new Vue({
   el: '#app',
@@ -213,6 +204,8 @@ var app = new Vue({
 
 
 
+
+
   
 
   
@@ -220,6 +213,6 @@ var app = new Vue({
 
 
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: fly v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>

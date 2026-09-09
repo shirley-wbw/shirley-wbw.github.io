@@ -1,20 +1,15 @@
-
 <!DOCTYPE html>
 <html>
   <head>
-    
-<meta charset="utf-8" >
+    <meta charset="utf-8" >
 
 <meta name="generator" content="Gridea Pro 1.2.2">
 <title>思想芦苇 | Shirley&#39;s Gridea Pro</title>
 
-
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="/favicon.ico?v=1788939434">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="/favicon.ico?v=1788939651">
 <link rel="stylesheet" href="/styles/main.css">
 
 
@@ -23,11 +18,13 @@
   
 
 
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
 
 
 
+    <meta name="description" content="" />
+    <meta name="keywords" content="Essay" />
   <meta name="description" content="论向善 我在思考一个问题，就是为什么人要向善，假如要劝导一个恶人向善，该如何说服，最后我发现根本没有好的理由劝人向善，比如你说向善对自身、对亲友、对社会有益，恶人说我不愿意对自身、对亲友、对社会有益，这时候该怎么回答呢。这可能是一个本性加教化问题，接受同样的教化，有人为善有人作恶。 如果从小接受诚实守信的教育，你会发现学得越好就越是老实本分，只会老老实实劳动打工上班，但有一部分人却会昧着良&amp;hellip;">
 <link rel="canonical" href="https://shirley-wbw.github.io/post/si-xiang-lu-wei/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"思想芦苇","url":"https://shirley-wbw.github.io/post/si-xiang-lu-wei/","description":"论向善 我在思考一个问题，就是为什么人要向善，假如要劝导一个恶人向善，该如何说服，最后我发现根本没有好的理由劝人向善，比如你说向善对自身、对亲友、对社会有益，恶人说我不愿意对自身、对亲友、对社会有益，这时候该怎么回答呢。这可能是一个本性加教化问题，接受同样的教化，有人为善有人作恶。 如果从小接受诚实守信的教育，你会发现学得越好就越是老实本分，只会老老实实劳动打工上班，但有一部分人却会昧着良\u0026hellip;","datePublished":"2022-07-26T11:03:11+08:00","dateModified":"2026-09-09T14:59:42+08:00","author":{"@type":"Person","name":"Shirley's Gridea Pro"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"/images/avatar.png"},"name":"Shirley's Gridea Pro"}}</script>
@@ -46,95 +43,96 @@
 </head>
   <body>
     <div id="app" class="main">
-      <div class="site-header-container">
-  <div class="site-header">
-    <div class="left">
-      <a href="https://shirley-wbw.github.io">
-        <img class="avatar" src="https://shirley-wbw.github.io/images/avatar.png?v=1788939434" alt="" width="32px" height="32px">
-      </a>
-      <a href="https://shirley-wbw.github.io">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="/">
+        <img src="/images/avatar.png?v=1788939651" class="site-logo">
         <h1 class="site-title">Shirley&#39;s Gridea Pro</h1>
       </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <div class="right">
-      <transition name="fade">
-        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
-      </transition>
-    </div>
-  </div>
-</div>
-
-<transition name="fade">
-  <div class="menu-container" style="display: none;" v-show="menuVisible">
-    <div class="menu-list">
+    <div>
       
         
-          <a href="/" class="menu purple-link">
+          <a href="/" class="site-nav">
             首页
           </a>
         
       
         
-          <a href="/archives" class="menu purple-link">
+          <a href="/archives" class="site-nav">
             归档
           </a>
         
       
         
-          <a href="/tags" class="menu purple-link">
+          <a href="/tags" class="site-nav">
             标签
           </a>
         
       
         
-          <a href="/post" class="menu purple-link">
+          <a href="/post" class="site-nav">
             个人日志
           </a>
         
       
         
-          <a href="/memos" class="menu purple-link">
+          <a href="/memos" class="site-nav">
             闪念
           </a>
         
       
         
-          <a href="/links" class="menu purple-link">
+          <a href="/links" class="site-nav">
             友链
           </a>
         
       
         
-          <a href="/post/about" class="menu purple-link">
+          <a href="/post/about" class="site-nav">
             关于
           </a>
         
       
     </div>
   </div>
-</transition>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      行则将至
+    </div>
+    <div class="site-footer">
+      Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
 
 
-      <div class="content-container">
-        <div class="post-detail">
-          
-          <h2 class="post-title">思想芦苇</h2>
-          <div class="post-info post-detail-info">
-            <span><i class="icon-calendar-outline"></i> 2022-07-26</span>
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">思想芦苇</h2>
+            <div class="post-date">2022-07-26</div>
             
-              <span>
-                <i class="icon-pricetags-outline"></i>
-                
-                  <a href="/tag/essay/">
-                    Essay
-                    
-                  </a>
-                
-              </span>
-            
-          </div>
-          <div class="post-content" v-pre>
-            <ul>
+            <div class="post-content" v-pre>
+              <ul>
 <li>论向善<br />
 我在思考一个问题，就是为什么人要向善，假如要劝导一个恶人向善，该如何说服，最后我发现根本没有好的理由劝人向善，比如你说向善对自身、对亲友、对社会有益，恶人说我不愿意对自身、对亲友、对社会有益，这时候该怎么回答呢。这可能是一个本性加教化问题，接受同样的教化，有人为善有人作恶。<br />
 如果从小接受诚实守信的教育，你会发现学得越好就越是老实本分，只会老老实实劳动打工上班，但有一部分人却会昧着良心赚了大钱，所以赚不到大钱是没有高超的业务能力或者是没有偷奸耍滑坑蒙拐骗走捷径的能力。什么是有能力，是否只要赚了轻松的大钱就是有能力呢，每个人只能按照自己的本心去做，不违背自己的标准。</li>
@@ -171,41 +169,34 @@
 最近不太顺利，生活和工作都令人很不快。我最近在想自己，也在想我们这一代人，我们是否是失落的一代，又或者只是我自己失落了，我想到一个最合适的词来形容那就是“无所适从”。我们成长的时候很多东西都很不发达，那时候辅导班很少，养猫和狗都是喂馒头，养孩子基本都是放养，很多孩子成长起来很坎坷，家长们成为家长只是因为在走生命的进程，并不都是合格的家长，说的有些混乱，我不知道为什么，我就长成了一个“无所适从”的人，因为贫穷与苦难还是因为到大城市工作，我们这些人无法在大城市定居，也无法回家乡定居，我们成为漂泊的人，租房生活的人，我是应该说“在哪里都很好”，还是应该说“在哪里都一样”。</li>
 </ul>
 
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="/tag/essay/" class="tag">
+                    Essay
+                  </a>
+                
+              </div>
+            
+            
+
+            
+              
+
+              
+            
+
           </div>
+
         </div>
-
-        
       </div>
-
-      
-        
-
-        
-      
-
-      <div class="site-footer">
-  <div class="slogan">行则将至</div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-  Powered by Gridea Pro | <a class="rss" href="/feed.xml" target="_blank">RSS</a>
-</div>
-
-
     </div>
-    <script type="application/javascript">
 
-hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
 
 var app = new Vue({
   el: '#app',
@@ -218,6 +209,8 @@ var app = new Vue({
 
 
 
+
+
   
 
   
@@ -225,6 +218,6 @@ var app = new Vue({
 
 
 
-  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: fly v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+  <script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: simple v1.1.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>
