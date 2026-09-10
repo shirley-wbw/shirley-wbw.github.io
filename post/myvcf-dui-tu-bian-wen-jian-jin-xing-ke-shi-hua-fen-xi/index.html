@@ -30,7 +30,7 @@
   (function () {
     try {
       var saved = localStorage.getItem('flavor-theme');
-      var theme = saved || 'dark';
+      var theme = saved || 'light';
       if (theme === 'light') {
         document.documentElement.classList.add('theme-light');
       }
@@ -254,8 +254,8 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
   </div>
 
   
+  
   <nav class="post-nav">
-    
     <a href="/post/guan-yu-ji-yin-id-de-zhi-shi-ji-lu/" class="post-nav-card post-nav-card--prev">
       
       <div class="post-nav-card__body">
@@ -264,7 +264,6 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
       </div>
       <span class="post-nav-card__arrow">&larr;</span>
     </a>
-    
     
     <a href="/post/libsvm-er-fen-lei-shi-jian-zong-jie-linux-shang-python-li-pei-zhi/" class="post-nav-card post-nav-card--next">
       <div class="post-nav-card__body">
@@ -276,6 +275,7 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
     </a>
     
   </nav>
+  
 
   
   
@@ -392,9 +392,12 @@ pip install -r /home/username/software/myVCF-master/requirements.txt
   
 
   
+  <style>/* 方案D 安全网：定制主题已不再渲染空卡片，此处仅为兜底 */
+.post-nav-card--empty { display: none; }</style>
+  
 
   
 
-<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: flavor-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: flavor-custom v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>

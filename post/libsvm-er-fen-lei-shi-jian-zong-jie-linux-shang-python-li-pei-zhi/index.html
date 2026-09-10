@@ -30,7 +30,7 @@
   (function () {
     try {
       var saved = localStorage.getItem('flavor-theme');
-      var theme = saved || 'dark';
+      var theme = saved || 'light';
       if (theme === 'light') {
         document.documentElement.classList.add('theme-light');
       }
@@ -316,8 +316,8 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
   </div>
 
   
+  
   <nav class="post-nav">
-    
     <a href="/post/myvcf-dui-tu-bian-wen-jian-jin-xing-ke-shi-hua-fen-xi/" class="post-nav-card post-nav-card--prev">
       
       <div class="post-nav-card__body">
@@ -326,7 +326,6 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
       </div>
       <span class="post-nav-card__arrow">&larr;</span>
     </a>
-    
     
     <a href="/post/about/" class="post-nav-card post-nav-card--next">
       <div class="post-nav-card__body">
@@ -338,6 +337,7 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
     </a>
     
   </nav>
+  
 
   
   
@@ -454,9 +454,12 @@ libsvm在训练时也可以直接使用命令行语句，而无需进入jupyter 
   
 
   
+  <style>/* 方案D 安全网：定制主题已不再渲染空卡片，此处仅为兜底 */
+.post-nav-card--empty { display: none; }</style>
+  
 
   
 
-<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: flavor-theme v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
+<script>console.log("\n%c ✦ Gridea Pro v1.2.2 %c · Theme: flavor-custom v1.0.0 · https://gridea.pro %c\n","color:#fadfa3;background:#111111;padding:9px 14px;border-radius:4px 0 0 4px;font-weight:500;font-size:12px","color:#e05c00;background:#fff3ec;padding:9px 14px;border-radius:0 4px 4px 0;font-size:11px","")</script>
 </body>
 </html>
